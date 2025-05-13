@@ -1,0 +1,103 @@
+package gui.entidades;
+
+import gui.system.PainelJogo;
+
+import javax.imageio.ImageIO;
+import java.io.IOException;
+import java.util.Random;
+
+public class NPC_Explorador extends Entidade{
+
+    PainelJogo gp;
+    private Random aleatorio = new Random();
+
+
+    public NPC_Explorador(PainelJogo gp){
+        super(gp);
+        this.gp = gp;
+
+
+        setDirecao("down");
+        setVelocidade(1);
+        carregarImagemExplorador();
+        setDialogo();
+    }
+
+
+    public void carregarImagemExplorador() {
+        try {
+            setUp1(ImageIO.read(getClass().getResourceAsStream("/explorador/explorador_up_1.png")));
+            setUp2(ImageIO.read(getClass().getResourceAsStream("/explorador/explorador_up_2.png")));
+            setDown1(ImageIO.read(getClass().getResourceAsStream("/explorador/explorador_down_1.png")));
+            setDown2(ImageIO.read(getClass().getResourceAsStream("/explorador/explorador_down_2.png")));
+            setLeft1(ImageIO.read(getClass().getResourceAsStream("/explorador/explorador_left_1.png")));
+            setLeft2(ImageIO.read(getClass().getResourceAsStream("/explorador/explorador_left_2.png")));
+            setRight1(ImageIO.read(getClass().getResourceAsStream("/explorador/explorador_right_1.png")));
+            setRight2(ImageIO.read(getClass().getResourceAsStream("/explorador/explorador_right_2.png")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void setDialogo(){
+
+        getDialogos()[0]="Shhh... Eles estão\nobservando.";
+        getDialogos()[1]="Você acha mesmo que essa\nfloresta é natural?\nNada aqui é natural.";
+        getDialogos()[2]="Já ouviu falar das criaturas \nde olhos brilhantes?\nEu já as vi... à noite.";
+        getDialogos()[3]= "Só me prometa...\nque não vai deixar essa\nfloresta te consumir...\ncomo fez comigo.";
+
+    }
+
+    public void setAcao(){
+
+        setContadorDeBloqueioDeAcao(getContadorDeBloqueioDeAcao() + 1);
+
+        if(getContadorDeBloqueioDeAcao() == 120) {
+            int i = aleatorio.nextInt(100) + 1;// Coleta um número de 1 a 100
+
+            if (i <= 25) {
+                setDirecao("up");
+            }
+            if (i > 25 && i <= 50) {
+                setDirecao("down");
+            }
+            if (i > 50 && i <= 75) {
+                setDirecao("left");
+            }
+            if (i > 75 && i <= 100) {
+                setDirecao("right");
+            }
+
+            setContadorDeBloqueioDeAcao(0);
+
+        }
+
+
+    }
+
+    public void falar(){
+
+        if(getDialogos()[getIndiceDialogo()]==null){
+            setIndiceDialogo(0);
+        }
+        gp.getIu().setDialogoAtual(getDialogos()[getIndiceDialogo()]);
+        setIndiceDialogo(getIndiceDialogo()+1);
+
+        switch(gp.jogador.getDirecao()){
+            case "up":
+                setDirecao("down");
+                break;
+            case "down":
+                setDirecao("up");
+                break;
+            case "left":
+                setDirecao("right");
+                break;
+            case "right":
+                setDirecao("left");
+                break;
+        }
+    }
+
+}
