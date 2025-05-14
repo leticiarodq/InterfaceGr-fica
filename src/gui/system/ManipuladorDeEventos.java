@@ -15,6 +15,8 @@ public class ManipuladorDeEventos {
     private EventoDoencaFerimento eventoDoencaFerimento;
 
 
+
+
     public ManipuladorDeEventos(PainelJogo gp) {
         this.gp = gp;
         this.eventoClima = new EventoClima(gp);
@@ -70,15 +72,28 @@ public class ManipuladorDeEventos {
         }
 
         if (!eventoMapaAtivo && gp.getEstadoJogo() != gp.getEstadoDialogo()) {
+            // Escolhe aleatoriamente apenas um evento climático para ocorrer
+            int eventoAleatorio = new java.util.Random().nextInt(4);
 
-            eventoClima.eventoChuva();
-            eventoClima.eventoCalorExtremo();
-            eventoClima.eventoNevasca();
-            eventoDoencaFerimento.eventoDesidratacao();
+            switch (eventoAleatorio) {
+                case 0:
+                    eventoClima.eventoChuva();
+                    break;
+                case 1:
+                    eventoClima.eventoCalorExtremo();
+                    break;
+                case 2:
+                    eventoClima.eventoNevasca();
+                    break;
+                case 3:
+                    eventoDoencaFerimento.eventoDesidratacao();
+                    break;
+            }
+
+            // Sempre executa a redução de energia
             baixarEnergia();
         }
     }
-
 
 
 

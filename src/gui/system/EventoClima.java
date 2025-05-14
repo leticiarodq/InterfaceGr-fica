@@ -21,11 +21,6 @@ public class EventoClima {
     public boolean calorExtremoAtivo = false;
     public boolean nevascaAtiva = false;
 
-    // Variável para controlar o tempo de duração da nevasca
-    private int tempoDuracaoNevasca = 10; // duração em segundos
-    private int contadorTempoNevasca = 0; // contador para a duração
-
-
     public EventoClima(PainelJogo gp) {
         this.gp = gp;
     }
@@ -52,7 +47,7 @@ public class EventoClima {
             Random random = new Random();
             int chance = random.nextInt(100); // 0 a 99
 
-            if (chance < 90) { // 10% de chance
+            if (chance < 15) { // 10% de chance
                 gp.setEstadoJogo(gp.getEstadoDialogo());
                 gp.getIu().setDialogoAtual("CALOR EXTREMO\nParece que o clima\nesquentou...\nVocê precisa beber água.");
                 gp.jogador.setSede(gp.jogador.getSede() - 2);

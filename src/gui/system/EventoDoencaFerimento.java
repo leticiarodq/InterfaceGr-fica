@@ -6,9 +6,6 @@ public class EventoDoencaFerimento {
 
     private PainelJogo gp;
 
-    private int contadorInfeccao = 0;
-    private final int intervaloInfeccao = 900;
-
     private int contadorDesidratacao = 0;
     private final int intervaloDesidratacao = 600; // a cada 120 frames (2 segundos)
 
@@ -20,10 +17,7 @@ public class EventoDoencaFerimento {
     public void eventoDesidratacao() {
         if (gp.jogador.getSede() <= 2) {
             gp.jogador.setDesidratado(true);
-            gp.jogador.setSanidade(Math.max(0, gp.jogador.getSanidade() - 1)); // evita negativo
-        }
-        else {
-            // Não está desidratado
+        } else {
             gp.jogador.setDesidratado(false);
             contadorDesidratacao = 0;
         }
@@ -32,16 +26,14 @@ public class EventoDoencaFerimento {
             contadorDesidratacao++;
             if (contadorDesidratacao >= intervaloDesidratacao) {
                 gp.jogador.setEnergia(gp.jogador.getEnergia() - 1);
-                //baixar energia
-                //baixar sanidade
+                gp.jogador.setSanidade(Math.max(0, gp.jogador.getSanidade() - 1)); // Reduz sanidade com intervalo
                 gp.setEstadoJogo(gp.getEstadoDialogo());
                 gp.getIu().setDialogoAtual("DESIDRATAÇÃO\nOoh, não...\nVocê está desidratado e\nperdeu 1 ponto de vida.");
-                contadorDesidratacao = 0; // reinicia para o próximo dano
+                contadorDesidratacao = 0;
             }
         }
 
         delirio();
-
     }
 
     public void aguaContaminada(int estadoJogo){
@@ -65,6 +57,11 @@ public class EventoDoencaFerimento {
         }
     }
 
+    public void hipotermia(){
+
+
+    }
+
     public void delirio() {
         if (gp.jogador.getSanidade() <= 2 || gp.jogador.isDesidratado()) {
             gp.getIu().setDialogoAtual("Você está delirando!");
@@ -78,8 +75,5 @@ public class EventoDoencaFerimento {
 
 
 
-    public void hipotermia(){
 
-
-    }
 }

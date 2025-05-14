@@ -9,7 +9,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Timer;
 
 public class InterfaceUsuario {
 
@@ -104,7 +103,7 @@ public class InterfaceUsuario {
 
         try {
             imagem = ImageIO.read(getClass().getResourceAsStream("/objetos/escudo.png"));
-            fundo1 = ImageIO.read(getClass().getResourceAsStream("/fundo/fundo1.png"));
+            fundo1 = ImageIO.read(getClass().getResourceAsStream("/fundo/fundo.png"));
             fundo2 = ImageIO.read(getClass().getResourceAsStream("/fundo/fundo2.png"));
             fundo3 = ImageIO.read(getClass().getResourceAsStream("/fundo/fundo3.png"));
             fundo4 = ImageIO.read(getClass().getResourceAsStream("/fundo/fundo4.png"));

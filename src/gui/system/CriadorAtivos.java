@@ -73,12 +73,12 @@ public class CriadorAtivos {
     }
 
     public void setCOELHO() {
-        gp.getNpc()[0] = new NPC_Coelho(gp);
-        gp.getNpc()[0].setMundoX(25 * gp.getTamanhoBloco());
-        gp.getNpc()[0].setMundoY(25 * gp.getTamanhoBloco());
         gp.getNpc()[1] = new NPC_Coelho(gp);
-        gp.getNpc()[1].setMundoX(30 * gp.getTamanhoBloco());
-        gp.getNpc()[1].setMundoY(35 * gp.getTamanhoBloco());
+        gp.getNpc()[1].setMundoX(25 * gp.getTamanhoBloco());
+        gp.getNpc()[1].setMundoY(25 * gp.getTamanhoBloco());
+        gp.getNpc()[2] = new NPC_Coelho(gp);
+        gp.getNpc()[2].setMundoX(30 * gp.getTamanhoBloco());
+        gp.getNpc()[2].setMundoY(35 * gp.getTamanhoBloco());
         System.out.println("Coelho criado em: " + gp.getNpc()[0].getMundoX() + ", " + gp.getNpc()[0].getMundoY());
 
     }

@@ -392,12 +392,10 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
 
     public void desenharEfeitoConfusao(Graphics2D g2) {
 
-        if(jogador.getSanidade()<=2){
             int largura = getWidth();
             int altura = getHeight();
 
-            // Escurece levemente a tela
-            g2.setColor(new Color(0, 0, 0, 100)); // preto com transparência
+            g2.setColor(new Color(255, 0, 0, 100));
             g2.fillRect(0, 0, largura, altura);
 
             // Aumenta a velocidade do giro
@@ -407,37 +405,13 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
             // Cálculo para tremor do círculo maior
             double tremor = Math.sin(System.currentTimeMillis() * 0.01) * 50; // controle de tremor
 
-            // Primeiro círculo giratório (Maior e Vermelho)
-            g2.setColor(new Color(255, 0, 0, 100)); // vermelho com transparência
-            g2.rotate(angulo, largura / 2, altura / 2);
-            g2.fillOval(largura / 2 - 200 + (int)tremor, altura / 2 - 200 + (int)tremor, 400, 400); // Tamanho maior e tremor
-            g2.rotate(-angulo, largura / 2, altura / 2);
-
             // Segundo círculo girando no sentido contrário
             g2.setColor(new Color(255, 100, 100, 80));
             g2.rotate(-angulo * 1.5, largura / 2, altura / 2);
             g2.fillOval(largura / 2 - 100, altura / 2 - 100, 200, 200);
             g2.rotate(angulo * 1.5, largura / 2, altura / 2);
 
-        }
 
-    }
-
-    private float opacidadeNevasca = 1.0f; // 1.0 (totalmente visível) até 0.0 (totalmente invisível)
-    private float taxaDesvanecimento = 0.05f;
-
-    public void encerrarNevasca() {
-        if (opacidadeNevasca > 0) {
-            // Reduz a opacidade gradualmente
-            opacidadeNevasca -= taxaDesvanecimento;
-            if (opacidadeNevasca < 0) {
-                opacidadeNevasca = 0; // Garante que não fique abaixo de 0
-            }
-        } else {
-            // Nevasca já foi completamente encerrada, pode resetar ou fazer outra ação
-            encerrandoNevasca = false; // Marca como encerrada
-            mostrarNevasca = false;   // Opcional: esconder a nevasca
-        }
     }
 
 
@@ -526,7 +500,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
             jogador.desenhar(g2);
 
 
-            iu.desenhar(g2); // Primeiro desenha a interface
+            // Primeiro desenha a interface
 
             if (mostrarEfeitoConfusao) {
                 desenharEfeitoConfusao(g2);// Depois desenha o efeito por cima
@@ -541,10 +515,16 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
             if (mostrarNevasca) {
                 desenharNevasca(g2);
             }
+
+            iu.desenhar(g2);
+
+        }
             g2.dispose();
         }
+
+
     }
-    }
+
 
 
 
