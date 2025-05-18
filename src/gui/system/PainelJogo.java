@@ -6,84 +6,19 @@ package gui.system;
 
 import gui.blocos.GerenciadorBlocos;
 import gui.entidades.*;
-import gui.objetos.SuperObjetos;
+import gui.eventos.ManipuladorDeEventos;
 
 import javax.swing.*;
+import javax.swing.Timer;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
-import java.awt.image.ConvolveOp;
-import java.awt.image.Kernel;
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 
 
 public class PainelJogo extends JPanel implements Runnable { //GamePanel herda de JPanel, que é a área onde o jogo vai ser desenhado
     //implements Runnable indica que essa classe será executada em uma Thread separada, permitindo que o jogo rode continuamente sem travar a interface
 
 
-    public class Gota {
-        int x, y, velocidade;
-
-        Gota(int x, int y, int velocidade) {
-            this.x = x;
-            this.y = y;
-            this.velocidade = velocidade;
-        }
-    }
-
-    public void iniciarChuva(int quantidade) {
-        gotas.clear();
-        for (int i = 0; i < quantidade; i++) {
-            int x = random.nextInt(getWidth());
-            int y = random.nextInt(getHeight());
-            int velocidade = 2 + random.nextInt(3); // entre 2 e 4
-            gotas.add(new Gota(x, y, velocidade));
-        }
-        mostrarChuva = true;
-    }
-
-    public class FlocoDeNeve {
-        int x, y, tamanho, velocidade;
-
-        public FlocoDeNeve(int x, int y, int tamanho, int velocidade) {
-            this.x = x;
-            this.y = y;
-            this.tamanho = tamanho;
-            this.velocidade = velocidade;
-        }
-
-    }
-
-    public void iniciarNevasca(int quantidade) {
-        flocos.clear(); // Limpa a lista de flocos de neve
-        for (int i = 0; i < quantidade; i++) {
-            int x = random.nextInt(getWidth()); // Posição aleatória em X
-            int y = random.nextInt(getHeight()); // Posição aleatória em Y
-            int tamanho = 5 + random.nextInt(5); // Tamanho aleatório entre 5 e 9
-            int velocidade = 1 + random.nextInt(3); // Velocidade entre 1 e 3 (aumentada para maior efeito)
-            flocos.add(new FlocoDeNeve(x, y, tamanho, velocidade)); // Adiciona o floco de neve à lista
-        }
-        mostrarNevasca = true; // Ativa a exibição da nevasca
-    }
-
-
-
-
-    public ArrayList<Gota> gotas = new ArrayList<>();
-    public boolean mostrarChuva = false;
-    public ArrayList<FlocoDeNeve> flocos = new ArrayList<>();
-    public boolean mostrarNevasca = false;
-    Random random = new Random();
-    public boolean encerrandoNevasca = false;
-    public boolean mostrarEfeitoConfusao=false;
-
-
-
     // Atributos privados
-
 
     private final int tamanhoOriginalBloco = 16; //O tamanho de um bloco do jogo é 16 pixels
     private final int escala = 3; //O tamanho do bloco será escalada em 3 vezes, ficando com 48 pixels
@@ -116,7 +51,6 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
 
     //private FerramentasUteis ferramentasUteis=new FerramentasUteis();
 
-
     private InterfaceUsuario iu = new InterfaceUsuario(this);
 
     private ManipuladorDeEventos manipuladorDeEventos=new ManipuladorDeEventos(this);
@@ -124,13 +58,16 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
     Thread threadJogo; //Essa Thread permitirá que o jogo rode continuamente.
 
     // Entidade e objeto
+
     public Jogador jogador = new Jogador(this, eventosTeclado);
-    private SuperObjetos obj[] = new SuperObjetos[100];
+    private Entidade obj[] = new Entidade[100];
     private Entidade npc[] = new Entidade[100];
     private Entidade coelho[]=new Entidade[10];
+    private Entidade criatura[]=new Entidade[10];
+    private ArrayList<Entidade> entidadeLista= new ArrayList<>();
+    private Entidade alimento[]= new Entidade[30];
 
-
-    //Estado do jogo
+    // Estado do jogo
 
     private int estadoJogo;
 
@@ -142,15 +79,11 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
     private int estadoDescricao = 3;
     private int estadoPersonagem=5;
 
-    // Métodos de acesso getters
 
+    // Métodos de acesso getters
 
     public int getEstadoPersonagem() {
         return estadoPersonagem;
-    }
-
-    public void setEstadoPersonagem(int estadoPersonagem){
-        this.estadoPersonagem=estadoPersonagem;
     }
 
     public final int getTamanhoBloco() {
@@ -196,7 +129,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
     public GerenciadorBlocos getBlocosG() {
         return blocosG;
     }
-    public SuperObjetos[] getObj() {
+    public Entidade[] getObj() {
         return obj;
     }
     public boolean isJogoIniciado() {
@@ -219,6 +152,10 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         return manipuladorDeEventos;
     }
 
+    public Entidade[] getCriatura() {
+        return criatura;
+    }
+
     public int getEstadoDialogo() {
         return estadoDialogo;
     }
@@ -226,22 +163,20 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         return eventosTeclado;
     }
 
-    public void setEventosTeclado(EventosTeclado eventosTeclado){
-        this.eventosTeclado=eventosTeclado;
+    public ArrayList<Entidade> getEntidadeList() {
+        return entidadeLista;
     }
 
-
-    public int getEstadoDescricao() {
-        return estadoDescricao;
+    public Entidade[] getAlimento() {
+        return alimento;
     }
-
 
     // Métodos setters
 
     public void setPersonagemSelecionado(String personagemSelecionado) {
         this.personagemSelecionado = personagemSelecionado;
     }
-    public void setObj(SuperObjetos[] obj) {
+    public void setObj(Entidade[] obj) {
         this.obj = obj;
     }
     public void setEstadoJogo(int estadoJogo) {
@@ -261,6 +196,16 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         this.manipuladorDeEventos=manipuladorDeEventos;
     }
 
+    public void setJogador(Jogador jogador) {
+        this.jogador = jogador;
+    }
+
+    public void setEntidadeLista(ArrayList<Entidade> entidadeLista) {
+        this.entidadeLista = entidadeLista;
+    }
+
+
+
     public PainelJogo() {
 
 
@@ -274,15 +219,13 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         this.setFocusable(true); //Permite que o painel capture eventos de teclado
         this.requestFocus(); //Garante que o painel receba o foco do teclado:
         //this.ferramentasUteis=new FerramentasUteis();
-        //telaMenuPersonagens = new MenuPersonagens(this);
-        //add(telaMenuPersonagens); //Adiciona a tela de seleção de personagem
-        //addKeyListener(telaMenuPersonagens); //Escuta os comandos para a seleção
+
 
     }
 
-    public void setJogador(Jogador jogador) {
-        this.jogador = jogador;
-    }
+    // Colisao objetos
+
+    public boolean tileColisao;
 
     public void iniciarJogo() {
 
@@ -297,9 +240,6 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
             jogador = new Survivor(this, eventosTeclado);
         }
 
-        //estadoJogo = estadoPlay;
-
-        //addKeyListener(eventosTeclado);
         requestFocusInWindow();
         jogoIniciado = true;
 
@@ -312,20 +252,17 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         cAtivos.setObjeto();
         cAtivos.setNPC();
         cAtivos.setCOELHO();
+        cAtivos.setCriatura();
+        cAtivos.setAlimento();
 
-        //estadoJogo = estadoPlay;
-        //estadoJogo=estadoSelecaoPersonagem;
         estadoJogo=estadoTitulo;
 
-
     }
-
     public void iniciarThreadJogo() { //Cria e inicia a Thread do jogo, chamando o método run()
         threadJogo = new Thread(this);
         threadJogo.start();
 
     }
-
     @Override
     public void run() { // Loop principal do jogo (mantém o jogo rodando enquanto a threadJogo estiver ativa)
 
@@ -367,77 +304,6 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         }
     }
 
-    public void desenharChuva(Graphics2D g2) {
-        // Desenha o fundo escuro semi-transparente para a chuva
-        g2.setColor(new Color(0, 0, 0, 100)); // Preto com transparência
-        g2.fillRect(0, 0, getWidth(), getHeight());
-
-        // Desenhar as gotas de chuva
-        g2.setColor(new Color(150, 150, 255, 100)); // Azul claro com transparência
-        for (Gota gota : gotas) {
-            g2.drawLine(gota.x, gota.y, gota.x, gota.y + 10);
-            gota.y += gota.velocidade;
-
-            // Resetar a gota quando sair da tela
-            if (gota.y > getHeight()) {
-                gota.y = 0;
-                gota.x = random.nextInt(getWidth());
-            }
-        }
-    }
-
-    // Variáveis globais no seu painel ou classe principal
-    float angulo = 0;
-    BufferedImage telaBuffer;
-
-    public void desenharEfeitoConfusao(Graphics2D g2) {
-
-            int largura = getWidth();
-            int altura = getHeight();
-
-            g2.setColor(new Color(255, 0, 0, 100));
-            g2.fillRect(0, 0, largura, altura);
-
-            // Aumenta a velocidade do giro
-            angulo += 0.05f;
-            if (angulo > 2 * Math.PI) angulo = 0;
-
-            // Cálculo para tremor do círculo maior
-            double tremor = Math.sin(System.currentTimeMillis() * 0.01) * 50; // controle de tremor
-
-            // Segundo círculo girando no sentido contrário
-            g2.setColor(new Color(255, 100, 100, 80));
-            g2.rotate(-angulo * 1.5, largura / 2, altura / 2);
-            g2.fillOval(largura / 2 - 100, altura / 2 - 100, 200, 200);
-            g2.rotate(angulo * 1.5, largura / 2, altura / 2);
-
-
-    }
-
-
-    public void desenharNevasca(Graphics2D g2) {
-
-        // Desenha o fundo escuro semi-transparente para a nevasca
-        g2.setColor(new Color(169, 169, 169, 200)); // Cor cinza (RGB: 169, 169, 169) com transparência
-        g2.fillRect(0, 0, getWidth(), getHeight()); // Preenchendo toda a área com o fundo cinza
-
-        // Desenha os flocos de neve
-        g2.setColor(new Color(255, 255, 255, 150)); // Branco com transparência
-        for (FlocoDeNeve floco : flocos) {
-            g2.fillOval(floco.x, floco.y, 5, 5); // Desenha o floco de neve como um círculo pequeno
-            floco.y += floco.velocidade;
-
-            // Resetar o floco de neve quando sair da tela
-            if (floco.y > getHeight()) {
-                floco.y = 0;
-                floco.x = random.nextInt(getWidth());
-            }
-        }
-    }
-
-
-
-
     public void update() {
 
         if (estadoJogo == estadoPlay) {
@@ -446,20 +312,166 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
 
 
             // NPC
-            for (int i = 0; i < npc.length; i++) {
+           for (int i = 0; i < npc.length; i++) {
                 if (npc[i] != null) {
                     npc[i].update();
                 }
             }
+
+            // CRIATURA
+
+          for (int i = 0; i < criatura.length; i++) {
+                if (criatura[i] != null) {
+                    criatura[i].update();
+                }
+            }
+
+
         }
         if (estadoJogo == estadoPausa) {
             // nada
         }
     }
 
+    // Tela de clima
+
+    // Atributos privados
+
+    private ArrayList<Gota> gotas = new ArrayList<>();
+    private boolean mostrarChuva = false;
+    private ArrayList<FlocoDeNeve> flocos = new ArrayList<>();
+    private boolean mostrarNevasca = false;
+    private boolean mostrarEfeitoConfusao = false;
+    private float angulo = 0;
+    private Random random = new Random();
+
+    // Métodos de acesso
+
+    public boolean isMostrarChuva(){
+        return mostrarChuva;
+    }
+
+    public boolean isMostrarEfeitoConfusao() {
+        return mostrarEfeitoConfusao;
+    }
+
+    public void setMostrarNevasca(boolean mostrarNevasca) {
+        this.mostrarNevasca = mostrarNevasca;
+    }
+
+    public void setMostrarEfeitoConfusao(boolean mostrarEfeitoConfusao) {
+        this.mostrarEfeitoConfusao = mostrarEfeitoConfusao;
+    }
+
+    public void setMostrarChuva(boolean mostrarChuva) {
+        this.mostrarChuva = mostrarChuva;
+    }
+
+    // Classe interna Gota
+
+    public class Gota {
+        int x, y, velocidade;
+
+        Gota(int x, int y, int velocidade) {
+            this.x = x;
+            this.y = y;
+            this.velocidade = velocidade;
+        }
+    }
+
+    // Classe interna Flocos de neve
+
+    public class FlocoDeNeve {
+        int x, y, tamanho, velocidade;
+
+        public FlocoDeNeve(int x, int y, int tamanho, int velocidade) {
+            this.x = x;
+            this.y = y;
+            this.tamanho = tamanho;
+            this.velocidade = velocidade;
+        }
+    }
+
+    // Método e iniciar chuva
+
+    public void iniciarChuva(int quantidade) {
+        gotas.clear();
+        for (int i = 0; i < quantidade; i++) {
+            int x = random.nextInt(getWidth());
+            int y = random.nextInt(getHeight());
+            int velocidade = 2 + random.nextInt(3);
+            gotas.add(new Gota(x, y, velocidade));
+        }
+        mostrarChuva = true;
+    }
+
+    // Método de iniciar nevasca
+
+    public void iniciarNevasca(int quantidade) {
+        flocos.clear();
+        for (int i = 0; i < quantidade; i++) {
+            int x = random.nextInt(getWidth());
+            int y = random.nextInt(getHeight());
+            int tamanho = 5 + random.nextInt(5);
+            int velocidade = 1 + random.nextInt(3);
+            flocos.add(new FlocoDeNeve(x, y, tamanho, velocidade));
+        }
+        mostrarNevasca = true;
+    }
+
+    // Desenhar telas de clima
+
+    public void desenharChuva(Graphics2D g2) {
+        g2.setColor(new Color(0, 0, 0, 100));
+        g2.fillRect(0, 0, getWidth(), getHeight());
+
+        g2.setColor(new Color(150, 150, 255, 100));
+        for (Gota gota : gotas) {
+            g2.drawLine(gota.x, gota.y, gota.x, gota.y + 10);
+            gota.y += gota.velocidade;
+            if (gota.y > getHeight()) {
+                gota.y = 0;
+                gota.x = random.nextInt(getWidth());
+            }
+        }
+    }
+
+    public void desenharNevasca(Graphics2D g2) {
+        g2.setColor(new Color(169, 169, 169, 200));
+        g2.fillRect(0, 0, getWidth(), getHeight());
+
+        g2.setColor(new Color(255, 255, 255, 150));
+        for (FlocoDeNeve floco : flocos) {
+            g2.fillOval(floco.x, floco.y, floco.tamanho, floco.tamanho);
+            floco.y += floco.velocidade;
+            if (floco.y > getHeight()) {
+                floco.y = 0;
+                floco.x = random.nextInt(getWidth());
+            }
+        }
+    }
+
+    public void desenharEfeitoConfusao(Graphics2D g2) {
+        int largura = getWidth();
+        int altura = getHeight();
+
+        g2.setColor(new Color(255, 0, 0, 100));
+        g2.fillRect(0, 0, largura, altura);
+
+        angulo += 0.05f;
+        if (angulo > 2 * Math.PI) angulo = 0;
+
+        double tremor = Math.sin(System.currentTimeMillis() * 0.01) * 50;
+
+        g2.setColor(new Color(255, 100, 100, 80));
+        g2.rotate(-angulo * 1.5, largura / 2, altura / 2);
+        g2.fillOval(largura / 2 - 100, altura / 2 - 100, 200, 200);
+        g2.rotate(angulo * 1.5, largura / 2, altura / 2);
+    }
 
 
 
+    @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
@@ -469,63 +481,77 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
             drawStart = System.nanoTime();
         }
 
-        // TITLE SCREEN
+        // TELA DE TÍTULO
         if (estadoJogo == estadoTitulo) {
             iu.desenhar(g2);
         } else {
-            blocosG.draw(g2); // Desenhar mapa antes do personagem
 
-            // Objetos
-            for (int i = 0; i < obj.length; i++) {
-                if (obj[i] != null) {
-                    obj[i].desenhar(g2, this);
-                }
-            }
+            // Desenhar blocos do mapa
+            blocosG.draw(g2);
 
-            // NPCs
+            // Adicionar entidades à lista de desenho
+            entidadeLista.add(jogador);
+
             for (int i = 0; i < npc.length; i++) {
                 if (npc[i] != null) {
-                    npc[i].desenhar(g2);
+                    entidadeLista.add(npc[i]);
                 }
             }
 
-            // Coelhos
-            for (int i = 0; i < coelho.length; i++) {
-                if (coelho[i] != null) {
-                    coelho[i].desenhar(g2);
+            for (int i = 0; i < obj.length; i++) {
+                if (obj[i] != null) {
+                    entidadeLista.add(obj[i]);
                 }
             }
 
-            // Jogador
-            jogador.desenhar(g2);
+            for (int i = 0; i < alimento.length; i++) {
+                if (alimento[i] != null) {
+                    entidadeLista.add(alimento[i]);
+                }
+            }
 
 
-            // Primeiro desenha a interface
 
+           for (int i = 0; i < criatura.length; i++) {
+                if (criatura[i] != null) {
+                    entidadeLista.add(criatura[i]);
+                }
+            }
+
+
+            // Ordenar entidades pelo eixo Y
+            Collections.sort(entidadeLista, new Comparator<Entidade>() {
+                @Override
+                public int compare(Entidade e1, Entidade e2) {
+                    int resultado=Integer.compare(e1.getMundoY(), e2.getMundoY());
+                    return resultado;
+                }
+            });
+
+            // Desenhar todas as entidades na ordem correta
+            for(int i=0; i<entidadeLista.size(); i++){
+                entidadeLista.get(i).desenhar(g2);
+            }
+            entidadeLista.clear();
+
+
+            // IU (Interface do Usuário)
+            iu.desenhar(g2);
+
+            // Efeitos visuais
             if (mostrarEfeitoConfusao) {
-                desenharEfeitoConfusao(g2);// Depois desenha o efeito por cima
+                desenharEfeitoConfusao(g2);
             }
 
-            // Chuva
             if (mostrarChuva) {
                 desenharChuva(g2);
             }
 
-            // Nevasca
             if (mostrarNevasca) {
                 desenharNevasca(g2);
             }
-
-            iu.desenhar(g2);
-
-        }
-            g2.dispose();
         }
 
-
+        g2.dispose();
     }
-
-
-
-
-
+}

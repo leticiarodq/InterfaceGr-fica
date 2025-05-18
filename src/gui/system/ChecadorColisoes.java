@@ -155,52 +155,31 @@ public class ChecadorColisoes {
                         // Simula o movimento e verifica interseção
                         entidade.getAreaSolida().y -= entidade.getVelocidade();
 
-
-                        if (entidade.getAreaSolida().intersects(gp.getObj()[i].getAreaSolida())) {
-                            if (gp.getObj()[i].isColisao()) {
-                                entidade.setColisaoOn(true);
-                            }
-                            if (jogador==true) {
-                                indice = i;
-                            }
-                        }
                         break;
 
                     case "down":
                         entidade.getAreaSolida().y += entidade.getVelocidade();
-                        if (entidade.getAreaSolida().intersects(gp.getObj()[i].getAreaSolida())) {
-                            if (gp.getObj()[i].isColisao()) {
-                                entidade.setColisaoOn(true);
-                            }
-                            if (jogador==true) {
-                                indice = i;
-                            }
-                        }
+
                         break;
 
                     case "left":
                         entidade.getAreaSolida().x -= entidade.getVelocidade();
-                        if (entidade.getAreaSolida().intersects(gp.getObj()[i].getAreaSolida())) {
-                            if (gp.getObj()[i].isColisao()) {
-                                entidade.setColisaoOn(true);
-                            }
-                            if (jogador==true) {
-                                indice = i;
-                            }
-                        }
+
                         break;
 
                     case "right":
                         entidade.getAreaSolida().x += entidade.getVelocidade();
-                        if (entidade.getAreaSolida().intersects(gp.getObj()[i].getAreaSolida())) {
-                            if (gp.getObj()[i].isColisao()) {
-                                entidade.setColisaoOn(true);
-                            }
-                            if (jogador==true) {
-                                indice = i;
-                            }
-                        }
+
                         break;
+                }
+
+                if (entidade.getAreaSolida().intersects(gp.getObj()[i].getAreaSolida())) {
+                    if (gp.getObj()[i].isColisao()) {
+                        entidade.setColisaoOn(true);
+                    }
+                    if (jogador == true) {
+                        indice = i;
+                    }
                 }
 
                 // Reset das áreas sólidas
@@ -215,7 +194,7 @@ public class ChecadorColisoes {
     }
 
     // Verifica colisão com outras entidades
-    public int checarEntidade(Entidade entidade, Entidade[] alvo){
+    public int checarEntidade(Entidade entidade, Entidade[] alvo) {
 
         int indice = 999;
 
@@ -231,35 +210,31 @@ public class ChecadorColisoes {
                 switch (entidade.getDirecao()) {
                     case "up":
                         entidade.getAreaSolida().y -= entidade.getVelocidade();
-                        if (entidade.getAreaSolida().intersects(alvo[i].getAreaSolida())) {
-                            entidade.setColisaoOn(true);
-                            indice = i;
-                            }
                         break;
 
                     case "down":
                         entidade.getAreaSolida().y += entidade.getVelocidade();
-                        if (entidade.getAreaSolida().intersects(alvo[i].getAreaSolida())) {
-                            entidade.setColisaoOn(true);
-                                indice = i;
-                            }
                         break;
 
                     case "left":
                         entidade.getAreaSolida().x -= entidade.getVelocidade();
-                        if (entidade.getAreaSolida().intersects(alvo[i].getAreaSolida())) {
-                            entidade.setColisaoOn(true);
-                            indice = i;
-                            }
+
                         break;
 
                     case "right":
                         entidade.getAreaSolida().x += entidade.getVelocidade();
-                        if (entidade.getAreaSolida().intersects(alvo[i].getAreaSolida())) {
-                            entidade.setColisaoOn(true);
-                            indice = i;
-                            break;
-                        }
+                        break;
+
+                }
+
+                if (entidade.getAreaSolida().intersects(alvo[i].getAreaSolida())) {
+
+                    if (alvo[i] != entidade) {
+                        entidade.setColisaoOn(true);
+                        indice = i;
+
+                    }
+
 
                 }
 
@@ -277,42 +252,42 @@ public class ChecadorColisoes {
 
     // Verifica colisão de uma entidade qualquer com o jogador
 
-    public void checarJogador(Entidade entidade){
+    public boolean checarJogador(Entidade entidade) {
+
+        boolean contatoJogador = false;
 
         entidade.getAreaSolida().x = entidade.getMundoX() + entidade.getAreaSolidaPadraoX();
         entidade.getAreaSolida().y = entidade.getMundoY() + entidade.getAreaSolidaPadraoY();
 
-        gp.jogador.getAreaSolida().x = gp.jogador.getMundoX() +gp.jogador.getAreaSolidaPadraoX();
+        gp.jogador.getAreaSolida().x = gp.jogador.getMundoX() + gp.jogador.getAreaSolidaPadraoX();
         gp.jogador.getAreaSolida().y = gp.jogador.getMundoY() + gp.jogador.getAreaSolidaPadraoY();
 
         switch (entidade.getDirecao()) {
             case "up":
                 entidade.getAreaSolida().y -= entidade.getVelocidade();
-                if (entidade.getAreaSolida().intersects(gp.jogador.getAreaSolida())) {
-                    entidade.setColisaoOn(true);
-                }
+
                 break;
 
             case "down":
                 entidade.getAreaSolida().y += entidade.getVelocidade();
-                if (entidade.getAreaSolida().intersects(gp.jogador.getAreaSolida())) {
-                    entidade.setColisaoOn(true);
-                }
+
                 break;
 
             case "left":
                 entidade.getAreaSolida().x -= entidade.getVelocidade();
-                if (entidade.getAreaSolida().intersects(gp.jogador.getAreaSolida())) {
-                    entidade.setColisaoOn(true);
-                }
+
                 break;
 
             case "right":
                 entidade.getAreaSolida().x += entidade.getVelocidade();
-                if (entidade.getAreaSolida().intersects(gp.jogador.getAreaSolida())) {
-                    entidade.setColisaoOn(true);
-                    break;
-                }
+
+                break;
+
+        }
+
+        if (entidade.getAreaSolida().intersects(gp.jogador.getAreaSolida())) {
+            entidade.setColisaoOn(true);
+            contatoJogador = true;
 
         }
 
@@ -321,5 +296,12 @@ public class ChecadorColisoes {
         gp.jogador.getAreaSolida().x = gp.jogador.getAreaSolidaPadraoX();
         gp.jogador.getAreaSolida().y = gp.jogador.getAreaSolidaPadraoY();
 
+
+        return contatoJogador;
     }
+
+
+
+
+
 }

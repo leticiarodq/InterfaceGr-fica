@@ -1,7 +1,8 @@
-package gui.system;
+package gui.eventos;
+
+import gui.system.PainelJogo;
 
 import java.awt.*;
-import java.util.Random;
 
 
 public class ManipuladorDeEventos {
@@ -10,15 +11,13 @@ public class ManipuladorDeEventos {
     private Rectangle retEvento;
     private int eventoRetanguloPadraoX, eventoRetanguloPadraoY;
 
-
     private EventoClima eventoClima;
     private EventoDoencaFerimento eventoDoencaFerimento;
 
 
-
-
     public ManipuladorDeEventos(PainelJogo gp) {
         this.gp = gp;
+
         this.eventoClima = new EventoClima(gp);
         this.eventoDoencaFerimento= new EventoDoencaFerimento(gp);
 

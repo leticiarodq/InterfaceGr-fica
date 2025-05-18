@@ -1,8 +1,12 @@
 package gui.entidades;
 
-import gui.objetos.OBJ_Remedio;
+import gui.objetos.ALIMENTO_Enlatado;
+import gui.objetos.REMEDIO_Analgesico;
+import gui.objetos.REMEDIO_Antibiotico;
+import gui.objetos.REMEDIO_Bandagem;
 import gui.system.EventosTeclado;
 import gui.system.PainelJogo;
+import personagens.Mecanico;
 import personagens.Personagem;
 
 import java.awt.*;
@@ -31,12 +35,12 @@ public class Jogador extends Entidade {
 
     private boolean desidratado = false;
     private boolean infectado=false;
-    private double temperaturaCorporal;
-    private boolean hipotermia=false;
+
 
     private ArrayList<Entidade> inventario=new ArrayList<>();
     private final int tamanhoMaxInventario=20;
 
+    // Inventário
     public final int getTamanhoMaxInventario(){
         return tamanhoMaxInventario;
     }
@@ -45,20 +49,6 @@ public class Jogador extends Entidade {
         return inventario;
     }
 
-    public double getTemperaturaCorporal() {
-        return temperaturaCorporal;
-    }
-    public void setTemperaturaCorporal(double temperaturaCorporal){
-        this.temperaturaCorporal=temperaturaCorporal;
-    }
-
-    public boolean isHipotermia() {
-        return hipotermia;
-    }
-
-    public void setHipotermia(boolean hipotermia) {
-        this.hipotermia = hipotermia;
-    }
 
     public boolean isDesidratado() {
         return desidratado;
@@ -73,8 +63,8 @@ public class Jogador extends Entidade {
         return infectado;
     }
 
-    public void setInfectado(boolean infectado) {
-        this.infectado = infectado;
+    public void setInfectado(boolean infectado){
+        this.infectado=infectado;
     }
 
     private int counter2=0;
@@ -86,17 +76,17 @@ public class Jogador extends Entidade {
         this.gp = gp;
         this.eventosTeclado = eventosTeclado;
 
+
         telaX=gp.getTelaLargura()/2 - (gp.getTamanhoBloco()/2);
         telaY=gp.getTelaAltura()/2 - (gp.getTamanhoBloco()/2);
 
         setAreaSolida(new Rectangle(8, 16, 32, 32));
         setAreaSolidaPadraoX(getAreaSolida().x);
         setAreaSolidaPadraoY(getAreaSolida().y);
+
         setValoresPadrao(); //Chama o método que vai configurar valores padrão para o jogador
         getImagemJogador(); //Aqui garantimos que as imagens do jogador sejam carregadas
 
-        setValoresPadrao();;
-        getImagemJogador();
         definirItens();
     }
 
@@ -129,7 +119,13 @@ public class Jogador extends Entidade {
     }
     public void definirItens(){
 
-        //inventario.add(new OBJ_Remedio(gp));
+        inventario.add(new REMEDIO_Analgesico(gp));
+        inventario.add(new REMEDIO_Bandagem(gp));
+        inventario.add(new REMEDIO_Antibiotico(gp));
+        inventario.add(new ALIMENTO_Enlatado(gp));
+
+
+
 
     }
 
@@ -163,6 +159,11 @@ public class Jogador extends Entidade {
             // Checar colisao NPC
             int npcIndice=gp.getcColisoes().checarEntidade(this, gp.getNpc());
             interagirNPC(npcIndice);
+
+            //Checar colisao criatura
+            int criaturaIndice=gp.getcColisoes().checarEntidade(this, gp.getCriatura());
+            contatoCriatura(criaturaIndice);
+
 
             // Checar evento
             gp.getManipuladorDeEventos().checarEvento();
@@ -203,8 +204,19 @@ public class Jogador extends Entidade {
                     }
                     setContadorSprite(0);
                 }
+            }
+
+            if (isInvisibilidade()==true){
+
+                setContadorInvisibilidade(getContadorInvisibilidade()+1);
+
+                if(getContadorInvisibilidade()>60){
+                    setInvisibilidade(false);
+                    setContadorInvisibilidade(0);
+                }
 
             }
+
 
         }
     }
@@ -236,6 +248,21 @@ public class Jogador extends Entidade {
         }
         gp.getEventosTeclado().setEnterPressionado(false);
     }
+
+
+    public void contatoCriatura(int i){
+        if(i!=999){
+
+            if(isInvisibilidade()==false){
+                setVida(getVida()-1);
+                setInvisibilidade(true);
+
+            }
+
+        }
+
+    }
+
 
 
     public void desenhar(Graphics2D g2){ //Este método desenha o jogador na tela
@@ -294,7 +321,22 @@ public class Jogador extends Entidade {
                 y = gp.getTelaAltura() - (gp.getMundoAltura() - getMundoY());
             }
 
+            if(isInvisibilidade()==true){
+                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
+
+
+            }
+
             g2.drawImage(imagem, x, y, gp.getTamanhoBloco(), gp.getTamanhoBloco(), null); //O jogador é desenhado na posição (x, y) com o tamanho da célula (tileSize), que está definido no GamePanel.
-        }
+
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+
+        // g2.setFont(new Font("Arial", Font.PLAIN, 26));
+        // g2.setColor(Color.white);
+        // g2.drawString("Invisibilidade:"+getContadorInvisibilidade(), 10, 400);
+
+
+
     }
+}
 

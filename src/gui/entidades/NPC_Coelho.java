@@ -11,13 +11,23 @@ public class NPC_Coelho extends Entidade{
     PainelJogo gp;
     private Random aleatorio = new Random();
 
+    private int limiteEsquerda;
+    private int limiteDireita;
+    private int limiteTopo;
+    private int limiteFundo;
+
 
     public NPC_Coelho(PainelJogo gp){
         super(gp);
         this.gp = gp;
 
+        int inicioColuna = 10;
+        int inicioLinha = 10;
 
-
+        this.limiteEsquerda = inicioColuna * gp.getTamanhoBloco();
+        this.limiteDireita  = (inicioColuna + 35) * gp.getTamanhoBloco();
+        this.limiteTopo     = inicioLinha * gp.getTamanhoBloco();
+        this.limiteFundo    = (inicioLinha + 35) * gp.getTamanhoBloco();
 
         setDirecao("down");
         setVelocidade(1);
@@ -47,6 +57,7 @@ public class NPC_Coelho extends Entidade{
         getDialogos()[0]="Snif snif";
 
     }
+
 
 
     public void setAcao(){
@@ -103,6 +114,51 @@ public class NPC_Coelho extends Entidade{
                 break;
         }
     }
+
+    @Override
+    public void update() {
+        setAcao();
+
+        setColisaoOn(false);
+        gp.getcColisoes().checarBloco(this);
+        gp.getcColisoes().checarObjeto(this, false);
+        gp.getcColisoes().checarJogador(this);
+
+        if (!isColisaoOn()) {
+            int novoX = getMundoX();
+            int novoY = getMundoY();
+
+            switch (getDirecao()) {
+                case "up":
+                    novoY -= getVelocidade();
+                    break;
+                case "down":
+                    novoY += getVelocidade();
+                    break;
+                case "left":
+                    novoX -= getVelocidade();
+                    break;
+                case "right":
+                    novoX += getVelocidade();
+                    break;
+            }
+
+            // Só move se estiver dentro da área permitida
+            if (novoX >= limiteEsquerda && novoX <= limiteDireita &&
+                    novoY >= limiteTopo && novoY <= limiteFundo) {
+                setMundoX(novoX);
+                setMundoY(novoY);
+            }
+
+            // Animação
+            setContadorSprite(getContadorSprite() + 1);
+            if (getContadorSprite() > 20) {
+                setNumSprite(getNumSprite() == 1 ? 2 : 1);
+                setContadorSprite(0);
+            }
+        }
+    }
+
 
 
 }

@@ -157,41 +157,33 @@ public class GerenciadorBlocos {
     }
 
 
-    public void carregarMapa (String caminhoArquivo, int mapa){ // lê arquivo .txt que define o layout do mundo
+    public void carregarMapa(String caminhoArquivo, int mapa) {
+        try {
+            InputStream is = getClass().getResourceAsStream(caminhoArquivo);
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
-        try{
-            InputStream is=getClass().getResourceAsStream(caminhoArquivo);
-            BufferedReader br= new BufferedReader(new InputStreamReader(is));
+            int linha = 0;
 
-            int coluna=0;
-            int linha=0;
+            while (linha < gp.getLinhaMundoMax()) {
+                String line = br.readLine();
+                if (line == null) break; // evita NullPointerException
 
-            while(coluna<gp.getColMundoMax() && linha< gp.getLinhaMundoMax()){
+                String[] numeros = line.split(" ");
 
-                String line= br.readLine();
-
-                while(coluna<gp.getColMundoMax()){
-
-                    String numeros[]=line.split(" ");
-
-                    int num=Integer.parseInt(numeros[coluna]);
-
-                    numBlocosMapa[coluna][linha]=num;
-                    coluna++;
+                for (int coluna = 0; coluna < gp.getColMundoMax(); coluna++) {
+                    int num = Integer.parseInt(numeros[coluna]);
+                    numBlocosMapa[coluna][linha] = num;
                 }
-                if(coluna==gp.getColMundoMax()){
-                    coluna=0;
-                    linha++;
-                }
+                linha++;
             }
 
             br.close();
 
         } catch (Exception e) {
-
-
+            e.printStackTrace(); // imprime o erro para ajudar na depuração
         }
     }
+
     public void draw(Graphics2D g2) { // desenha os blocos na tela, baseando-se na posição do jogador
 
         int mundoCol=0; // representa a coluna atual no mundo

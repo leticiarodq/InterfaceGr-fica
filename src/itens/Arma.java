@@ -1,6 +1,6 @@
 package itens; // Define que esta classe pertence ao pacote 'itens'
 
-//Imports necessarios para ter relação direta com criaturas
+//Imports necessarios para ter relação direta com gui.criaturas
 
 import eventos.EventoCriatura;
 import personagens.Personagem;

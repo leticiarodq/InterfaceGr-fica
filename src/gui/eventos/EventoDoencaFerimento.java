@@ -1,4 +1,6 @@
-package gui.system;
+package gui.eventos;
+
+import gui.system.PainelJogo;
 
 import java.util.Random;
 
@@ -6,11 +8,13 @@ public class EventoDoencaFerimento {
 
     private PainelJogo gp;
 
+
     private int contadorDesidratacao = 0;
     private final int intervaloDesidratacao = 600; // a cada 120 frames (2 segundos)
 
     public EventoDoencaFerimento(PainelJogo gp){
         this.gp=gp;
+
 
     }
 
@@ -66,9 +70,9 @@ public class EventoDoencaFerimento {
         if (gp.jogador.getSanidade() <= 2 || gp.jogador.isDesidratado()) {
             gp.getIu().setDialogoAtual("Você está delirando!");
             gp.jogador.setVelocidade(1);
-            gp.mostrarEfeitoConfusao = true;
+            gp.setMostrarEfeitoConfusao(true);
         } else {
-            gp.mostrarEfeitoConfusao = false;
+            gp.setMostrarEfeitoConfusao(false);
             gp.jogador.setVelocidade(2); // velocidade normal
         }
     }

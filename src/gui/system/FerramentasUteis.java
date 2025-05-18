@@ -19,4 +19,3 @@ public class FerramentasUteis {
         return redimensionarImagem(original, novaLargura, novaAltura);
     }
 }
-

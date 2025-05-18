@@ -17,7 +17,6 @@ public class Survivor extends Jogador {
         getImagemJogador();
         sobreviventeNato.exibirStatus(); // <-- Aqui a chamada!
     }
-
     @Override
     public void getImagemJogador() {
         try {

@@ -3,7 +3,7 @@ package gui.system;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class EventosTeclado implements KeyListener{
+public class EventosTeclado implements KeyListener {
 
     PainelJogo gp;
 
@@ -11,7 +11,7 @@ public class EventosTeclado implements KeyListener{
 
     private boolean checarDesenhoTempo = false;
 
-    public boolean isChecarDesenhoTempo(){
+    public boolean isChecarDesenhoTempo() {
         return checarDesenhoTempo;
     }
 
@@ -19,33 +19,37 @@ public class EventosTeclado implements KeyListener{
         this.checarDesenhoTempo = checarDesenhoTempo;
     }
 
-    public boolean isCimaPressionado(){
+    public boolean isCimaPressionado() {
         return cimaPressionado;
     }
-    public boolean isBaixoPressionado(){
+
+    public boolean isBaixoPressionado() {
         return baixoPressionado;
     }
-    public boolean isEsquerdaPressionado(){
+
+    public boolean isEsquerdaPressionado() {
         return esquerdaPressionado;
     }
-    public boolean isDireitaPressionado(){
+
+    public boolean isDireitaPressionado() {
         return direitaPressionado;
     }
-    public boolean isEnterPressionado(){
+
+    public boolean isEnterPressionado() {
         return enterPressionado;
     }
 
-    public void setEnterPressionado(boolean enterPressionado){
-        this.enterPressionado=enterPressionado;
+    public void setEnterPressionado(boolean enterPressionado) {
+        this.enterPressionado = enterPressionado;
     }
 
 
-    public EventosTeclado (PainelJogo gp){
-        this.gp=gp;
+    public EventosTeclado(PainelJogo gp) {
+        this.gp = gp;
     }
 
     @Override
-    public void keyTyped(KeyEvent e){
+    public void keyTyped(KeyEvent e) {
 
     }
 
@@ -56,22 +60,18 @@ public class EventosTeclado implements KeyListener{
 
         if (gp.getEstadoJogo() == gp.getEstadoTitulo()) {
             estadoTitulo(code);
-        }
-        else if(gp.getEstadoJogo()==gp.getEstadoPlay()){
+        } else if (gp.getEstadoJogo() == gp.getEstadoPlay()) {
             estadoPlay(code);
-        }
-        else if (gp.getEstadoJogo() == gp.getEstadoDialogo()) {
+        } else if (gp.getEstadoJogo() == gp.getEstadoDialogo()) {
             estadoDialogo(code);
-        }
-        else if(gp.getEstadoJogo()==gp.getEstadoPausa()){
+        } else if (gp.getEstadoJogo() == gp.getEstadoPausa()) {
             estadoPausa(code);
-        }
-        else if(gp.getEstadoJogo() == gp.getEstadoPersonagem()){
+        } else if (gp.getEstadoJogo() == gp.getEstadoPersonagem()) {
             estadoPersonagem(code);
         }
     }
 
-    public void estadoTitulo(int code){
+    public void estadoTitulo(int code) {
 
         if (gp.getIu().getTelaMenu() == 0) {
             if (code == KeyEvent.VK_W) {
@@ -144,8 +144,7 @@ public class EventosTeclado implements KeyListener{
 
             }
 
-        }
-        else if (gp.getIu().getTelaMenu() == 2) {
+        } else if (gp.getIu().getTelaMenu() == 2) {
             if (code == KeyEvent.VK_ENTER) {
                 // Confirma a seleção do personagem e inicia o jogo
                 String personagem = "";
@@ -170,7 +169,7 @@ public class EventosTeclado implements KeyListener{
 
     }
 
-    public void estadoPlay(int code){
+    public void estadoPlay(int code) {
 
         if (code == KeyEvent.VK_W) {
             cimaPressionado = true;
@@ -194,17 +193,18 @@ public class EventosTeclado implements KeyListener{
                 gp.setEstadoJogo(gp.getEstadoPlay());
             }
         }
-        if(code==KeyEvent.VK_C){
-           gp.setEstadoJogo(gp.getEstadoPersonagem());
+        if (code == KeyEvent.VK_C) {
+            gp.setEstadoJogo(gp.getEstadoPersonagem());
         }
 
-        if(code==KeyEvent.VK_ENTER){
-            enterPressionado=true;
+        if (code == KeyEvent.VK_ENTER) {
+            enterPressionado = true;
         }
+
 
     }
 
-    public void estadoPausa(int code){
+    public void estadoPausa(int code) {
 
         if (code == KeyEvent.VK_P) {
             gp.setEstadoJogo(gp.getEstadoPlay());
@@ -212,7 +212,7 @@ public class EventosTeclado implements KeyListener{
 
     }
 
-    public void estadoDialogo(int code){
+    public void estadoDialogo(int code) {
 
         if (code == KeyEvent.VK_ENTER) {
             gp.getIu().avancarDialogo();
@@ -224,7 +224,7 @@ public class EventosTeclado implements KeyListener{
 
     }
 
-    public void estadoPersonagem(int code){
+    public void estadoPersonagem(int code) {
 
         if (code == KeyEvent.VK_C) {
             gp.setEstadoJogo(gp.getEstadoPlay());
@@ -232,29 +232,37 @@ public class EventosTeclado implements KeyListener{
 
         if (code == KeyEvent.VK_W) {
 
-            if(gp.getIu().getSlotLinha()!=0){
+            if (gp.getIu().getSlotLinha() != 0) {
                 gp.getIu().setSlotLinha(gp.getIu().getSlotLinha() - 1); // Cima
             }
         }
 
         if (code == KeyEvent.VK_S) {
-            if(gp.getIu().getSlotLinha()!=3){
+            if (gp.getIu().getSlotLinha() != 3) {
                 gp.getIu().setSlotLinha(gp.getIu().getSlotLinha() + 1); // Baixo
             }
         }
 
         if (code == KeyEvent.VK_A) {
-            if(gp.getIu().getSlotCol()!=0){
+            if (gp.getIu().getSlotCol() != 0) {
                 gp.getIu().setSlotCol(gp.getIu().getSlotCol() - 1); // Esquerda
             }
         }
 
         if (code == KeyEvent.VK_D) {
-            if(gp.getIu().getSlotCol()!=4){
+            if (gp.getIu().getSlotCol() != 4) {
                 gp.getIu().setSlotCol(gp.getIu().getSlotCol() + 1); // Direita
             }
         }
     }
+
+    public void estadoCombate(int code) {
+
+
+
+    }
+
+
 
 
     @Override

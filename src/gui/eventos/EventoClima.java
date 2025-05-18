@@ -1,11 +1,13 @@
-package gui.system;
+package gui.eventos;
 
-import java.awt.*;
+import gui.system.PainelJogo;
+
 import java.util.Random;
 
 public class EventoClima {
 
     private PainelJogo gp;
+
 
     private int contadorChuva = 0;
     private final int intervaloChuva = 1200; // número de frames (ajuste como quiser)
@@ -23,6 +25,7 @@ public class EventoClima {
 
     public EventoClima(PainelJogo gp) {
         this.gp = gp;
+
     }
 
     public void eventoChuva() {
@@ -38,7 +41,7 @@ public class EventoClima {
             contadorChuva = 0; // reseta o contador após ativar
         } else {
             contadorChuva++;
-            gp.mostrarChuva = false;
+            gp.setMostrarChuva(false);
         }
     }
 
@@ -67,7 +70,7 @@ public class EventoClima {
             Random random = new Random();
             int chance = random.nextInt(100); // 0 a 99
 
-            if (chance < 5) { // 10% de chance
+            if (chance < 100) { // 10% de chance
                 gp.setEstadoJogo(gp.getEstadoDialogo());
                 gp.getIu().setDialogoAtual("NEVASCA\nO vento gelado sopra com\nforça...\nVocê está perdeu energia!");
                 gp.jogador.setEnergia(gp.jogador.getEnergia() - 1);
@@ -77,12 +80,7 @@ public class EventoClima {
             contadorNevasca = 0; // reseta o contador só após tentar ativar
         } else {
             contadorNevasca++;
-            gp.mostrarNevasca = false;
+            gp.setMostrarNevasca(false);
         }
     }
 }
-
-
-
-
-
