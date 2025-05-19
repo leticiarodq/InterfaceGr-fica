@@ -35,7 +35,7 @@ public class GerenciadorBlocos {
 
         this.gp=gp; //O this se refere ao atributo da instância da classe e não ao parâmetro do método
 
-        blocos = new Blocos[100]; //Quantidade dos tipos de bloco
+        blocos = new Blocos[200]; //Quantidade dos tipos de bloco
 
         numBlocosMapa= new int[gp.getColMundoMax()][gp.getLinhaMundoMax()];
 
@@ -47,6 +47,7 @@ public class GerenciadorBlocos {
     public void pegarImagemBloco(){ // Construtor que chama o método setup várias vezes passando o índice no vetor 'blocos', o nome da imagem e se o bloco tem colisão ou não
 
 
+        // Floresta
         setup(0,"grass00", false);
 
 
@@ -128,8 +129,23 @@ public class GerenciadorBlocos {
 
         setup(69, "placa", true);
 
+        // Ruínas
+
+        setup(70, "ruinas01", true);
+        setup(71, "ruinas02", true);
+        setup(72, "ruinas03", true);
+        setup(73, "ruinas04", true);
+        setup(74, "ruinas05", true);
+        setup(75, "ruinas06", true);
+        setup(76, "ruinas07", true);
+        setup(77, "ruinas08", true);
+        setup(78, "ruinas09", true);
 
 
+        // ilha
+        setup(100, "ilha01", false);
+        setup(101,"ilha02", false);
+        setup(102,"ilha03", false);
 
 
 

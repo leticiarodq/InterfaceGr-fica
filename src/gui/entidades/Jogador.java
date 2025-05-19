@@ -4,6 +4,7 @@ import gui.objetos.ALIMENTO_Enlatado;
 import gui.objetos.REMEDIO_Analgesico;
 import gui.objetos.REMEDIO_Antibiotico;
 import gui.objetos.REMEDIO_Bandagem;
+import gui.system.CriadorAtivos;
 import gui.system.EventosTeclado;
 import gui.system.PainelJogo;
 import personagens.Mecanico;
@@ -68,6 +69,8 @@ public class Jogador extends Entidade {
     }
 
     private int counter2=0;
+
+    CriadorAtivos criadorDeAtivos;
 
     public Jogador(PainelJogo gp, EventosTeclado eventosTeclado) { //Construtor da classe que recebe o painel de jogo e manipulador de teclas
 
@@ -221,22 +224,33 @@ public class Jogador extends Entidade {
         }
     }
 
+    public int tempoParaReaparecer = 0;
+    public boolean itemVaiVoltar = false;
+
+
     public void pegarObjeto(int i){
 
         if(i !=999){
-            //gp.getObj()[i]=null;
-                String nomeObjeto=gp.getObj()[i].getNome();
 
-                switch(nomeObjeto){
-                    case "Remedio":
-                        temRemedio++;
-                        gp.getObj()[i]=null;
-                        System.out.println("Remedios: "+temRemedio);
-                        break;
-                }
+            String texto;
+
+            if(inventario.size()!=tamanhoMaxInventario){
+
+                inventario.add(gp.getObj()[i]);
+                texto="Pegou"+gp.getObj()[i].getNome()+"!";
+
+                itemVaiVoltar = true;
+                tempoParaReaparecer = 300; // por exemplo, 300 frames (~5 segundos)
+
+            }
+            else {
+                texto="Você antingiu o limite máximo no inventário!";
+            }
+            gp.getObj()[i]=null;
         }
 
     }
+
 
     public void interagirNPC(int i){
         if(i!=999){

@@ -65,7 +65,6 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
     private Entidade coelho[]=new Entidade[10];
     private Entidade criatura[]=new Entidade[10];
     private ArrayList<Entidade> entidadeLista= new ArrayList<>();
-    private Entidade alimento[]= new Entidade[30];
 
     // Estado do jogo
 
@@ -167,9 +166,6 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         return entidadeLista;
     }
 
-    public Entidade[] getAlimento() {
-        return alimento;
-    }
 
     // Métodos setters
 
@@ -253,7 +249,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         cAtivos.setNPC();
         cAtivos.setCOELHO();
         cAtivos.setCriatura();
-        cAtivos.setAlimento();
+
 
         estadoJogo=estadoTitulo;
 
@@ -501,12 +497,6 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
             for (int i = 0; i < obj.length; i++) {
                 if (obj[i] != null) {
                     entidadeLista.add(obj[i]);
-                }
-            }
-
-            for (int i = 0; i < alimento.length; i++) {
-                if (alimento[i] != null) {
-                    entidadeLista.add(alimento[i]);
                 }
             }
 

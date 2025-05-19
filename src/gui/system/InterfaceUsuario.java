@@ -283,7 +283,7 @@ public class InterfaceUsuario {
         int dFrameLargura=frameLargura;
         int dFrameAltura=gp.getTamanhoBloco()*4;
 
-        desenharJanela(dFrameX, dFrameY, dFrameAltura, dFrameLargura);
+
         int textoX= dFrameX+20;
         int textoY=frameY+gp.getTamanhoBloco()+230;
         g2.setFont(Font03.deriveFont(13f));
@@ -292,9 +292,11 @@ public class InterfaceUsuario {
 
         if (itemIndice < gp.jogador.getInventario().size()) {
 
+            desenharJanela(dFrameX, dFrameY, dFrameAltura, dFrameLargura);
+
             for(String linha:gp.jogador.getInventario().get(itemIndice).getDescricao().split("\n")){
                 g2.drawString(linha, textoX, textoY);
-                textoY+=32;
+                textoY+=26;
 
             }
 
