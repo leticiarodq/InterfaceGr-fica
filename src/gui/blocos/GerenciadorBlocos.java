@@ -3,6 +3,8 @@ package gui.blocos;
 import gui.system.FerramentasUteis;
 import gui.system.PainelJogo;
 import personagens.Personagem;
+import ambientes.*;
+
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -11,6 +13,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
+
 
 // Classe responsável por carregar, gerenciar e desenhar os blocos no mundo do jogo
 
@@ -173,6 +177,7 @@ public class GerenciadorBlocos {
     }
 
 
+
     public void carregarMapa(String caminhoArquivo, int mapa) {
         try {
             InputStream is = getClass().getResourceAsStream(caminhoArquivo);
@@ -198,7 +203,13 @@ public class GerenciadorBlocos {
         } catch (Exception e) {
             e.printStackTrace(); // imprime o erro para ajudar na depuração
         }
+
+        if(mapa==0){
+            System.out.println("Floresta");
+        }
     }
+
+
 
     public void draw(Graphics2D g2) { // desenha os blocos na tela, baseando-se na posição do jogador
 

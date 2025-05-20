@@ -57,6 +57,9 @@ public abstract class Ambiente { // Define a classe abstrata 'Ambiente' que serv
     }
 
 
+    public void setNomeAmbiente(String nomeAmbiente){
+        this.nomeAmbiente=nomeAmbiente;
+    }
     // Métodos que serão construídos em breve
     public void explorar(){
     }

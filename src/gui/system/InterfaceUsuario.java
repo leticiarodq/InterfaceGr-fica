@@ -17,7 +17,7 @@ public class InterfaceUsuario {
     private Font Font05, Font03, Font06;
     private Graphics2D g2;
 
-    private BufferedImage imagem, fundo1, fundo2, fundo3, fundo4, fundo5, vida_cheia, vida_vazia, vida_metade, sede_cheia, sede_vazia, sede_metade, fome_cheio, fome_metade, fome_vazio, sanidade_cheia, sanidade_metade, sanidade_vazia, energia_cheia, energia_metade, energia_vazia;
+    private BufferedImage imagem, fundo1, fundo2, vida_cheia, vida_vazia, vida_metade, sede_cheia, sede_vazia, sede_metade, fome_cheio, fome_metade, fome_vazio, sanidade_cheia, sanidade_metade, sanidade_vazia, energia_cheia, energia_metade, energia_vazia;
 
     private boolean jogoFinalizado = true;
 
@@ -112,10 +112,8 @@ public class InterfaceUsuario {
         try {
             imagem = ImageIO.read(getClass().getResourceAsStream("/objetos/escudo.png"));
             fundo1 = ImageIO.read(getClass().getResourceAsStream("/fundo/fundo.png"));
-            fundo2 = ImageIO.read(getClass().getResourceAsStream("/fundo/fundo2.png"));
-            fundo3 = ImageIO.read(getClass().getResourceAsStream("/fundo/fundo3.png"));
-            fundo4 = ImageIO.read(getClass().getResourceAsStream("/fundo/fundo4.png"));
-            fundo5 = ImageIO.read(getClass().getResourceAsStream("/fundo/fundo5.png"));
+            fundo2 = ImageIO.read(getClass().getResourceAsStream("/fundo/fundo02.png"));
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -229,7 +227,7 @@ public class InterfaceUsuario {
     public void desenharTelaJogoFinalizado() {
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 
-        g2.setColor(Color.BLACK);
+        g2.setColor(Color.red);
         g2.fillRect(0, 0, gp.getTelaLargura(), gp.getTelaAltura());
 
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
@@ -470,19 +468,19 @@ public class InterfaceUsuario {
 
         if (telaMenu == 0) {
             // Desenha o fundo na tela
-            g2.drawImage(fundo1, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null); // Ajusta a imagem de fundo à tela
+            g2.drawImage(fundo2, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null); // Ajusta a imagem de fundo à tela
 
             //g2.setColor(new Color(0, 0, 0));
             //g2.fillRect(0, 0, gp.getTelaLargura(), gp.getTelaAltura());
 
             // Título
-            g2.setColor(Color.GRAY);
+            g2.setColor(Color.BLACK);
             g2.setFont(Font05.deriveFont(70f));
-            g2.drawString("ÚLTIMA FRONTEIRA", obterXCentralizarTexto("ÚLTIMA FRONTEIRA") + 3, 150 + 2);
+            g2.drawString("ÚLTIMA FRONTEIRA", obterXCentralizarTexto("ÚLTIMA FRONTEIRA") + 4, 220 + 3);
 
             g2.setColor(Color.WHITE);
             g2.setFont(Font05.deriveFont(70f));
-            g2.drawString("ÚLTIMA FRONTEIRA", obterXCentralizarTexto("ÚLTIMA FRONTEIRA"), 150);
+            g2.drawString("ÚLTIMA FRONTEIRA", obterXCentralizarTexto("ÚLTIMA FRONTEIRA"), 220);
 
             // Imagem centralizada
             int novaLargura = imagem.getWidth() * 2;
@@ -501,18 +499,18 @@ public class InterfaceUsuario {
 
 
             for (int i = 0; i < opcoes.length; i++) {
-                int yTexto = gp.getTamanhoBloco() * (8 + i);
+                int yTexto = gp.getTamanhoBloco() * (7 + i);
                 String texto = opcoes[i];
 
                 // Desenha o texto centralizado
                 int xTexto = obterXCentralizarTexto(texto);
                 g2.drawString(texto, xTexto, yTexto);
-                desenharTextoComBorda(texto, xTexto, yTexto);
+                desenharTextoComBordaPreta(texto, xTexto, yTexto);
 
                 // Se essa é a opção selecionada, desenha a setinha
                 if (comandoNum == i) {
                     g2.drawString(">", xTexto - gp.getTamanhoBloco(), yTexto);
-                    desenharTextoComBorda(">", xTexto - gp.getTamanhoBloco(), yTexto);
+                    desenharTextoComBordaPreta(">", xTexto - gp.getTamanhoBloco(), yTexto);
                     g2.setColor(Color.yellow);
                     g2.drawString(texto, xTexto, yTexto);
                     g2.drawString(">", xTexto - gp.getTamanhoBloco(), yTexto);
@@ -524,25 +522,36 @@ public class InterfaceUsuario {
 
             //gp.telaMenuPersonagens.desenhar(g2);
 
-            g2.drawImage(fundo1, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null); // Ajusta a imagem de fundo à tela
+            g2.drawImage(fundo2, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null); // Ajusta a imagem de fundo à tela
 
-            g2.setColor(Color.WHITE);
-            g2.setFont(Font03.deriveFont(20f));
+            g2.setColor(Color.black);
+            g2.setFont(Font05.deriveFont(35f));
 
             String texto = "SELECIONE SEU PERSONAGEM:";
             int x = obterXCentralizarTexto(texto);
             int y = gp.getTamanhoBloco() * 3;
+            g2.drawString(texto, x+5, y+4);
+
+            g2.setColor(Color.white);
+            g2.setFont(Font05.deriveFont(35f));
+
+            texto = "SELECIONE SEU PERSONAGEM:";
+            x = obterXCentralizarTexto(texto);
+            y = gp.getTamanhoBloco() * 3;
             g2.drawString(texto, x, y);
-            desenharTextoComBorda(texto, x, y);
+
+
+            g2.setColor(Color.WHITE);
+            g2.setFont(Font03.deriveFont(20f));
 
             texto = "O RASTREADOR";
             x = obterXCentralizarTexto(texto);
             y += gp.getTamanhoBloco() * 2;
             g2.drawString(texto, x, y);
-            desenharTextoComBorda(texto, x, y);
+            desenharTextoComBordaPreta(texto, x, y);
             if (comandoNum == 0) {
                 g2.drawString(">", x - gp.getTamanhoBloco(), y);
-                desenharTextoComBorda(">", x - gp.getTamanhoBloco(), y);
+                desenharTextoComBordaPreta(">", x - gp.getTamanhoBloco(), y);
                 g2.setColor(Color.yellow);
                 g2.drawString(texto, x, y);
                 g2.drawString(">", x - gp.getTamanhoBloco(), y);
@@ -553,10 +562,10 @@ public class InterfaceUsuario {
             x = obterXCentralizarTexto(texto);
             y += gp.getTamanhoBloco() * 1;
             g2.drawString(texto, x, y);
-            desenharTextoComBorda(texto, x, y);
+            desenharTextoComBordaPreta(texto, x, y);
             if (comandoNum == 1) {
                 g2.drawString(">", x - gp.getTamanhoBloco(), y);
-                desenharTextoComBorda(">", x - gp.getTamanhoBloco(), y);
+                desenharTextoComBordaPreta(">", x - gp.getTamanhoBloco(), y);
                 g2.setColor(Color.yellow);
                 g2.drawString(texto, x, y);
                 g2.drawString(">", x - gp.getTamanhoBloco(), y);
@@ -567,10 +576,10 @@ public class InterfaceUsuario {
             x = obterXCentralizarTexto(texto);
             y += gp.getTamanhoBloco() * 1;
             g2.drawString(texto, x, y);
-            desenharTextoComBorda(texto, x, y);
+            desenharTextoComBordaPreta(texto, x, y);
             if (comandoNum == 2) {
                 g2.drawString(">", x - gp.getTamanhoBloco(), y);
-                desenharTextoComBorda(">", x - gp.getTamanhoBloco(), y);
+                desenharTextoComBordaPreta(">", x - gp.getTamanhoBloco(), y);
                 g2.setColor(Color.yellow);
                 g2.drawString(texto, x, y);
                 g2.drawString(">", x - gp.getTamanhoBloco(), y);
@@ -580,10 +589,10 @@ public class InterfaceUsuario {
             x = obterXCentralizarTexto(texto);
             y += gp.getTamanhoBloco() * 1;
             g2.drawString(texto, x, y);
-            desenharTextoComBorda(texto, x, y);
+            desenharTextoComBordaPreta(texto, x, y);
             if (comandoNum == 3) {
                 g2.drawString(">", x - gp.getTamanhoBloco(), y);
-                desenharTextoComBorda(">", x - gp.getTamanhoBloco(), y);
+                desenharTextoComBordaPreta(">", x - gp.getTamanhoBloco(), y);
                 g2.setColor(Color.yellow);
                 g2.drawString(texto, x, y);
                 g2.drawString(">", x - gp.getTamanhoBloco(), y);
@@ -593,10 +602,10 @@ public class InterfaceUsuario {
             x = obterXCentralizarTexto(texto);
             y += gp.getTamanhoBloco() * 2;
             g2.drawString(texto, x, y);
-            desenharTextoComBorda(texto, x, y);
+            desenharTextoComBordaPreta(texto, x, y);
             if (comandoNum == 4) {
                 g2.drawString(">", x - gp.getTamanhoBloco(), y);
-                desenharTextoComBorda(">", x - gp.getTamanhoBloco(), y);
+                desenharTextoComBordaPreta(">", x - gp.getTamanhoBloco(), y);
                 g2.setColor(Color.yellow);
                 g2.drawString(texto, x, y);
                 g2.drawString(">", x - gp.getTamanhoBloco(), y);
@@ -607,7 +616,7 @@ public class InterfaceUsuario {
             // Definindo o fundo
             //g2.setColor(Color.BLACK);
             //g2.fillRect(0, 0, gp.getTelaLargura(), gp.getTelaAltura());
-            g2.drawImage(fundo1, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null); // Ajusta a imagem de fundo à tela
+            g2.drawImage(fundo2, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null); // Ajusta a imagem de fundo à tela
 
 
             // Definindo a cor e a fonte do texto
@@ -621,19 +630,19 @@ public class InterfaceUsuario {
                 descricao = "Kael Thorn é um rastreador experiente, conhecido por seu instinto quase sobrenatural para encontrar comida e água em qualquer ambiente. Seus olhos atentos e seu faro aguçado o tornam essencial para qualquer expedição perigosa. Ágil, silencioso e resiliente, Kael aprendeu a ler os menores sinais da natureza para sobreviver onde poucos conseguiriam."
                 ;
                 nome = "O RASTREADOR";
-                g2.drawImage(fundo1, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null);
+                g2.drawImage(fundo2, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null);
             } else if (personagemSelecionado.equals("O MÉDICO")) {
                 descricao = "Lysander Curavita é um médico habilidoso, capaz de curar ferimentos com os recursos que a natureza oferece. Sua experiência o torna capaz de restaurar a saúde mesmo sem o uso de itens raros. Astuto e compassivo, ele transforma o comum em remédio, sendo uma fonte de esperança em tempos de necessidade.";
                 nome = "O MÉDICO";
-                g2.drawImage(fundo1, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null); // Ajusta a imagem de fundo à tela
+                g2.drawImage(fundo2, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null); // Ajusta a imagem de fundo à tela
             } else if (personagemSelecionado.equals("A MECÂNICA")) {
                 descricao = "Kaela Forjaterra é uma mecânica determinada, com o dom de reparar ferramentas danificadas e criar novas armas a partir do que tiver em mãos. Com poucas peças e muita engenhosidade, Kaela garante que os equipamentos estejam sempre prontos para o próximo desafio.";
                 nome = "A MECÂNICA";
-                g2.drawImage(fundo1, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null); // Ajusta a imagem de fundo à tela
+                g2.drawImage(fundo2, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null); // Ajusta a imagem de fundo à tela
             } else if (personagemSelecionado.equals("A SOBREVIVENTE")) {
                 descricao = "Elyra Sylvanis é uma elfa sobrevivente , cuja conexão com a natureza a torna menos vulnerável às necessidades de comida e água. Sua resistência a esses elementos lhe permite explorar os ambientes mais áridos e selvagens sem sofrer tanto com a escassez. Elyra navega pelos terrenos mais hostis com graça e eficácia, sempre atenta ao que o ambiente tem a oferecer.";
                 nome = "A SOBREVIVENTE";
-                g2.drawImage(fundo1, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null); // Ajusta a imagem de fundo à tela
+                g2.drawImage(fundo2, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null); // Ajusta a imagem de fundo à tela
             }
 
             // Calcular a largura máxima para o texto (por exemplo, 80% da largura total)
@@ -649,22 +658,23 @@ public class InterfaceUsuario {
             int y = gp.getTamanhoBloco() * 4; // Começando com um espaçamento confortável
             int espacoEntreLinhas = 25; // Ajuste conforme necessário
 
+
             // Desenhe cada linha centralizada
             for (String linha : linhas) {
                 int x = obterXCentralizarTexto(linha);
                 g2.drawString(linha, margemEsquerda, y);
-                desenharTextoComBorda(linha, margemEsquerda, y);
+                desenharTextoComBordaPreta(linha, margemEsquerda, y);
 
                 y += espacoEntreLinhas;
             }
 
             g2.setColor(Color.white);
-            g2.setFont(Font03.deriveFont(20f)); // Ajuste de tamanho da fonte
+            g2.setFont(Font05.deriveFont(35f)); // Ajuste de tamanho da fonte
             int x = obterXCentralizarTexto(nome);
             y += gp.getTamanhoBloco(); // Espaço adicional antes das instruçõe
 
             g2.drawString(nome, x, 120);
-            desenharTextoComBorda(nome, x, 120);
+            desenharTextoComBordaPreta(nome, x, 120);
 
 
             // Instruções para avançar
@@ -676,7 +686,7 @@ public class InterfaceUsuario {
 
             // Desenhando as instruções
             g2.drawString(instrucoes, x, 500);
-            desenharTextoComBorda(instrucoes, x, 500);
+            desenharTextoComBordaPreta(instrucoes, x, 500);
 
         }
     }
