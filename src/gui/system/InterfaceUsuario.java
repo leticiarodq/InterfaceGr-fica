@@ -283,7 +283,7 @@ public class InterfaceUsuario {
         desenharJanela(frameX, frameY, frameAltura, frameLargura);
 
         g2.setColor(Color.white);
-        g2.setFont(Font03.deriveFont(15f));
+        g2.setFont(Font03.deriveFont(25f));
 
         int textoX = frameX + 20;
         int textoY = frameY + gp.getTamanhoBloco();
@@ -364,7 +364,7 @@ public class InterfaceUsuario {
 
         int textoX = dFrameX + 20;
         int textoY = frameY + gp.getTamanhoBloco() + 230;
-        g2.setFont(Font03.deriveFont(13f));
+        g2.setFont(Font03.deriveFont(23f));
 
         int itemIndice = pegarItemSlot();
 
@@ -383,6 +383,8 @@ public class InterfaceUsuario {
 
 
     }
+
+
 
     public int pegarItemSlot() {
 
@@ -435,7 +437,7 @@ public class InterfaceUsuario {
 
         desenharJanela(x, y, largura, altura);
 
-        g2.setFont(Font03.deriveFont(14f));
+        g2.setFont(Font03.deriveFont(30f));
         x += gp.getTamanhoBloco() / 2;
         y += gp.getTamanhoBloco();
 
@@ -492,7 +494,7 @@ public class InterfaceUsuario {
             //g2.drawImage(imagem, xImagem, yImagem, novaLargura, novaAltura, null);
 
             // Opções do menu
-            g2.setFont(Font03.deriveFont(25f));
+            g2.setFont(Font03.deriveFont(40f));
             g2.setColor(Color.WHITE);
 
             String[] opcoes = {"NOVO JOGO", "CARREGAR JOGO", "SAIR"};
@@ -525,15 +527,15 @@ public class InterfaceUsuario {
             g2.drawImage(fundo2, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null); // Ajusta a imagem de fundo à tela
 
             g2.setColor(Color.black);
-            g2.setFont(Font05.deriveFont(35f));
+            g2.setFont(Font03.deriveFont(45f));
 
             String texto = "SELECIONE SEU PERSONAGEM:";
             int x = obterXCentralizarTexto(texto);
             int y = gp.getTamanhoBloco() * 3;
-            g2.drawString(texto, x+5, y+4);
+            g2.drawString(texto, x+2, y+2);
 
             g2.setColor(Color.white);
-            g2.setFont(Font05.deriveFont(35f));
+            g2.setFont(Font03.deriveFont(45f));
 
             texto = "SELECIONE SEU PERSONAGEM:";
             x = obterXCentralizarTexto(texto);
@@ -542,7 +544,7 @@ public class InterfaceUsuario {
 
 
             g2.setColor(Color.WHITE);
-            g2.setFont(Font03.deriveFont(20f));
+            g2.setFont(Font03.deriveFont(40f));
 
             texto = "O RASTREADOR";
             x = obterXCentralizarTexto(texto);
@@ -621,7 +623,7 @@ public class InterfaceUsuario {
 
             // Definindo a cor e a fonte do texto
             g2.setColor(Color.WHITE);
-            g2.setFont(Font03.deriveFont(18f)); // Ajuste de tamanho da fonte
+            g2.setFont(Font03.deriveFont(30f)); // Ajuste de tamanho da fonte
 
             // Descrição e vantagens de cada personagem
             String descricao = "";
@@ -669,7 +671,7 @@ public class InterfaceUsuario {
             }
 
             g2.setColor(Color.white);
-            g2.setFont(Font05.deriveFont(35f)); // Ajuste de tamanho da fonte
+            g2.setFont(Font03.deriveFont(40f)); // Ajuste de tamanho da fonte
             int x = obterXCentralizarTexto(nome);
             y += gp.getTamanhoBloco(); // Espaço adicional antes das instruçõe
 
@@ -679,7 +681,7 @@ public class InterfaceUsuario {
 
             // Instruções para avançar
             g2.setColor(Color.WHITE);
-            g2.setFont(Font03.deriveFont(13f)); // Ajuste de tamanho da fonte
+            g2.setFont(Font03.deriveFont(30f)); // Ajuste de tamanho da fonte
             String instrucoes = "Pressione ENTER para confirmar ou ESC para voltar";
             x = obterXCentralizarTexto(instrucoes);
             y += gp.getTamanhoBloco(); // Espaço adicional antes das instruções

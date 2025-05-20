@@ -22,13 +22,13 @@ public class GerenciadorBlocos {
 
     private PainelJogo gp; // referência ao painel principal de jogo, para acessar os dados do painel
     private Blocos[] blocos; // vetor que armazena todos os tipos diferentes de blocos
-    private int numBlocosMapa[][]; // uma matriz que representa o mapa inteiro, cada valor nela é um índice do vetor blocos
+    private int numBlocosMapa[][][]; // uma matriz que representa o mapa inteiro, cada valor nela é um índice do vetor blocos
     Personagem personagem;
 
 
     // Métodos de acesso getters
 
-    public int[][] getNumBlocosMapa() {
+    public int[][][] getNumBlocosMapa() {
         return numBlocosMapa;
     }
     public Blocos[] getBlocos() {
@@ -41,10 +41,11 @@ public class GerenciadorBlocos {
 
         blocos = new Blocos[200]; //Quantidade dos tipos de bloco
 
-        numBlocosMapa= new int[gp.getColMundoMax()][gp.getLinhaMundoMax()];
+        numBlocosMapa= new int[gp.getMapaMax()][gp.getColMundoMax()][gp.getLinhaMundoMax()];
 
         pegarImagemBloco(); //Chamando o método no construtor
         carregarMapa("/maps/floresta.txt",0);
+        carregarMapa("/maps/ruinas.txt",1);
     }
 
 
@@ -178,22 +179,33 @@ public class GerenciadorBlocos {
 
 
 
-    public void carregarMapa(String caminhoArquivo, int mapa) {
+    public boolean carregarMapa(String caminhoArquivo, int mapa) {
         try {
             InputStream is = getClass().getResourceAsStream(caminhoArquivo);
+
+            // Verifique se o arquivo foi carregado corretamente
+            if (is == null) {
+                throw new IOException("Arquivo não encontrado: " + caminhoArquivo);
+            }
+
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
             int linha = 0;
 
             while (linha < gp.getLinhaMundoMax()) {
                 String line = br.readLine();
-                if (line == null) break; // evita NullPointerException
+                if (line == null) break; // Evita NullPointerException
 
                 String[] numeros = line.split(" ");
 
+                // Verifica se o número de colunas é consistente
+                if (numeros.length != gp.getColMundoMax()) {
+                    throw new IOException("Número incorreto de colunas na linha " + (linha + 1));
+                }
+
                 for (int coluna = 0; coluna < gp.getColMundoMax(); coluna++) {
                     int num = Integer.parseInt(numeros[coluna]);
-                    numBlocosMapa[coluna][linha] = num;
+                    numBlocosMapa[mapa][coluna][linha] = num;
                 }
                 linha++;
             }
@@ -201,13 +213,19 @@ public class GerenciadorBlocos {
             br.close();
 
         } catch (Exception e) {
-            e.printStackTrace(); // imprime o erro para ajudar na depuração
+            // Exibe uma mensagem detalhada sobre a exceção
+            System.err.println("Erro ao carregar o mapa: " + e.getMessage());
+            e.printStackTrace(); // Imprime o erro para depuração
+            return false; // Retorna false em caso de erro
         }
 
-        if(mapa==0){
+        if (mapa == 0) {
             System.out.println("Floresta");
         }
+
+        return true; // Retorna true se o mapa for carregado com sucesso
     }
+
 
 
 
@@ -219,7 +237,7 @@ public class GerenciadorBlocos {
         // percorre cada coluna e linha do mundo (ou seja, cada bloco do mapa).
         while(mundoCol<gp.getColMundoMax() && mundoLinha<gp.getLinhaMundoMax()){
 
-            int numBloco= numBlocosMapa[mundoCol][mundoLinha]; // número que representa o tipo do bloco naquela posição
+            int numBloco= numBlocosMapa[gp.getMapaAtual()][mundoCol][mundoLinha]; // número que representa o tipo do bloco naquela posição
 
             // posição exata desse bloco no mundo, calculado multiplicando a posição na matriz pelo tamanho de cada bloco
             int mundoX= mundoCol * gp.getTamanhoBloco();

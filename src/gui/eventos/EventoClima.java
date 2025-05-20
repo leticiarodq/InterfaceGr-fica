@@ -28,6 +28,7 @@ public class EventoClima {
     }
 
     public void eventoChuva() {
+
         if (contadorChuva >= intervaloChuva && !calorExtremoAtivo && !nevascaAtiva) {
             int chance = random.nextInt(100);
             if (chance < 10) { // 10% de chance

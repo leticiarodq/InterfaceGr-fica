@@ -178,9 +178,9 @@ public class ManipuladorDeEventos {
     public void mensagemBoasVindas(int estadoJogo) {
         gp.setEstadoJogo(estadoJogo);
         String[] falas = {
-                "Bem-vindo ao jogo\nÚLTIMA FRONTEIRA!",
-                "Prepare-se para\n sobreviver.",
-                "Use os recursos\ncom sabedoria.",
+                "Bem-vindo ao jogo ÚLTIMA\nFRONTEIRA!",
+                "Prepare-se para sobreviver.",
+                "Use os recursos com\nsabedoria.",
                 "Boa sorte!"
         };
         gp.getIu().setDialogos(falas);

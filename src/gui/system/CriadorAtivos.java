@@ -7,6 +7,8 @@ import gui.entidades.NPC_Explorador;
 import gui.objetos.*;
 import eventos.*;
 
+import java.util.Random;
+
 public class CriadorAtivos {
 
     private PainelJogo gp;
@@ -126,16 +128,19 @@ public class CriadorAtivos {
 
     }
 
+
+
   public void setCriatura(){
 
-        int i=0;
-        gp.getCriatura()[i]=new CRI_Lobo(gp);
-        gp.getCriatura()[i].setMundoX(21 * gp.getTamanhoBloco());
-        gp.getCriatura()[i].setMundoY(25 * gp.getTamanhoBloco());
-        i++;
+          int i=0;
+          gp.getCriatura()[i]=new CRI_Lobo(gp);
+          gp.getCriatura()[i].setMundoX(21 * gp.getTamanhoBloco());
+          gp.getCriatura()[i].setMundoY(25 * gp.getTamanhoBloco());
+          i++;
+
+
 
     }
-
 
 
 }
