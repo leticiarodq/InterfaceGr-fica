@@ -1,6 +1,6 @@
 package exceptions;
 
-public class SedeCheiaException extends Exception {
+public class SedeCheiaException extends RuntimeException {
     public SedeCheiaException(String mensagem) {
         super(mensagem);
     }

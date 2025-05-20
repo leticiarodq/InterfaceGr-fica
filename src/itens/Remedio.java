@@ -1,8 +1,8 @@
 package itens;
 
+import exceptions.VidaCheiaException;
 import interfaces.AcaoCurar;
 import personagens.Personagem;
-import exceptions.VidaCheiaException;
 
 public class Remedio extends Item implements AcaoCurar {
     private String tipo;
@@ -40,12 +40,19 @@ public class Remedio extends Item implements AcaoCurar {
         this.cura = cura;
     }
 
-    // Método curar com Exception(Aplicar Try Catch no GUI)
-    public void curar(Personagem personagem)  {
+    // Método curar lança exceção unchecked se a vida estiver cheia
+    public String curar(Personagem personagem) {
         if (personagem.getVida() >= 100) {
             throw new VidaCheiaException(personagem.getNome() + " já está com a vida cheia.");
         }
         personagem.recuperarVida(cura);
+        return personagem.getNome() + " foi curado em " + cura + " pontos de vida.";
+    }
+
+    // Método usar sem throws, usa curar
+    @Override
+    public void usar(Personagem personagem) {
+        curar(personagem);
     }
 
     @Override

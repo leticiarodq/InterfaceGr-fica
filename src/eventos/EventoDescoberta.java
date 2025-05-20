@@ -13,7 +13,7 @@ public class EventoDescoberta extends Evento {
     private List<String> condicaoEspecial;
 
     public EventoDescoberta(String nomeEvento, String descricaoEvento, int probabilidadeOcorrencia, String[] impacto, String[] condicaoAtivacao,
-                           String[] descoberta, String[] encontrados, String[] especial) {
+                            String[] descoberta, String[] encontrados, String[] especial) {
 
         super(nomeEvento, descricaoEvento, probabilidadeOcorrencia, impacto, condicaoAtivacao);
 
@@ -34,7 +34,7 @@ public class EventoDescoberta extends Evento {
         return condicaoEspecial;
     }
 
-<<<<<<< Updated upstream
+
     EventoDescoberta eventoFruta = new EventoDescoberta(
             "Frutas encontradas",
             "Você achou frutas raras!",
@@ -45,10 +45,9 @@ public class EventoDescoberta extends Evento {
             new String[]{"maçã", "banana", "laranja"}, // objetos relacionados
             new String[]{"somente durante o dia"} // condição especial
     );
-=======
-    public void executar(Personagem personagem, Ambiente local){
+
+    public void executar(Personagem personagem, Ambiente local) {
+
 
     }
-
->>>>>>> Stashed changes
 }

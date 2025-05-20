@@ -2,6 +2,7 @@ package itens;
 
 import exceptions.CombinarException;
 import interfaces.Combinavel;
+import personagens.Personagem;
 
 import java.util.List;
 
@@ -42,4 +43,11 @@ public class Material extends Item implements Combinavel {
             throw new CombinarException("Não foi possível criar nenhuma ferramenta com esses materiais.");
         }
     }
+
+    @Override
+    public void usar(Personagem personagem) {
+        // Como o Material não é "usável" diretamente, lançamos exceção
+        throw new UnsupportedOperationException("Material não pode ser usado diretamente. Use combinar para criar ferramentas.");
+    }
+
 }

@@ -1,10 +1,9 @@
 package itens;
 
 import exceptions.FomeCheiaException;
-import interfaces.Consumivel;
 import personagens.Personagem;
 
-public class Alimento extends Item implements Consumivel {
+public class Alimento extends Item {
     private int valornutricional;
     private String tipo;
     private int prazodevalidade;
@@ -40,14 +39,16 @@ public class Alimento extends Item implements Consumivel {
         this.prazodevalidade = prazodevalidade;
     }
 
-    // Metodo consumir com exception (Aplicar Try Catch na GUI)
-    public String consumir(Personagem personagem) throws FomeCheiaException {
+    public String consumir(Personagem personagem) {
         if (personagem.getFome() >= 100) {
             throw new FomeCheiaException(personagem.getNome() + " já está com a fome totalmente saciada.");
         }
-
         personagem.recuperarFome(valornutricional);
         return personagem.getNome() + " consumiu " + getNome() + " e recuperou " + valornutricional + " de fome.";
     }
-}
 
+    @Override
+    public void usar(Personagem personagem) {
+        consumir(personagem);
+    }
+}

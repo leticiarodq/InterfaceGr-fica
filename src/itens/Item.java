@@ -42,5 +42,5 @@ public abstract class Item implements AcaoUsar {
         this.durabilidade = durabilidade;
     }
 
-    public void usar(Personagem personagem){}
+    public abstract void usar(Personagem personagem);
 }

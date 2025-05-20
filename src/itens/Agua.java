@@ -29,14 +29,16 @@ public class Agua extends Item {
         this.volume = volume;
     }
 
-    // Meotodo beber com exception (Aplicar Try Catch na GUI)
-    public String beber(Personagem personagem) throws SedeCheiaException {
+    public String beber(Personagem personagem) {
         if (personagem.getSede() >= 100) {
             throw new SedeCheiaException(personagem.getNome() + " já está com a sede cheia.");
-        } else {
-
-            personagem.recuperarSede(volume);
-            return personagem.getNome() + " bebeu " + getNome() + " e recuperou " + volume + " de sede.";
         }
+        personagem.recuperarSede(volume);
+        return personagem.getNome() + " bebeu " + getNome() + " e recuperou " + volume + " de sede.";
+    }
+
+    @Override
+    public void usar(Personagem personagem) {
+        beber(personagem);
     }
 }
