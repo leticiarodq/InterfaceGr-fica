@@ -78,6 +78,10 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
     private int estadoDescricao = 3;
     private int estadoPersonagem=5;
 
+    // Mapa do jogo
+
+    private final int mapaMax=10;
+    private int mapaAtual=0;
 
     // Métodos de acesso getters
 
@@ -166,6 +170,13 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         return entidadeLista;
     }
 
+    public final int getMapaMax(){
+        return mapaMax;
+    }
+
+    public int getMapaAtual() {
+        return mapaAtual;
+    }
 
     // Métodos setters
 

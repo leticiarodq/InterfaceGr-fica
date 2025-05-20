@@ -8,7 +8,6 @@ public class EventoClima {
 
     private PainelJogo gp;
 
-
     private int contadorChuva = 0;
     private final int intervaloChuva = 1200; // número de frames (ajuste como quiser)
     private int contadorCalor = 0;
@@ -50,7 +49,7 @@ public class EventoClima {
             Random random = new Random();
             int chance = random.nextInt(100); // 0 a 99
 
-            if (chance < 15) { // 10% de chance
+            if (chance < 100) { // 10% de chance
                 gp.setEstadoJogo(gp.getEstadoDialogo());
                 gp.getIu().setDialogoAtual("CALOR EXTREMO\nParece que o clima\nesquentou...\nVocê precisa beber água.");
                 gp.jogador.setSede(gp.jogador.getSede() - 2);
@@ -70,7 +69,7 @@ public class EventoClima {
             Random random = new Random();
             int chance = random.nextInt(100); // 0 a 99
 
-            if (chance < 100) { // 10% de chance
+            if (chance < 5) { // 10% de chance
                 gp.setEstadoJogo(gp.getEstadoDialogo());
                 gp.getIu().setDialogoAtual("NEVASCA\nO vento gelado sopra com\nforça...\nVocê está perdeu energia!");
                 gp.jogador.setEnergia(gp.jogador.getEnergia() - 1);

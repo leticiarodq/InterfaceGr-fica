@@ -11,6 +11,8 @@ import java.io.IOException;
 public class Entidade {
 
 
+    public boolean tocou=false;
+
     // Referência ao jogo
     private final PainelJogo gp;
 

@@ -6,6 +6,7 @@ import gui.objetos.REMEDIO_Antibiotico;
 import gui.objetos.REMEDIO_Bandagem;
 import gui.system.CriadorAtivos;
 import gui.system.EventosTeclado;
+import gui.system.InterfaceUsuario;
 import gui.system.PainelJogo;
 import personagens.Mecanico;
 import personagens.Personagem;
@@ -23,6 +24,8 @@ public class Jogador extends Entidade {
     private final int telaY;
     private int temRemedio=0;
     private Personagem personagem;
+
+
 
     public final int getTelaX(){
         return telaX;
@@ -122,12 +125,6 @@ public class Jogador extends Entidade {
     }
     public void definirItens(){
 
-        inventario.add(new REMEDIO_Analgesico(gp));
-        inventario.add(new REMEDIO_Bandagem(gp));
-        inventario.add(new REMEDIO_Antibiotico(gp));
-        inventario.add(new ALIMENTO_Enlatado(gp));
-
-
 
 
     }
@@ -224,8 +221,6 @@ public class Jogador extends Entidade {
         }
     }
 
-    public int tempoParaReaparecer = 0;
-    public boolean itemVaiVoltar = false;
 
 
     public void pegarObjeto(int i){
@@ -237,15 +232,14 @@ public class Jogador extends Entidade {
             if(inventario.size()!=tamanhoMaxInventario){
 
                 inventario.add(gp.getObj()[i]);
-                texto="Pegou"+gp.getObj()[i].getNome()+"!";
+                texto="Pegou "+gp.getObj()[i].getNome()+"!";
 
-                itemVaiVoltar = true;
-                tempoParaReaparecer = 300; // por exemplo, 300 frames (~5 segundos)
 
             }
             else {
                 texto="Você antingiu o limite máximo no inventário!";
             }
+            gp.getIu().mostrarMensagem(texto);
             gp.getObj()[i]=null;
         }
 

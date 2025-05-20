@@ -30,4 +30,15 @@ public class EventoDescoberta extends Evento {
     public List<String> getCondicaoEspecial() {
         return condicaoEspecial;
     }
+
+    EventoDescoberta eventoFruta = new EventoDescoberta(
+            "Frutas encontradas",
+            "Você achou frutas raras!",
+            100, // probabilidade
+            new String[]{"+5 energia"}, // impacto
+            new String[]{"tocar_fruta"}, // condição
+            new String[]{"descoberta_fruta"},
+            new String[]{"maçã", "banana", "laranja"}, // objetos relacionados
+            new String[]{"somente durante o dia"} // condição especial
+    );
 }

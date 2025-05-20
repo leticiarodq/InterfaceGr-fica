@@ -27,6 +27,10 @@ public class InterfaceUsuario {
     private int slotCol = 0;
     private int slotLinha = 0;
 
+    private String mensagem="";
+    private boolean mensagemOn=false;
+    private int contadorMensagem=0;
+
     private String personagemSelecionado;
 
     private String dialogoAtual = "";
@@ -126,30 +130,6 @@ public class InterfaceUsuario {
     }
 
 
-    public void desenhar(Graphics2D g2) {
-        this.g2 = g2;
-        g2.setFont(Font03);
-        g2.setColor(Color.white);
-
-        // TITLE STATE
-        if (gp.getEstadoJogo() == gp.getEstadoTitulo()) {
-            desenharTelaTitulo();
-        } else if (gp.getEstadoJogo() == gp.getEstadoPlay()) {
-            desenharVidaJogador();
-
-        } else if (gp.getEstadoJogo() == gp.getEstadoPausa()) {
-            desenharTelaPausa();
-        } else if (gp.getEstadoJogo() == gp.getEstadoDialogo()) {
-            desenharVidaJogador();
-            desenharTelaDialogo();
-
-        } else if (gp.getEstadoJogo() == gp.getEstadoPersonagem()) {
-            desenharStatusPersonagem();
-            desenharInventario();
-
-        }
-
-    }
 
     public void setDialogos(String[] dialogos) {
         this.dialogos = dialogos;
@@ -345,7 +325,7 @@ public class InterfaceUsuario {
         }
 
     }
-
+    // Atributo para guardar a mensagem a ser exibida
 
     public void desenharTelaDialogo() {
 
@@ -384,6 +364,8 @@ public class InterfaceUsuario {
         }
 
     }
+
+
 
 
     public void desenharTelaTitulo() {
@@ -670,5 +652,64 @@ public class InterfaceUsuario {
         g2.setColor(Color.WHITE);
         g2.drawString(texto, x, y);
     }
+
+
+    public void mostrarMensagem(String texto){
+
+        mensagem=texto;
+        mensagemOn=true;
+
+    }
+
+    public void desenhar(Graphics2D g2) {
+        this.g2 = g2;
+        g2.setFont(Font03);
+        g2.setColor(Color.white);
+
+        // TITLE STATE
+        if (gp.getEstadoJogo() == gp.getEstadoTitulo()) {
+            desenharTelaTitulo();
+        } else if (gp.getEstadoJogo() == gp.getEstadoPlay()) {
+            desenharVidaJogador();
+
+        } else if (gp.getEstadoJogo() == gp.getEstadoPausa()) {
+            desenharTelaPausa();
+        } else if (gp.getEstadoJogo() == gp.getEstadoDialogo()) {
+            desenharVidaJogador();
+            desenharTelaDialogo();
+
+        } else if (gp.getEstadoJogo() == gp.getEstadoPersonagem()) {
+            desenharStatusPersonagem();
+            desenharInventario();
+
+        }
+
+        if(mensagemOn==true){
+
+            g2.setColor(Color.BLACK);
+            g2.setFont(Font05.deriveFont(25f));
+            g2.drawString(mensagem,(gp.getTamanhoBloco()/2) + 3, 300 + 2);
+
+            g2.setFont(Font05.deriveFont(25f));
+            g2.setColor(Color.white);
+            g2.drawString(mensagem, gp.getTamanhoBloco()/2, 300);
+            g2.drawString(mensagem, gp.getTamanhoBloco()/2, 300);
+
+            contadorMensagem++;
+
+            if(contadorMensagem>200){
+
+                contadorMensagem=0;
+                mensagemOn=false;
+
+            }
+
+
+        }
+
+
+    }
+
+
 
 }

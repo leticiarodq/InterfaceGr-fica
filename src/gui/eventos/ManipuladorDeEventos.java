@@ -72,7 +72,7 @@ public class ManipuladorDeEventos {
 
         if (!eventoMapaAtivo && gp.getEstadoJogo() != gp.getEstadoDialogo()) {
             // Escolhe aleatoriamente apenas um evento climático para ocorrer
-            int eventoAleatorio = new java.util.Random().nextInt(4);
+            int eventoAleatorio = new java.util.Random().nextInt(5);
 
             switch (eventoAleatorio) {
                 case 0:
@@ -87,10 +87,17 @@ public class ManipuladorDeEventos {
                 case 3:
                     eventoDoencaFerimento.eventoDesidratacao();
                     break;
+
+                case 4:
+                    eventoDoencaFerimento.eventoInfectado();
+                    break;
+
+
             }
 
             // Sempre executa a redução de energia
             baixarEnergia();
+
         }
     }
 

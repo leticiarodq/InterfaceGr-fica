@@ -12,8 +12,12 @@ public class EventoDoencaFerimento {
     private int contadorDesidratacao = 0;
     private final int intervaloDesidratacao = 600; // a cada 120 frames (2 segundos)
 
-    public EventoDoencaFerimento(PainelJogo gp){
-        this.gp=gp;
+    private int contadorInfeccao = 0;
+    private final int intervaloInfeccao = 100; // por exemplo, 600 frames (~10 segundos se rodar a 60fps)
+
+
+    public EventoDoencaFerimento(PainelJogo gp) {
+        this.gp = gp;
 
 
     }
@@ -40,7 +44,7 @@ public class EventoDoencaFerimento {
         delirio();
     }
 
-    public void aguaContaminada(int estadoJogo){
+    public void aguaContaminada(int estadoJogo) {
         if (gp.jogador.getSede() < gp.jogador.getSedeMaxima()) {
             gp.jogador.setSede(gp.jogador.getSede() + 1);
             gp.setEstadoJogo(estadoJogo);
@@ -49,7 +53,7 @@ public class EventoDoencaFerimento {
             Random random = new Random();
             int chance = random.nextInt(100); // 0 a 99
 
-            if (chance < 50) { // 30% de chance de infecção
+            if (chance < 100) { // 30% de chance de infecção
                 gp.jogador.setInfectado(true);
                 gp.getIu().setDialogoAtual("Você bebeu água\ncontaminada\ne foi infectado!");
             } else {
@@ -59,14 +63,51 @@ public class EventoDoencaFerimento {
             gp.setEstadoJogo(estadoJogo);
             gp.getIu().setDialogoAtual("Você já está hidratado.");
         }
-    }
-
-    public void hipotermia(){
-
 
     }
 
-    public void delirio() {
+    public void hipotermia() {
+
+
+    }
+
+
+
+    public void eventoInfectado() {
+
+        String personagem = gp.getPersonagemSelecionado();
+
+        if (gp.jogador.isInfectado()) {
+
+            if ("médico".equals(personagem)) {
+                // Médico perde vida imediatamente ao estar infectado (ou pode ser outra regra)
+                gp.jogador.setVida(gp.jogador.getVida() - 1);
+
+                gp.setEstadoJogo(gp.getEstadoDialogo());
+                gp.getIu().setDialogoAtual("Você está infectado!\nPerdeu 1 ponto de vida.");
+
+            } else {
+                // Para outros personagens, conta até o intervalo para perder vida
+                contadorInfeccao++;
+                if (contadorInfeccao >= intervaloInfeccao) {
+                    gp.jogador.setVida(gp.jogador.getVida() - 1);
+                    contadorInfeccao = 0;
+
+                    gp.setEstadoJogo(gp.getEstadoDialogo());
+                    gp.getIu().setDialogoAtual("Você está infectado!\nPerdeu 1 ponto de vida.");
+                }
+                // NÃO reseta o contador aqui; ele deve acumular até atingir o intervalo
+            }
+
+        } else {
+            // Se não está infectado, reseta o contador
+            contadorInfeccao = 0;
+        }
+
+
+    }
+
+    public void delirio () {
         if (gp.jogador.getSanidade() <= 2 || gp.jogador.isDesidratado()) {
             gp.getIu().setDialogoAtual("Você está delirando!");
             gp.jogador.setVelocidade(1);
@@ -76,8 +117,4 @@ public class EventoDoencaFerimento {
             gp.jogador.setVelocidade(2); // velocidade normal
         }
     }
-
-
-
-
 }

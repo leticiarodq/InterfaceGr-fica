@@ -44,7 +44,7 @@ public class NPC_Explorador extends Entidade{
 
         getDialogos()[0]="Shhh... Eles estão\nobservando.";
         getDialogos()[1]="Você acha mesmo que essa\nfloresta é natural?\nNada aqui é natural.";
-        getDialogos()[2]="Já ouviu falar das gui.criaturas \nde olhos brilhantes?\nEu já as vi... à noite.";
+        getDialogos()[2]="Já ouviu falar das criaturas \nde olhos brilhantes?\nEu já as vi... à noite.";
         getDialogos()[3]= "Só me prometa...\nque não vai deixar essa\nfloresta te consumir...\ncomo fez comigo.";
 
     }

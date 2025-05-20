@@ -1,9 +1,11 @@
 package gui.system;
 
 import gui.criaturas.CRI_Lobo;
+import gui.entidades.Entidade;
 import gui.entidades.NPC_Coelho;
 import gui.entidades.NPC_Explorador;
 import gui.objetos.*;
+import eventos.*;
 
 public class CriadorAtivos {
 
@@ -50,13 +52,38 @@ public class CriadorAtivos {
             gp.getObj()[i].setMundoY(30 * gp.getTamanhoBloco());
             i++;
 
+            gp.getObj()[i] = new ferramentas(gp, "machado");
+            gp.getObj()[i].setMundoX(24 * gp.getTamanhoBloco());
+            gp.getObj()[i].setMundoY(21 * gp.getTamanhoBloco());
+            i++;
+
+            gp.getObj()[i] = new ferramentas(gp, "picareta");
+            gp.getObj()[i].setMundoX(23 * gp.getTamanhoBloco());
+            gp.getObj()[i].setMundoY(22 * gp.getTamanhoBloco());
+            i++;
+
+            gp.getObj()[i] = new ferramentas(gp, "espada");
+            gp.getObj()[i].setMundoX(26 * gp.getTamanhoBloco());
+            gp.getObj()[i].setMundoY(27 * gp.getTamanhoBloco());
+            i++;
 
         } else if ("rastreador".equals(personagem)) {
+
 
             gp.getObj()[i] = new REMEDIO_Antibiotico(gp);
             gp.getObj()[i].setMundoX(28 * gp.getTamanhoBloco());
             gp.getObj()[i].setMundoY(25 * gp.getTamanhoBloco());
             i++;
+
+
+
+            gp.getObj()[i] = new ALIMENTO_Fruta(gp, "laranja");
+            gp.getObj()[i].setMundoX(30 * gp.getTamanhoBloco());
+            gp.getObj()[i].setMundoY(25 * gp.getTamanhoBloco());
+            i++;
+
+
+        } else {
 
             gp.getObj()[i] = new ALIMENTO_Fruta(gp, "maçã");
             gp.getObj()[i].setMundoX(30 * gp.getTamanhoBloco());
@@ -68,13 +95,6 @@ public class CriadorAtivos {
             gp.getObj()[i].setMundoY(26 * gp.getTamanhoBloco());
             i++;
 
-            gp.getObj()[i] = new ALIMENTO_Fruta(gp, "laranja");
-            gp.getObj()[i].setMundoX(32 * gp.getTamanhoBloco());
-            gp.getObj()[i].setMundoY(27 * gp.getTamanhoBloco());
-            i++;
-
-
-        } else {
 
 
 
@@ -84,24 +104,23 @@ public class CriadorAtivos {
     }
 
 
+
     public void setNPC() {
 
-
-        gp.getNpc()[0] = new NPC_Explorador(gp);
-        gp.getNpc()[0].setMundoX(12 * gp.getTamanhoBloco());
-
-
-        gp.getNpc()[0].setMundoY(10 * gp.getTamanhoBloco());
+        int i=0;
+        gp.getNpc()[i] = new NPC_Explorador(gp);
+        gp.getNpc()[i].setMundoX(42 * gp.getTamanhoBloco());
+        gp.getNpc()[i].setMundoY(29 * gp.getTamanhoBloco());
         System.out.println("NPC criado em: " + gp.getNpc()[0].getMundoX() + ", " + gp.getNpc()[0].getMundoY());
-
+        i++;
     }
 
     public void setCOELHO() {
 
 
-        gp.getNpc()[0] = new NPC_Coelho(gp);
-        gp.getNpc()[0].setMundoX(21 * gp.getTamanhoBloco());
-        gp.getNpc()[0].setMundoY(26 * gp.getTamanhoBloco());
+        gp.getNpc()[1] = new NPC_Coelho(gp);
+        gp.getNpc()[1].setMundoX(21 * gp.getTamanhoBloco());
+        gp.getNpc()[1].setMundoY(26 * gp.getTamanhoBloco());
 
         System.out.println("Coelho criado em: " + gp.getNpc()[0].getMundoX() + ", " + gp.getNpc()[0].getMundoY());
 
