@@ -1,17 +1,16 @@
-package itens; // Define que esta classe pertence ao pacote 'itens'
-
-//Imports necessarios para ter relação direta com gui.criaturas
+package itens;
 
 import eventos.EventoCriatura;
+import exceptions.ArmaQuebradaException;
+import interfaces.Atacavel;
 import personagens.Personagem;
 
-// A classe Arma é uma subclasse da classe Item
-public abstract class Arma extends Item{
+public class Arma extends Item implements Atacavel {
     private String tipo;
     private double dano;
     private double distancia;
+    private EventoCriatura inimigo; // Inimigo a ser atacado
 
-    //Construtor
     public Arma(String nome, int peso, int durabilidade, String tipo, double dano, double distancia) {
         super(nome, peso, durabilidade);
         this.tipo = tipo;
@@ -19,46 +18,59 @@ public abstract class Arma extends Item{
         this.distancia = distancia;
     }
 
-    //Metodo Getters
-    public String getTipo(){
+    // Getters e Setters
+    public String getTipo() {
         return tipo;
     }
 
-    public double getDano(){
+    public double getDano() {
         return dano;
     }
 
-    public double getDistancia(){
+    public double getDistancia() {
         return distancia;
     }
 
-    //Metodos Setters
-    public void setTipo(String tipo){
+    public void setTipo(String tipo) {
         this.tipo = tipo;
     }
 
-    public void setDano(double dano){
+    public void setDano(double dano) {
         this.dano = dano;
     }
 
-    public void setDistancia(double distancia){
+    public void setDistancia(double distancia) {
         this.distancia = distancia;
     }
 
-    //Metodo atacar
+    public void setInimigo(EventoCriatura inimigo) {
+        this.inimigo = inimigo;
+    }
+
+    public EventoCriatura getInimigo() {
+        return inimigo;
+    }
+
+    // Lógica do ataque
     public void atacar(EventoCriatura inimigo) {
-        if (getDurabilidade() > 0) {
-            inimigo.receberDano(dano); // Aplica dano ao inimigo (precisa implementar em Alvo ou Inimigo)
-            System.out.println("Você atacou com uma arma " + tipo + " causando " + dano + " de dano.");
-            setDurabilidade(getDurabilidade() - 1); // Reduz durabilidade da arma
-        } else {
-            System.out.println("A arma está quebrada e não pode ser usada.");
+        if (getDurabilidade() <= 0) {
+            throw new ArmaQuebradaException("A arma está quebrada e não pode ser usada.");
         }
+        inimigo.receberDano(dano);
+        setDurabilidade(getDurabilidade() - 1);
     }
 
-    public void usar(Personagem personagem, EventoCriatura inimigo) {
-        atacar(inimigo);
+    // Método usar sobrescrito
+    @Override
+    public void usar(Personagem personagem) {
+        if (inimigo == null) {
+            throw new IllegalStateException("Nenhum inimigo definido para ataque.");
+        }
+        atacar(inimigo); // Lógica do back-end
     }
 
+    @Override
+    public String toString() {
+        return getNome();
+    }
 }
-

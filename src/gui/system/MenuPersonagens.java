@@ -1,12 +1,18 @@
+/*
 package gui.system;
 
 
+import gui.entidades.Jogador;
+
 import javax.swing.*;
+import java.awt.*;
+import java.io.IOException;
+import java.io.InputStream;
 
 
-public class MenuPersonagens extends JPanel{
+public class MenuPersonagens extends JPanel {
 
- /*   PainelJogo gp;
+   PainelJogo gp;
     Font Font02, Font03, Font04;
     private int indiceSelecao=0;
     private boolean selecaoConfirmada = false; // Indica se está na tela de confirmação
@@ -346,6 +352,6 @@ public class MenuPersonagens extends JPanel{
     @Override
     public void keyTyped(KeyEvent e) {}
 
-  */
-}
 
+}
+*/

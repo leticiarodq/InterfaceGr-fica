@@ -13,9 +13,9 @@ public class Survivor extends Jogador {
 
     public Survivor(PainelJogo gp, EventosTeclado eventosTeclado) {
         super(gp, eventosTeclado);
-        this.sobreviventeNato = new SobreviventeNato("Elfa", 100, 100, 100, 100, 100, null, "Floresta");
+        this.sobreviventeNato = new SobreviventeNato("Elfa", 100, 100, 100, 100, 100, null, "Floresta", 36.5);
         getImagemJogador();
-        sobreviventeNato.exibirStatus(); // <-- Aqui a chamada!
+        sobreviventeNato.exibirStatus();
     }
     @Override
     public void getImagemJogador() {

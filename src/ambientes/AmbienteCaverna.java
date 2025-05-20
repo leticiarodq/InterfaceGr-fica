@@ -33,6 +33,15 @@ public class AmbienteCaverna extends Ambiente { // Cria uma subclasse que herda 
     public boolean isAguaGotejamento(){
         return aguaGotejamento;
     }
+
+    public void gerarEvento(){
+
+    }
+
+    public void modificarClima(){
+
+    }
+
 }
 
 

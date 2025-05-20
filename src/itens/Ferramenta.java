@@ -1,11 +1,11 @@
 package itens;// Define que esta classe pertence ao pacote 'itens'
 
-//Imports necessarios
-
+import exceptions.FerramentaQuebradaException;
+import interfaces.AcaoUsar;
 import personagens.Personagem;
 
 // A classe Ferramenta é uma subclasse da classe Item
-public abstract class Ferramenta extends Item{
+public class Ferramenta extends Item implements AcaoUsar {
     private String tipo;
     private int eficiencia;
 
@@ -34,10 +34,12 @@ public abstract class Ferramenta extends Item{
         this.eficiencia = eficiencia;
     }
 
-    //Método usar
-    public void usar(Personagem personagem){
+    @Override
+    // Metodo usar com exception (Aplicar Try Catch na GUI)
+    public void usar(Personagem personagem) {
+        if (getDurabilidade() <= 0) {
+            throw new FerramentaQuebradaException("A ferramenta " + getNome() + " está quebrada e não pode ser usada.");
+        }
         setDurabilidade(getDurabilidade() - 1);
-        System.out.println("Você usou a ferramenta: " + getNome());
     }
-
 }

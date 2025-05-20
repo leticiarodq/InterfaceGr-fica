@@ -31,4 +31,12 @@ public class AmbienteLagoRio extends Ambiente {
     public boolean isTerrenoLamacento() {
         return terrenoLamacento;
     }
+
+    public void gerarEvento(){
+
+    }
+
+    public void modificarClima(){
+
+    }
 }

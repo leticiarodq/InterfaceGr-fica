@@ -1,5 +1,8 @@
 package eventos;
 
+import ambientes.Ambiente;
+import personagens.Personagem;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,6 +34,7 @@ public class EventoDescoberta extends Evento {
         return condicaoEspecial;
     }
 
+<<<<<<< Updated upstream
     EventoDescoberta eventoFruta = new EventoDescoberta(
             "Frutas encontradas",
             "Você achou frutas raras!",
@@ -41,4 +45,10 @@ public class EventoDescoberta extends Evento {
             new String[]{"maçã", "banana", "laranja"}, // objetos relacionados
             new String[]{"somente durante o dia"} // condição especial
     );
+=======
+    public void executar(Personagem personagem, Ambiente local){
+
+    }
+
+>>>>>>> Stashed changes
 }

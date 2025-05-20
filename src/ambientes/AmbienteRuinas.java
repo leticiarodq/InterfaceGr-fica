@@ -29,4 +29,12 @@ public class AmbienteRuinas extends Ambiente{
     public boolean isBaixoRiscoClimatico() {
         return baixoRiscoClimatico;
     }
+
+    public void gerarEvento(){
+
+    }
+
+    public void modificarClima(){
+
+    }
 }

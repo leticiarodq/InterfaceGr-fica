@@ -6,8 +6,8 @@ import java.util.ArrayList;
 public class SobreviventeNato extends Personagem {
 
     //Construtor
-    public SobreviventeNato(String nome, int vida, int fome, int sede, int energia, int sanidade, ArrayList inventario, String localizacao) {
-        super(nome, vida, fome, sede, energia, sanidade, inventario, localizacao);
+    public SobreviventeNato(String nome, int vida, int fome, int sede, int energia, int sanidade, Inventario inventario, String localizacao, double temperaturaCorporal) {
+        super(nome, vida, fome, sede, energia, sanidade, inventario, localizacao, temperaturaCorporal);
     }
 
     //pretendo criar metodos com as skills dos itens por aqui

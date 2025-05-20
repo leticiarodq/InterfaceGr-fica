@@ -32,4 +32,12 @@ public class AmbienteFloresta extends Ambiente {
     public boolean isClimaUmido() {
         return climaUmido;
     }
+
+    public void gerarEvento(){
+
+    }
+
+    public void modificarClima(){
+
+    }
 }

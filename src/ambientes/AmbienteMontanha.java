@@ -30,4 +30,12 @@ public class AmbienteMontanha extends Ambiente {
     public String getBaixaVegetacao(){
         return baixaVegetacao;
     }
+
+    public void gerarEvento(){
+
+    }
+
+    public void modificarClima(){
+
+    }
 }

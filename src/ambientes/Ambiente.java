@@ -64,10 +64,7 @@ public abstract class Ambiente { // Define a classe abstrata 'Ambiente' que serv
     public void explorar(){
     }
 
-    public void gerarEvento(){
-    }
+    public abstract void gerarEvento();
 
-    public void modificarClima(){
-    }
-
+    public abstract void modificarClima();
 }

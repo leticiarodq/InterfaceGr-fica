@@ -1,5 +1,8 @@
 package eventos;
 
+import ambientes.Ambiente;
+import personagens.Personagem;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,6 +35,8 @@ public class EventoDoencaFerimento extends Evento{
         return curaDisponivel;
     }
 
+    public void executar(Personagem personagem, Ambiente local){
 
+    }
 
 }

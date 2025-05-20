@@ -1,11 +1,9 @@
-package personagens; // Define que esta classe pertence ao pacote itens
+package personagens;
 
-import java.util.ArrayList;
+import exceptions.*;
 
+public class Personagem {
 
-public class Personagem { // Declaração da classe Personagem
-
-    // Atributos privados do personagem, acessíveis apenas pela própria classe
     private String nome;
     private int vida;
     private int fome;
@@ -14,11 +12,9 @@ public class Personagem { // Declaração da classe Personagem
     private int sanidade;
     private Inventario inventario;
     private String localizacao;
+    private double temperaturaCorporal = 36.5;
 
-    //private double temperaturaCorporal=36.5;
-
-    // Construtor
-    public Personagem(String nome,int vida, int fome, int sede, int energia, int sanidade, ArrayList inventario, String localizacao){
+    public Personagem(String nome, int vida, int fome, int sede, int energia, int sanidade, Inventario inventario, String localizacao, double temperaturaCorporal) {
         this.nome = nome;
         this.vida = vida;
         this.fome = fome;
@@ -27,35 +23,35 @@ public class Personagem { // Declaração da classe Personagem
         this.sanidade = sanidade;
         this.inventario = new Inventario(40);
         this.localizacao = localizacao;
-
+        this.temperaturaCorporal = temperaturaCorporal;
     }
 
-    //metodos getters
-    public String getNome(){
+    // Getters
+    public String getNome() {
         return nome;
     }
 
-    public int getVida(){
+    public int getVida() {
         return vida;
     }
 
-    public int getFome(){
+    public int getFome() {
         return fome;
     }
 
-    public int getSede(){
+    public int getSede() {
         return sede;
     }
 
-    public int getEnergia(){
+    public int getEnergia() {
         return energia;
     }
 
-    public int getSanidade(){
+    public int getSanidade() {
         return sanidade;
     }
 
-    public Inventario getInventario(){
+    public Inventario getInventario() {
         return inventario;
     }
 
@@ -63,33 +59,32 @@ public class Personagem { // Declaração da classe Personagem
         return localizacao;
     }
 
-   /* public double getTemperaturaCorporal(){
+    public double getTemperaturaCorporal() {
         return temperaturaCorporal;
     }
-    */
 
-    // Métodos setters
-    public void setNome(String nome){
+    // Setters
+    public void setNome(String nome) {
         this.nome = nome;
     }
 
-    public void setVida(int vida){
+    public void setVida(int vida) {
         this.vida = vida;
     }
 
-    public void setFome(int fome){
+    public void setFome(int fome) {
         this.fome = fome;
     }
 
-    public void setSede(int sede){
+    public void setSede(int sede) {
         this.sede = sede;
     }
 
-    public void setEnergia(int energia){
+    public void setEnergia(int energia) {
         this.energia = energia;
     }
 
-    public void setSanidade(int sanidade){
+    public void setSanidade(int sanidade) {
         this.sanidade = sanidade;
     }
 
@@ -97,43 +92,86 @@ public class Personagem { // Declaração da classe Personagem
         this.inventario = inventario;
     }
 
+    public void setTemperaturaCorporal(double temperaturaCorporal) {
+        this.temperaturaCorporal = temperaturaCorporal;
+    }
 
     public void setLocalizacao(String localizacao) {
         this.localizacao = localizacao;
     }
 
-    // métodos de vida, sede , fome e energia
-
-    public void reducaodeVida(int quantidade){
-        this.vida = Math.min(100, this.vida - quantidade);
+    // Métodos para gastar energia - lança exceção se energia insuficiente
+    public void reduzirEnergia(int quantidade) throws EnergiaInsuficienteException {
+        if (energia < quantidade) {
+            throw new EnergiaInsuficienteException();
+        }
+        energia -= quantidade;
     }
 
-    public void reducaodeSede(int quantidade){
-        this.sede = Math.min(100, this.sede - quantidade);
+    // Reduz vida - lança exceção se vida chegar a zero
+    public void reduzirVida(int quantidade) throws PersonagemMortoException {
+        vida = (vida - quantidade);
+        if (vida == 0) {
+            throw new PersonagemMortoException();
+        }
     }
 
-    public void reducaodeFome(int quantidade){
-        this.fome = Math.min(100, this.fome - quantidade);
+    // Reduz fome e, se chegar a zero, reduz vida (com exceção se morrer)
+    public void reduzirFome(int quantidade) throws PersonagemMortoException {
+        fome = (fome - quantidade);
+        if (fome == 0) {
+            reduzirVida(10);  // Perde vida por fome
+        }
     }
 
-    public void reducaodeEnergia(int quantidade){
-        this.energia = Math.min(100, this.energia - quantidade);
+    // Reduz sede e, se chegar a zero, reduz vida (com exceção se morrer)
+    public void reduzirSede(int quantidade) throws PersonagemMortoException {
+        sede = (sede - quantidade);
+        if (sede == 0) {
+            reduzirVida(15);  // Perde vida por sede
+        }
     }
 
-    public void recuperacaodeVida(int quantidade){
-        this.vida = Math.min(100, this.vida + quantidade);
+    public void reduzirSanidade(int quantidade) throws PersonagemMortoException {
+        sanidade = (sanidade - quantidade);
+        if (sanidade == 0) {
+            reduzirVida(15); //Perde vida por falta de sanidade
+        }
     }
 
-    public void recuperacaodeSede(int quantidade){
-        this.sede = Math.min(100, this.sede + quantidade);
+    public void reduzirTemperaturaCorporal(double quantidade) throws PersonagemMortoException {
+        temperaturaCorporal -= quantidade;
+        if (temperaturaCorporal < 35.0) {
+            reduzirVida(15); //Perde vida por baixa da temperatura
+        }
     }
 
-    public void recuperacaodeFome(int quantidade){
-        this.fome = Math.min(100, this.fome + quantidade);
+    // Recuperação
+    public void recuperarVida(int quantidade) throws VidaCheiaException {
+        vida =  (vida + quantidade);
     }
 
-    public void recuperacaodeEnergia(int quantidade){
-        this.energia = Math.min(100, this.energia + quantidade);
+    public void recuperarFome(int quantidade) throws FomeCheiaException {
+        fome =  (fome + quantidade);
+    }
+
+    public void recuperarSede(int quantidade) throws SedeCheiaException {
+        sede = (sede + quantidade);
+    }
+
+    public void recuperarEnergia(int quantidade) throws EnergiaCheiaException {
+        energia = (energia + quantidade);
+    }
+
+    public void recuperarSanidade(int quantidade) throws EnergiaCheiaException {
+        sanidade = (sanidade + quantidade);
+    }
+
+    public void recuperarTemperaturaCorporal(double quantidade) throws PersonagemMortoException {
+        temperaturaCorporal += quantidade;
+        if (temperaturaCorporal > 42.0) {
+          reduzirVida(15); //Perde vida por aumento da temperatura corporal
+        }
     }
 
     public void exibirStatus() {

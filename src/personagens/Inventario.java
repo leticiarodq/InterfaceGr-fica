@@ -1,7 +1,6 @@
 package personagens;
 
 import itens.Item;
-
 import java.util.ArrayList;
 
 public class Inventario {
@@ -17,57 +16,52 @@ public class Inventario {
     }
 
     // Adiciona item
-    public boolean adicionarItem(Item item) {
+    public void adicionarItem(Item item) throws IllegalStateException {
         if (pesoTotal + item.getPeso() > pesoMaximo) {
-            System.out.println("Capacidade máxima de peso atingida! Não é possível adicionar " + item.getNome());
-            return false;
+            throw new IllegalStateException("Capacidade máxima de peso atingida! Não é possível adicionar " + item.getNome());
         }
-
         itens.add(item);
         pesoTotal += item.getPeso();
-        System.out.println(item.getNome() + " foi adicionado ao inventário.");
-        return true;
     }
 
-    // Remove item
-    public boolean removerItem(String nomeItem) {
+    // Remove item pelo nome
+    public void removerItem(String nomeItem) throws IllegalArgumentException {
+        Item itemParaRemover = null;
         for (Item item : itens) {
             if (item.getNome().equalsIgnoreCase(nomeItem)) {
-                itens.remove(item);
-                pesoTotal -= item.getPeso();
-                System.out.println(item.getNome() + " foi removido do inventário.");
-                return true;
+                itemParaRemover = item;
+                break;
             }
         }
-        System.out.println("Item " + nomeItem + " não encontrado.");
-        return false;
-    }
-
-    // Usa item
-    public boolean usarItem(String nomeItem, Personagem personagem) {
-        for (Item item : itens) {
-            if (item.getNome().equalsIgnoreCase(nomeItem)) {
-                item.usar(personagem);
-                itens.remove(item);
-                pesoTotal -= item.getPeso();
-                System.out.println(item.getNome() + " foi usado e removido do inventário.");
-                return true;
-            }
-        }
-        System.out.println("Item " + nomeItem + " não encontrado.");
-        return false;
-    }
-
-    // Lista itens
-    public void listarItens() {
-        if (itens.isEmpty()) {
-            System.out.println("Inventário vazio.");
+        if (itemParaRemover != null) {
+            itens.remove(itemParaRemover);
+            pesoTotal -= itemParaRemover.getPeso();
         } else {
-            System.out.println("Itens no inventário:");
-            for (Item item : itens) {
-                System.out.println("- " + item.getNome() + " (" + item.getPeso() + " kg)");
+            throw new IllegalArgumentException("Item " + nomeItem + " não encontrado no inventário.");
+        }
+    }
+
+    // Usa item pelo nome
+    public void usarItem(String nomeItem, Personagem personagem) throws IllegalArgumentException {
+        Item itemParaUsar = null;
+        for (Item item : itens) {
+            if (item.getNome().equalsIgnoreCase(nomeItem)) {
+                itemParaUsar = item;
+                break;
             }
         }
+        if (itemParaUsar != null) {
+            itemParaUsar.usar(personagem);
+            itens.remove(itemParaUsar);
+            pesoTotal -= itemParaUsar.getPeso();
+        } else {
+            throw new IllegalArgumentException("Item " + nomeItem + " não encontrado no inventário.");
+        }
+    }
+
+    // Retorna lista de itens (para exibir na GUI)
+    public ArrayList<Item> getItens() {
+        return new ArrayList<>(itens); // Retorna cópia para evitar alterações externas
     }
 
     // Peso atual
@@ -85,6 +79,3 @@ public class Inventario {
         return pesoMaximo;
     }
 }
-
-
-

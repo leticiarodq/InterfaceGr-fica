@@ -1,20 +1,20 @@
-package itens; // Define que esta classe pertence ao pacote 'itens'
+package itens;
 
-import personagens.Personagem;
+import exceptions.CombinarException;
+import interfaces.Combinavel;
 
-// A classe Material é uma subclasse da classe Item
-public abstract class Material extends Item {
+import java.util.List;
+
+public class Material extends Item implements Combinavel {
     private String tipo;
     private int resistencia;
 
-    // Construtor
     public Material(String nome, int peso, int durabilidade, String tipo, int resistencia) {
         super(nome, peso, durabilidade);
         this.tipo = tipo;
         this.resistencia = resistencia;
     }
 
-    // Métodos getters
     public String getTipo() {
         return tipo;
     }
@@ -23,7 +23,6 @@ public abstract class Material extends Item {
         return resistencia;
     }
 
-    // Métodos setters
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
@@ -32,24 +31,15 @@ public abstract class Material extends Item {
         this.resistencia = resistencia;
     }
 
-    // Método combinar
-    public Item combinar(Material outroMaterial) {
-        String novoNome = this.getNome() + "-" + outroMaterial.getNome();
-        int novoPeso = this.getPeso() + outroMaterial.getPeso();
-        int novaDurabilidade = (this.getDurabilidade() + outroMaterial.getDurabilidade()) / 2;
-        int eficienciaMedia = (this.resistencia + outroMaterial.resistencia) / 2;
-
-        // Criação da ferramenta combinada
-        System.out.println("Você combinou " + this.getNome() + " com " + outroMaterial.getNome()
-                + " e criou: " + novoNome);
-
-        // Agora, retornamos uma instância da ferramenta combinada
-        return new FerramentaCombinada(novoNome, novoPeso, novaDurabilidade, "Ferramenta Combinada", eficienciaMedia);
+    // Método combinar com exception (Aplicar Try Catch na GUI)
+    public Item combinar(List<Material> materiais) throws CombinarException {
+        CraftManager craftManager = new CraftManager();
+        FerramentaCombinada ferramenta = craftManager.craft(materiais);
+        if (ferramenta != null) {
+            return ferramenta;  // Retorna a ferramenta criada
+        } else {
+            // Lança exceção que o front deve capturar e mostrar para o usuário
+            throw new CombinarException("Não foi possível criar nenhuma ferramenta com esses materiais.");
+        }
     }
-
-    public void usar(Personagem personagem, Material outroMaterial) {
-        combinar(outroMaterial);
-    }
-
 }
-
