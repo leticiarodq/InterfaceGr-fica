@@ -206,19 +206,23 @@ public class Jogador extends Entidade {
                 }
             }
 
-            if (isInvisibilidade()==true){
+        }
 
-                setContadorInvisibilidade(getContadorInvisibilidade()+1);
+        if (isInvisibilidade()){
 
-                if(getContadorInvisibilidade()>60){
-                    setInvisibilidade(false);
-                    setContadorInvisibilidade(0);
-                }
+            setContadorInvisibilidade(getContadorInvisibilidade()+1);
 
+            if(getContadorInvisibilidade()>60){
+                setInvisibilidade(false);
+                setContadorInvisibilidade(0);
             }
 
-
         }
+        if(getVida()<=0){
+            gp.setEstadoJogo(gp.getEstadoJogoFinalizado());
+        }
+
+
     }
 
 

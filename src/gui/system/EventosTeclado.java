@@ -68,7 +68,36 @@ public class EventosTeclado implements KeyListener {
             estadoPausa(code);
         } else if (gp.getEstadoJogo() == gp.getEstadoPersonagem()) {
             estadoPersonagem(code);
+        }else if(gp.getEstadoJogo()==gp.getEstadoJogoFinalizado()){
+            estadoJogoFinalizado(code);
         }
+    }
+
+    public void estadoJogoFinalizado(int code){
+
+        if(code==KeyEvent.VK_W){
+            gp.getIu().setComandoNum(gp.getIu().getComandoNum()-1);
+            if(gp.getIu().getComandoNum()<0){
+                gp.getIu().setComandoNum(1);
+            }
+        }
+
+        if(code==KeyEvent.VK_S){
+            gp.getIu().setComandoNum(gp.getIu().getComandoNum()+1);
+            if(gp.getIu().getComandoNum()<1){
+                gp.getIu().setComandoNum(0);
+            }
+
+        }
+
+        if(code==KeyEvent.VK_ENTER){
+            if(gp.getIu().getComandoNum()==1){
+                gp.setEstadoJogo(gp.getEstadoTitulo());
+                gp.getIu().setTelaMenu(0); // volta para o menu principal
+                gp.getIu().setComandoNum(0); // cursor no topo
+            }
+        }
+
     }
 
     public void estadoTitulo(int code) {
@@ -168,6 +197,8 @@ public class EventosTeclado implements KeyListener {
         }
 
     }
+
+
 
     public void estadoPlay(int code) {
 

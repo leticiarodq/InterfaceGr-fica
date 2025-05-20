@@ -27,9 +27,9 @@ public class InterfaceUsuario {
     private int slotCol = 0;
     private int slotLinha = 0;
 
-    private String mensagem="";
-    private boolean mensagemOn=false;
-    private int contadorMensagem=0;
+    private String mensagem = "";
+    private boolean mensagemOn = false;
+    private int contadorMensagem = 0;
 
     private String personagemSelecionado;
 
@@ -129,6 +129,57 @@ public class InterfaceUsuario {
 
     }
 
+    public void desenhar(Graphics2D g2) {
+        this.g2 = g2;
+        g2.setFont(Font03);
+        g2.setColor(Color.white);
+
+        // TITLE STATE
+        if (gp.getEstadoJogo() == gp.getEstadoTitulo()) {
+            desenharTelaTitulo();
+        } else if (gp.getEstadoJogo() == gp.getEstadoPlay()) {
+            desenharVidaJogador();
+
+        } else if (gp.getEstadoJogo() == gp.getEstadoPausa()) {
+            desenharTelaPausa();
+        } else if (gp.getEstadoJogo() == gp.getEstadoDialogo()) {
+            desenharVidaJogador();
+            desenharTelaDialogo();
+
+        } else if (gp.getEstadoJogo() == gp.getEstadoPersonagem()) {
+            desenharStatusPersonagem();
+            desenharInventario();
+
+        } else if (gp.getEstadoJogo() == gp.getEstadoJogoFinalizado()) {
+            desenharTelaJogoFinalizado();
+
+        }
+
+        if (mensagemOn == true) {
+
+            g2.setColor(Color.BLACK);
+            g2.setFont(Font05.deriveFont(25f));
+            g2.drawString(mensagem, (gp.getTamanhoBloco() / 2) + 3, 300 + 2);
+
+            g2.setFont(Font05.deriveFont(25f));
+            g2.setColor(Color.white);
+            g2.drawString(mensagem, gp.getTamanhoBloco() / 2, 300);
+            g2.drawString(mensagem, gp.getTamanhoBloco() / 2, 300);
+
+            contadorMensagem++;
+
+            if (contadorMensagem > 200) {
+
+                contadorMensagem = 0;
+                mensagemOn = false;
+
+            }
+
+
+        }
+
+
+    }
 
 
     public void setDialogos(String[] dialogos) {
@@ -174,6 +225,55 @@ public class InterfaceUsuario {
 
         return linhas;
     }
+
+    public void desenharTelaJogoFinalizado() {
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+
+        g2.setColor(Color.BLACK);
+        g2.fillRect(0, 0, gp.getTelaLargura(), gp.getTelaAltura());
+
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+
+        g2.setFont(Font05.deriveFont(60f));
+
+        // Texto "VOCÊ MORREU!" com borda
+        String texto = "VOCÊ MORREU!";
+        int x = obterXCentralizarTexto(texto);
+        int y = 200;
+
+        g2.setColor(Color.BLACK);
+        g2.drawString(texto, x + 4, y + 4);
+        g2.setColor(Color.WHITE);
+        g2.drawString(texto, x, y);
+
+        // Texto "Tente novamente" com borda
+        g2.setFont(Font05.deriveFont(40f));
+        texto = "Tentar novamente";
+        x = obterXCentralizarTexto(texto);
+        y += gp.getTamanhoBloco() * 4;
+
+        g2.setColor(Color.BLACK);
+        g2.drawString(texto, x + 4, y + 4);
+        if (comandoNum == 0) g2.drawString(">", x - 40 + 4, y + 4);
+
+        g2.setColor(Color.WHITE);
+        g2.drawString(texto, x, y);
+        if (comandoNum == 0) g2.drawString(">", x - 40, y);
+
+        // Texto "Sair" com borda
+        texto = "Sair";
+        x = obterXCentralizarTexto(texto);
+        y += gp.getTamanhoBloco() * 1;
+
+        g2.setColor(Color.BLACK);
+        g2.drawString(texto, x + 4, y + 4);
+        if (comandoNum == 1) g2.drawString(">", x - 40 + 4, y + 4);
+
+        g2.setColor(Color.WHITE);
+        g2.drawString(texto, x, y);
+        if (comandoNum == 1) g2.drawString(">", x - 40, y);
+    }
+
 
     public void desenharStatusPersonagem() {
 
@@ -258,25 +358,25 @@ public class InterfaceUsuario {
 
         // Tela descricao
 
-        int dFrameX=frameX;
-        int dFrameY=frameY + frameAltura;
-        int dFrameLargura=frameLargura;
-        int dFrameAltura=gp.getTamanhoBloco()*4;
+        int dFrameX = frameX;
+        int dFrameY = frameY + frameAltura;
+        int dFrameLargura = frameLargura;
+        int dFrameAltura = gp.getTamanhoBloco() * 4;
 
 
-        int textoX= dFrameX+20;
-        int textoY=frameY+gp.getTamanhoBloco()+230;
+        int textoX = dFrameX + 20;
+        int textoY = frameY + gp.getTamanhoBloco() + 230;
         g2.setFont(Font03.deriveFont(13f));
 
-        int itemIndice=pegarItemSlot();
+        int itemIndice = pegarItemSlot();
 
         if (itemIndice < gp.jogador.getInventario().size()) {
 
             desenharJanela(dFrameX, dFrameY, dFrameAltura, dFrameLargura);
 
-            for(String linha:gp.jogador.getInventario().get(itemIndice).getDescricao().split("\n")){
+            for (String linha : gp.jogador.getInventario().get(itemIndice).getDescricao().split("\n")) {
                 g2.drawString(linha, textoX, textoY);
-                textoY+=26;
+                textoY += 26;
 
             }
 
@@ -286,9 +386,9 @@ public class InterfaceUsuario {
 
     }
 
-    public int pegarItemSlot(){
+    public int pegarItemSlot() {
 
-        int itemIndice= slotCol+(slotLinha*5);
+        int itemIndice = slotCol + (slotLinha * 5);
         return itemIndice;
     }
 
@@ -364,8 +464,6 @@ public class InterfaceUsuario {
         }
 
     }
-
-
 
 
     public void desenharTelaTitulo() {
@@ -587,30 +685,22 @@ public class InterfaceUsuario {
 
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 
-        // Desenha o fundo transparente
-        g2.setColor(Color.BLACK);  // Cor do fundo (pode ser qualquer cor)
-        g2.fillRect(0, 0, gp.getTelaLargura(), gp.getTelaAltura()); // Preenche a tela inteira com o fundo transparente
+        g2.setColor(Color.BLACK);
+        g2.fillRect(0, 0, gp.getTelaLargura(), gp.getTelaAltura());
 
-        // Restaura a opacidade para desenhar o texto com total visibilidade
-        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));  // Total opacidade
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
 
+        g2.setFont(Font05.deriveFont(60f));
 
-        g2.setColor(Color.WHITE);
-        g2.setFont(Font05.deriveFont(40f));  // Defina sua fonte como Font03 ou substitua com a fonte desejada
-
-
+        // Texto "VOCÊ MORREU!" com borda
         String texto = "JOGO PAUSADO";
-
-
-        // Obter a posição X para centralizar
         int x = obterXCentralizarTexto(texto);
+        int y = 150;
 
-        // Obter a posição Y para centralizar verticalmente
-        int y = gp.getTelaAltura() / 2 + g2.getFontMetrics().getHeight() / 4; // Ajuste o valor para um melhor alinhamento vertical
-
-        // Desenha o texto
+        g2.setColor(Color.BLACK);
+        g2.drawString(texto, x + 4, y + 4);
+        g2.setColor(Color.WHITE);
         g2.drawString(texto, x, y);
-        desenharTextoComBordaPreta(texto, x, y);
 
     }
 
@@ -638,7 +728,6 @@ public class InterfaceUsuario {
     }
 
 
-
     public void desenharTextoComBordaPreta(String texto, int x, int y) {
         // Cor da borda (preta)
         g2.setColor(Color.BLACK);
@@ -654,61 +743,13 @@ public class InterfaceUsuario {
     }
 
 
-    public void mostrarMensagem(String texto){
+    public void mostrarMensagem(String texto) {
 
-        mensagem=texto;
-        mensagemOn=true;
-
-    }
-
-    public void desenhar(Graphics2D g2) {
-        this.g2 = g2;
-        g2.setFont(Font03);
-        g2.setColor(Color.white);
-
-        // TITLE STATE
-        if (gp.getEstadoJogo() == gp.getEstadoTitulo()) {
-            desenharTelaTitulo();
-        } else if (gp.getEstadoJogo() == gp.getEstadoPlay()) {
-            desenharVidaJogador();
-
-        } else if (gp.getEstadoJogo() == gp.getEstadoPausa()) {
-            desenharTelaPausa();
-        } else if (gp.getEstadoJogo() == gp.getEstadoDialogo()) {
-            desenharVidaJogador();
-            desenharTelaDialogo();
-
-        } else if (gp.getEstadoJogo() == gp.getEstadoPersonagem()) {
-            desenharStatusPersonagem();
-            desenharInventario();
-
-        }
-
-        if(mensagemOn==true){
-
-            g2.setColor(Color.BLACK);
-            g2.setFont(Font05.deriveFont(25f));
-            g2.drawString(mensagem,(gp.getTamanhoBloco()/2) + 3, 300 + 2);
-
-            g2.setFont(Font05.deriveFont(25f));
-            g2.setColor(Color.white);
-            g2.drawString(mensagem, gp.getTamanhoBloco()/2, 300);
-            g2.drawString(mensagem, gp.getTamanhoBloco()/2, 300);
-
-            contadorMensagem++;
-
-            if(contadorMensagem>200){
-
-                contadorMensagem=0;
-                mensagemOn=false;
-
-            }
-
-
-        }
-
+        mensagem = texto;
+        mensagemOn = true;
 
     }
+
 
 
 

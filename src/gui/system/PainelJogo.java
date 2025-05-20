@@ -77,6 +77,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
     private final int estadoDialogo=4;
     private int estadoDescricao = 3;
     private int estadoPersonagem=5;
+    private int estadoJogoFinalizado=6;
 
     // Mapa do jogo
 
@@ -140,6 +141,10 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
     }
     public int getEstadoJogo() {
         return estadoJogo;
+    }
+
+    public int getEstadoJogoFinalizado() {
+        return estadoJogoFinalizado;
     }
 
     public final int getEstadoPlay() {
