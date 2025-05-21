@@ -10,17 +10,17 @@ import personagens.Personagem;
 public class GerenciadorDeTurnos {
 
     private int turnoAtual = 1;
-    private Personagem jogador;
+    private Personagem personagem;
     private Ambiente ambienteAtual;
     private GerenciadorDeAmbientes gerenciadorDeAmbientes;
     private GerenciadorDeEventos gerenciadorDeEventos;
     private RegistroDeTurnos historico;
 
-    public GerenciadorDeTurnos(Personagem jogador, Ambiente ambienteInicial, GerenciadorDeAmbientes ga, GerenciadorDeEventos ge) {
-        this.jogador = jogador;
+    public GerenciadorDeTurnos(Personagem personagem, Ambiente ambienteInicial, GerenciadorDeAmbientes ga, GerenciadorDeEventos ge) {
+        this.personagem = personagem;
         this.ambienteAtual = ambienteInicial;
-        this.gerenciadorDeAmbientes = ga;
-        this.gerenciadorDeEventos = ge;
+        this.gerenciadorDeAmbientes = gerenciadorDeAmbientes;
+        this.gerenciadorDeEventos = gerenciadorDeEventos;
         this.historico = new RegistroDeTurnos();
     }
 
@@ -33,25 +33,22 @@ public class GerenciadorDeTurnos {
     }
 
     private void faseInicio() {
-        jogador.obterNome();
-        jogador.obterSede();
-        jogador.obterEnergia();
-        jogador.obterVida();
-        jogador.obterSanidade();
-        jogador.obterLocalizacao();
-        jogador.obterTemperaturaCorporal();
+        personagem.exibirStatus();
         gerenciadorDeAmbientes.atualizarClima(ambienteAtual);
-        historico.registrarInicioTurno(turnoAtual, jogador, ambienteAtual);
+        historico.registrarInicioTurno(turnoAtual, personagem, ambienteAtual);
     }
 
     public void faseAcao() {
 
+    //Como depende muito da GUI e não está finalizada ainda está em vazio
+
     }
 
     private void faseEventoAleatorio() {
-        Evento evento = gerenciadorDeEventos.gerarEventoAleatorio(ambienteAtual);
+        Evento evento = gerenciadorDeEventos.sortearEvento()(ambienteAtual);
+        Evento evento = gerenciadorDeEventos.aplicarEvento()(ambienteAtual);
         if (evento != null) {
-            evento.executar(jogador, ambienteAtual);
+            evento.executar(Personagem personagem, Ambiente local);
         }
     }
 

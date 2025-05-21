@@ -35,7 +35,7 @@ public class RegistroDeTurnos {
         turnos.clear();
     }
 
-    // (Opcional) retorna o número total de turnos registrados
+    // retorna o número total de turnos registrados
     public int getNumeroDeTurnos() {
         return turnos.size();
     }
