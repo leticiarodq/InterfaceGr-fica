@@ -23,7 +23,7 @@ public class ALIMENTO_Fruta extends Entidade {
 
             case "laranja":
                 setDown1(setup("/alimentos/laranja"));
-                setDescricao("[Laranja]\nCheia de vitamina C!\nAjuda a fortalecer o sistema imunológico.");
+                setDescricao("[Laranja]\nCheia de vitamina C!\nAjuda a fortalecer o\nsistema imunológico.");
                 break;
 
             case "tomate":

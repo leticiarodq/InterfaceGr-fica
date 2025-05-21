@@ -17,7 +17,7 @@ public class REMEDIO_Antibiotico extends Entidade {
         setNome(remedioLogico.getTipo());
         setDown1(setup("/objetos/antibiotico"));
         setColisao(true);
-        setDescricao("["+ getNome() +"]\nCombate infecções internas.");
+        setDescricao("["+ getNome() +"]\nCombate infecções\ninternas.");
 
 
     }

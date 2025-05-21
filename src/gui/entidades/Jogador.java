@@ -248,7 +248,7 @@ public class Jogador extends Entidade {
             else {
                 texto="Você antingiu o limite máximo no inventário!";
             }
-            //gp.getIu().mostrarMensagem(texto);
+            gp.getIu().mostrarMensagem(texto);
             gp.getObj()[i]=null;
         }
 

@@ -34,6 +34,10 @@ public class InterfaceUsuario {
     private String[] dialogos;
     private int indiceDialogo = 0;
 
+    private String mensagem = "";
+    private boolean mensagemOn = false;
+    private int contadorMensagem = 0;
+
     //private Personagem personagem;
 
     // Métodos de acesso
@@ -140,7 +144,34 @@ public class InterfaceUsuario {
             desenharStatusPersonagem();
             desenharInventario();
 
+        } else if (gp.getEstadoJogo() == gp.getEstadoJogoFinalizado()) {
+            desenharTelaJogoFinalizado();
+
         }
+
+        if (mensagemOn == true) {
+
+            g2.setColor(Color.BLACK);
+            g2.setFont(Font05.deriveFont(25f));
+            g2.drawString(mensagem, (gp.getTamanhoBloco() / 2) + 3, 300 + 2);
+
+            g2.setFont(Font05.deriveFont(25f));
+            g2.setColor(Color.white);
+            g2.drawString(mensagem, gp.getTamanhoBloco() / 2, 300);
+            g2.drawString(mensagem, gp.getTamanhoBloco() / 2, 300);
+
+            contadorMensagem++;
+
+            if (contadorMensagem > 200) {
+
+                contadorMensagem = 0;
+                mensagemOn = false;
+
+            }
+
+
+        }
+
 
     }
 
@@ -188,6 +219,56 @@ public class InterfaceUsuario {
         return linhas;
     }
 
+    public void desenharTelaJogoFinalizado() {
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+
+        g2.setColor(Color.BLACK);
+        g2.fillRect(0, 0, gp.getTelaLargura(), gp.getTelaAltura());
+
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+
+        g2.setFont(Font05.deriveFont(65f));
+
+        // Texto "VOCÊ MORREU!" com borda
+        String texto = "VOCÊ MORREU!";
+        int x = obterXCentralizarTexto(texto);
+        int y = 200;
+
+        g2.setColor(Color.BLACK);
+        g2.drawString(texto, x + 4, y + 4);
+        g2.setColor(Color.WHITE);
+        g2.drawString(texto, x, y);
+
+        // Texto "Tente novamente" com borda
+        g2.setFont(Font03.deriveFont(45f));
+        texto = "Tentar novamente";
+        x = obterXCentralizarTexto(texto);
+        y += gp.getTamanhoBloco() * 4;
+        desenharTextoSombra(texto,x,y);
+
+
+        g2.setColor(Color.WHITE);
+        g2.drawString(texto, x, y);
+        if (comandoNum == 0) g2.drawString(">", x - 40, y);
+        desenharTextoSombra(texto,x,y);
+
+        // Texto "Sair" com borda
+        texto = "Sair";
+        x = obterXCentralizarTexto(texto);
+        y += gp.getTamanhoBloco() * 1;
+
+        desenharTextoSombra(texto,x,y);
+
+
+        g2.setColor(Color.WHITE);
+        g2.drawString(texto, x, y);
+        if (comandoNum == 1) g2.drawString(">", x - 40, y);
+
+        desenharTextoSombra(texto,x,y);
+    }
+
+
+
     public void desenharStatusPersonagem() {
 
         final int frameX = gp.getTamanhoBloco() * 2;
@@ -198,7 +279,7 @@ public class InterfaceUsuario {
         desenharJanela(frameX, frameY, frameAltura, frameLargura);
 
         g2.setColor(Color.white);
-        g2.setFont(Font03.deriveFont(15f));
+        g2.setFont(Font03.deriveFont(30f));
 
         int textoX = frameX + 20;
         int textoY = frameY + gp.getTamanhoBloco();
@@ -223,6 +304,15 @@ public class InterfaceUsuario {
 
         g2.drawString("Sede", textoX, textoY);
         g2.drawString(gp.jogador.getSede() + "/" + gp.jogador.getSedeMaxima(), frameX + frameLargura - 70, textoY);
+
+    }
+
+    public void mostrarMensagem(String texto) {
+
+        mensagem=texto;
+        mensagemOn=true;
+        mensagem = texto;
+        mensagemOn = true;
 
     }
 
@@ -279,7 +369,7 @@ public class InterfaceUsuario {
 
         int textoX= dFrameX+20;
         int textoY=frameY+gp.getTamanhoBloco()+230;
-        g2.setFont(Font03.deriveFont(13f));
+        g2.setFont(Font03.deriveFont(25f));
 
         int itemIndice=pegarItemSlot();
 
@@ -350,7 +440,7 @@ public class InterfaceUsuario {
 
         desenharJanela(x, y, largura, altura);
 
-        g2.setFont(Font03.deriveFont(14f));
+        g2.setFont(Font03.deriveFont(25f));
         x += gp.getTamanhoBloco() / 2;
         y += gp.getTamanhoBloco();
 
