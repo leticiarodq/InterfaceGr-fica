@@ -22,13 +22,13 @@ public class GerenciadorBlocos {
 
     private PainelJogo gp; // referência ao painel principal de jogo, para acessar os dados do painel
     private Blocos[] blocos; // vetor que armazena todos os tipos diferentes de blocos
-    private int numBlocosMapa[][][]; // uma matriz que representa o mapa inteiro, cada valor nela é um índice do vetor blocos
+    private int numBlocosMapa[][]; // uma matriz que representa o mapa inteiro, cada valor nela é um índice do vetor blocos
     Personagem personagem;
 
 
     // Métodos de acesso getters
 
-    public int[][][] getNumBlocosMapa() {
+    public int[][] getNumBlocosMapa() {
         return numBlocosMapa;
     }
     public Blocos[] getBlocos() {
@@ -41,11 +41,11 @@ public class GerenciadorBlocos {
 
         blocos = new Blocos[200]; //Quantidade dos tipos de bloco
 
-        numBlocosMapa= new int[gp.getMapaMax()][gp.getColMundoMax()][gp.getLinhaMundoMax()];
+        numBlocosMapa= new int[gp.getColMundoMax()][gp.getLinhaMundoMax()];
 
         pegarImagemBloco(); //Chamando o método no construtor
         carregarMapa("/maps/floresta.txt",0);
-        carregarMapa("/maps/ruinas.txt",1);
+        //carregarMapa("/maps/ruinas.txt",1);
     }
 
 
@@ -205,7 +205,7 @@ public class GerenciadorBlocos {
 
                 for (int coluna = 0; coluna < gp.getColMundoMax(); coluna++) {
                     int num = Integer.parseInt(numeros[coluna]);
-                    numBlocosMapa[mapa][coluna][linha] = num;
+                    numBlocosMapa[coluna][linha] = num;
                 }
                 linha++;
             }
@@ -237,7 +237,7 @@ public class GerenciadorBlocos {
         // percorre cada coluna e linha do mundo (ou seja, cada bloco do mapa).
         while(mundoCol<gp.getColMundoMax() && mundoLinha<gp.getLinhaMundoMax()){
 
-            int numBloco= numBlocosMapa[gp.getMapaAtual()][mundoCol][mundoLinha]; // número que representa o tipo do bloco naquela posição
+            int numBloco= numBlocosMapa[mundoCol][mundoLinha]; // número que representa o tipo do bloco naquela posição
 
             // posição exata desse bloco no mundo, calculado multiplicando a posição na matriz pelo tamanho de cada bloco
             int mundoX= mundoCol * gp.getTamanhoBloco();

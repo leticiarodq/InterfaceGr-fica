@@ -38,7 +38,7 @@ public class ChecadorColisoes {
 
         if (personagemColunaEsquerda >= 0 && personagemColunaEsquerda < gp.getBlocosG().getNumBlocosMapa().length &&
                 personagemLinhaCima >= 0 && personagemLinhaCima < gp.getBlocosG().getNumBlocosMapa()[0].length) {
-            blocoNum1 = gp.getBlocosG().getNumBlocosMapa()[gp.getMapaAtual()][personagemColunaEsquerda][personagemLinhaCima];
+            blocoNum1 = gp.getBlocosG().getNumBlocosMapa()[personagemColunaEsquerda][personagemLinhaCima];
         }
 
         switch (entidade.getDirecao()) {
@@ -48,15 +48,15 @@ public class ChecadorColisoes {
 
                 personagemLinhaCima = Math.max(0, Math.min(personagemLinhaCima, gp.getBlocosG().getNumBlocosMapa()[0].length - 1));
 
-                blocoNum1 = gp.getBlocosG().getNumBlocosMapa()[gp.getMapaAtual()][personagemColunaEsquerda][personagemLinhaCima];
-                blocoNum2 = gp.getBlocosG().getNumBlocosMapa()[gp.getMapaAtual()][personagemColunaDireita][personagemLinhaCima];
+                blocoNum1 = gp.getBlocosG().getNumBlocosMapa()[personagemColunaEsquerda][personagemLinhaCima];
+                blocoNum2 = gp.getBlocosG().getNumBlocosMapa()[personagemColunaDireita][personagemLinhaCima];
                 // Checa se algum desses blocos tem colisão ativada:
                 if (personagemColunaEsquerda >= 0 && personagemColunaEsquerda < gp.getBlocosG().getNumBlocosMapa().length &&
                         personagemColunaDireita >= 0 && personagemColunaDireita < gp.getBlocosG().getNumBlocosMapa().length &&
                         personagemLinhaCima >= 0 && personagemLinhaCima < gp.getBlocosG().getNumBlocosMapa()[0].length) {
 
-                    blocoNum1 = gp.getBlocosG().getNumBlocosMapa()[gp.getMapaAtual()][personagemColunaEsquerda][personagemLinhaCima];
-                    blocoNum2 = gp.getBlocosG().getNumBlocosMapa()[gp.getMapaAtual()][personagemColunaDireita][personagemLinhaCima];
+                    blocoNum1 = gp.getBlocosG().getNumBlocosMapa()[personagemColunaEsquerda][personagemLinhaCima];
+                    blocoNum2 = gp.getBlocosG().getNumBlocosMapa()[personagemColunaDireita][personagemLinhaCima];
 
                     // Verifica se os índices dos blocos estão dentro dos limites válidos do array de blocos
                     if (blocoNum1 >= 0 && blocoNum1 < gp.getBlocosG().getBlocos().length &&
@@ -81,8 +81,8 @@ public class ChecadorColisoes {
                         personagemColunaDireita >= 0 && personagemColunaDireita < gp.getBlocosG().getNumBlocosMapa().length &&
                         personagemLinhaBaixo >= 0 && personagemLinhaBaixo < gp.getBlocosG().getNumBlocosMapa()[0].length) {
 
-                    blocoNum1 = gp.getBlocosG().getNumBlocosMapa()[gp.getMapaAtual()][personagemColunaEsquerda][personagemLinhaBaixo];
-                    blocoNum2 = gp.getBlocosG().getNumBlocosMapa()[gp.getMapaAtual()][personagemColunaDireita][personagemLinhaBaixo];
+                    blocoNum1 = gp.getBlocosG().getNumBlocosMapa()[personagemColunaEsquerda][personagemLinhaBaixo];
+                    blocoNum2 = gp.getBlocosG().getNumBlocosMapa()[personagemColunaDireita][personagemLinhaBaixo];
 
                     // Verifica se os índices dos blocos estão dentro dos limites válidos do array de blocos
                     if (blocoNum1 >= 0 && blocoNum1 < gp.getBlocosG().getBlocos().length &&
@@ -102,8 +102,8 @@ public class ChecadorColisoes {
                         personagemLinhaCima >= 0 && personagemLinhaCima < gp.getBlocosG().getNumBlocosMapa()[0].length &&
                         personagemLinhaBaixo >= 0 && personagemLinhaBaixo < gp.getBlocosG().getNumBlocosMapa()[0].length) {
 
-                    blocoNum1 = gp.getBlocosG().getNumBlocosMapa()[gp.getMapaAtual()][personagemColunaDireita][personagemLinhaCima];
-                    blocoNum2 = gp.getBlocosG().getNumBlocosMapa()[gp.getMapaAtual()][personagemColunaDireita][personagemLinhaBaixo];
+                    blocoNum1 = gp.getBlocosG().getNumBlocosMapa()[personagemColunaDireita][personagemLinhaCima];
+                    blocoNum2 = gp.getBlocosG().getNumBlocosMapa()[personagemColunaDireita][personagemLinhaBaixo];
 
                     if (blocoNum1 >= 0 && blocoNum1 < gp.getBlocosG().getBlocos().length &&
                             blocoNum2 >= 0 && blocoNum2 < gp.getBlocosG().getBlocos().length) {
@@ -122,8 +122,8 @@ public class ChecadorColisoes {
                         personagemLinhaCima >= 0 && personagemLinhaCima < gp.getBlocosG().getNumBlocosMapa()[0].length &&
                         personagemLinhaBaixo >= 0 && personagemLinhaBaixo < gp.getBlocosG().getNumBlocosMapa()[0].length) {
 
-                    blocoNum1 = gp.getBlocosG().getNumBlocosMapa()[gp.getMapaAtual()][personagemColunaEsquerda][personagemLinhaCima];
-                    blocoNum2 = gp.getBlocosG().getNumBlocosMapa()[gp.getMapaAtual()][personagemColunaEsquerda][personagemLinhaBaixo];
+                    blocoNum1 = gp.getBlocosG().getNumBlocosMapa()[personagemColunaEsquerda][personagemLinhaCima];
+                    blocoNum2 = gp.getBlocosG().getNumBlocosMapa()[personagemColunaEsquerda][personagemLinhaBaixo];
 
                     if (blocoNum1 >= 0 && blocoNum1 < gp.getBlocosG().getBlocos().length &&
                             blocoNum2 >= 0 && blocoNum2 < gp.getBlocosG().getBlocos().length) {

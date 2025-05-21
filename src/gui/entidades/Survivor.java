@@ -2,6 +2,7 @@ package gui.entidades;
 
 import gui.system.EventosTeclado;
 import gui.system.PainelJogo;
+import personagens.Personagem;
 import personagens.SobreviventeNato;
 
 import javax.imageio.ImageIO;

@@ -3,6 +3,7 @@ package gui.entidades;
 import gui.system.EventosTeclado;
 import gui.system.PainelJogo;
 import personagens.Medico;
+import personagens.Personagem;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;

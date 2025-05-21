@@ -10,6 +10,8 @@ import gui.system.InterfaceUsuario;
 import gui.system.PainelJogo;
 import personagens.Mecanico;
 import personagens.Personagem;
+import personagens.Rastreador;
+import personagens.SobreviventeNato;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -24,7 +26,6 @@ public class Jogador extends Entidade {
     private final int telaY;
     private int temRemedio=0;
     private Personagem personagem;
-
 
 
     public final int getTelaX(){
@@ -75,12 +76,15 @@ public class Jogador extends Entidade {
 
     CriadorAtivos criadorDeAtivos;
 
+    Personagem personagemLogico;
+
     public Jogador(PainelJogo gp, EventosTeclado eventosTeclado) { //Construtor da classe que recebe o painel de jogo e manipulador de teclas
 
         super(gp);
 
         this.gp = gp;
         this.eventosTeclado = eventosTeclado;
+
 
 
         telaX=gp.getTelaLargura()/2 - (gp.getTamanhoBloco()/2);
@@ -105,6 +109,7 @@ public class Jogador extends Entidade {
         setDirecao("down");
 
         // Status do jogador
+
         setVidaMaxima(6);
         setVida(getVidaMaxima());
 
@@ -243,7 +248,7 @@ public class Jogador extends Entidade {
             else {
                 texto="Você antingiu o limite máximo no inventário!";
             }
-            gp.getIu().mostrarMensagem(texto);
+            //gp.getIu().mostrarMensagem(texto);
             gp.getObj()[i]=null;
         }
 

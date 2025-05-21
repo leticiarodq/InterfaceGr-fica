@@ -8,6 +8,7 @@ import gui.blocos.GerenciadorBlocos;
 import gui.entidades.*;
 import gui.eventos.ManipuladorDeEventos;
 import gui.tile_interativo.BlocoInterativo;
+import itens.Alimento;
 
 import javax.swing.*;
 import javax.swing.Timer;
@@ -61,11 +62,12 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
     // Entidade e objeto
 
     public Jogador jogador = new Jogador(this, eventosTeclado);
-    private Entidade obj[][] = new Entidade[mapaMax][100];
-    private Entidade npc[][] = new Entidade[mapaMax][100];
-    private Entidade coelho[][]=new Entidade[mapaMax][10];
-    private Entidade criatura[][]=new Entidade[mapaMax][10];
+    private Entidade obj[] = new Entidade[100];
+    private Entidade npc[] = new Entidade[100];
+    private Entidade coelho[]=new Entidade[10];
+    private Entidade criatura[]=new Entidade[10];
     private ArrayList<Entidade> entidadeLista= new ArrayList<>();
+    private Entidade alimento[]=new Entidade[10];
 
    // public BlocoInterativo blocoInterativo[][]=new BlocoInterativo[mapaMax][50];
 
@@ -177,6 +179,10 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
 
     public ArrayList<Entidade> getEntidadeList() {
         return entidadeLista;
+    }
+
+    public Entidade[] getAlimento(){
+        return alimento;
     }
 
     public final int getMapaMax(){
@@ -328,17 +334,17 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
 
 
             // NPC
-           for (int i = 0; i < npc[1].length; i++) {
-                if (npc[mapaMax][i] != null) {
-                    npc[mapaMax][i].update();
+           for (int i = 0; i < npc.length; i++) {
+                if (npc[i] != null) {
+                    npc[i].update();
                 }
             }
 
             // CRIATURA
 
-          for (int i = 0; i < criatura[1].length; i++) {
-                if (criatura[mapaMax][i] != null) {
-                    criatura[mapaMax][i].update();
+          for (int i = 0; i < criatura.length; i++) {
+                if (criatura[i] != null) {
+                    criatura[i].update();
                 }
             }
 
@@ -527,6 +533,11 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
                     entidadeLista.add(criatura[i]);
                 }
             }
+
+
+
+
+
 
 
             // Ordenar entidades pelo eixo Y
