@@ -13,9 +13,9 @@ public class Detective extends Jogador { //
 
     public Detective(PainelJogo gp, EventosTeclado eventosTeclado) {
         super(gp, eventosTeclado);
-        this.rastreador = new Rastreador("Luiz",100, 100, 100, 100, 100, null, "Floresta", 36.5);
+        this.rastreador = new Rastreador("Rastreador",getVida(), getFome(), getSede(), getEnergia(), getSanidade(), null, gp.getBlocosG().getAmbienteAtual().getNomeAmbiente(), 36.5);
         getImagemJogador();
-        rastreador.exibirStatus(); // <-- Aqui a chamada!
+        rastreador.exibirStatus();
     }
 
     @Override

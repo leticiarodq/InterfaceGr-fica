@@ -1,5 +1,7 @@
 package gui.entidades;
 
+import ambientes.Ambiente;
+import ambientes.GerenciadorDeAmbientes;
 import gui.objetos.ALIMENTO_Enlatado;
 import gui.objetos.REMEDIO_Analgesico;
 import gui.objetos.REMEDIO_Antibiotico;
@@ -8,10 +10,7 @@ import gui.system.CriadorAtivos;
 import gui.system.EventosTeclado;
 import gui.system.InterfaceUsuario;
 import gui.system.PainelJogo;
-import personagens.Mecanico;
-import personagens.Personagem;
-import personagens.Rastreador;
-import personagens.SobreviventeNato;
+import personagens.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -24,9 +23,7 @@ public class Jogador extends Entidade {
 
     private final int telaX;
     private final int telaY;
-    private int temRemedio=0;
-    private Personagem personagem;
-
+    private Personagem personagemLogico;
 
     public final int getTelaX(){
         return telaX;
@@ -34,13 +31,9 @@ public class Jogador extends Entidade {
     public final int getTelaY(){
         return telaY;
     }
-    public int getTemRemedio(){
-        return temRemedio;
-    }
 
     private boolean desidratado = false;
     private boolean infectado=false;
-
 
     private ArrayList<Entidade> inventario=new ArrayList<>();
     private final int tamanhoMaxInventario=20;
@@ -76,8 +69,6 @@ public class Jogador extends Entidade {
 
     CriadorAtivos criadorDeAtivos;
 
-    Personagem personagemLogico;
-
     public Jogador(PainelJogo gp, EventosTeclado eventosTeclado) { //Construtor da classe que recebe o painel de jogo e manipulador de teclas
 
         super(gp);
@@ -85,6 +76,18 @@ public class Jogador extends Entidade {
         this.gp = gp;
         this.eventosTeclado = eventosTeclado;
 
+
+        this.personagemLogico = new Personagem(
+                "Jogador",
+                6,
+                8,
+                8,
+                6,
+                6,
+                new Inventario(40),
+                gp.getBlocosG().getAmbienteAtual().getNomeAmbiente(),
+                36.5
+        );
 
 
         telaX=gp.getTelaLargura()/2 - (gp.getTamanhoBloco()/2);
@@ -103,14 +106,16 @@ public class Jogador extends Entidade {
     public void setValoresPadrao() {
         // Define valores iniciais para a posição do jogador, velocidade e direção
 
-        setMundoX(gp.getTamanhoBloco() * 26);
-        setMundoY(gp.getTamanhoBloco() * 9);
+        //setMundoX(gp.getTamanhoBloco() * 26);
+        //setMundoY(gp.getTamanhoBloco() * 9);
+        setMundoX(gp.getTamanhoBloco() * 31);
+        setMundoY(gp.getTamanhoBloco() * 20);
         setVelocidade(2);
         setDirecao("down");
 
         // Status do jogador
 
-        setVidaMaxima(6);
+        /*setVidaMaxima(6);
         setVida(getVidaMaxima());
 
         setSedeMaxima(8);
@@ -124,17 +129,26 @@ public class Jogador extends Entidade {
 
         setEnergiaMaxima(6);
         setEnergia(getEnergiaMaxima());
+         */
 
+        setVida(personagemLogico.getVida());
+        setSede(personagemLogico.getSede());
+        setFome(personagemLogico.getFome());
+        setSanidade(personagemLogico.getSanidade());
+        setEnergia(personagemLogico.getEnergia());
+
+        setVidaMaxima(6);
+        setSedeMaxima(8);
+        setFomeMaxima(8);
+        setSanidadeMaxima(6);
+        setEnergiaMaxima(6);
 
 
     }
     public void definirItens(){
 
 
-
     }
-
-
 
     public void getImagemJogador(){}
 
@@ -229,7 +243,6 @@ public class Jogador extends Entidade {
 
 
     }
-
 
 
     public void pegarObjeto(int i){
@@ -347,11 +360,6 @@ public class Jogador extends Entidade {
             g2.drawImage(imagem, x, y, gp.getTamanhoBloco(), gp.getTamanhoBloco(), null); //O jogador é desenhado na posição (x, y) com o tamanho da célula (tileSize), que está definido no GamePanel.
 
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
-
-        // g2.setFont(new Font("Arial", Font.PLAIN, 26));
-        // g2.setColor(Color.white);
-        // g2.drawString("Invisibilidade:"+getContadorInvisibilidade(), 10, 400);
-
 
 
     }

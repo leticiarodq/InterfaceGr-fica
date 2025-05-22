@@ -14,6 +14,8 @@ public class Personagem {
     private String localizacao;
     private double temperaturaCorporal = 36.5;
 
+
+
     public Personagem(String nome, int vida, int fome, int sede, int energia, int sanidade, Inventario inventario, String localizacao, double temperaturaCorporal) {
         this.nome = nome;
         this.vida = vida;

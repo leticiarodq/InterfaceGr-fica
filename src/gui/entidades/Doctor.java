@@ -18,7 +18,7 @@ public class Doctor extends Jogador {
 
     public Doctor(PainelJogo gp, EventosTeclado eventosTeclado) {
         super(gp, eventosTeclado);
-        this.medico = new Medico("Dr. Eduardo",100, 100, 100, 100, 100, null, "Floresta", 36.5);
+        this.medico = new Medico("Dr. Eduardo",100, 100, 100, 100, 100, null, gp.getBlocosG().getAmbienteAtual().getNomeAmbiente(), 36.5);
         getImagemJogador();
         medico.exibirStatus();
     }

@@ -1,5 +1,6 @@
 package gui.criaturas;
 
+import eventos.EventoCriatura;
 import gui.entidades.Entidade;
 import gui.system.PainelJogo;
 
@@ -12,6 +13,7 @@ public class CRI_Lobo extends Entidade {
 
     private PainelJogo gp;
 
+    private EventoCriatura criaturaLogica;
     private Random aleatorio = new Random();
 
     public CRI_Lobo(PainelJogo gp){

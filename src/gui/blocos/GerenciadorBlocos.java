@@ -2,10 +2,7 @@ package gui.blocos;
 
 import gui.system.FerramentasUteis;
 import gui.system.PainelJogo;
-import personagens.Personagem;
 import ambientes.*;
-
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -13,17 +10,36 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-
-
+import java.util.HashMap;
+import java.util.Map;
 
 // Classe responsável por carregar, gerenciar e desenhar os blocos no mundo do jogo
 
 public class GerenciadorBlocos {
 
-    private PainelJogo gp; // referência ao painel principal de jogo, para acessar os dados do painel
-    private Blocos[] blocos; // vetor que armazena todos os tipos diferentes de blocos
-    private int numBlocosMapa[][]; // uma matriz que representa o mapa inteiro, cada valor nela é um índice do vetor blocos
-    Personagem personagem;
+    private PainelJogo gp;
+    private Blocos[] blocos;
+    private int[][] numBlocosMapa;
+    private Map<Integer, Ambiente> ambientesMapeados = new HashMap<>();
+
+    private Ambiente ambienteAtual;
+
+
+    public GerenciadorBlocos(PainelJogo gp) {
+        this.gp = gp;
+
+        blocos = new Blocos[200];
+        numBlocosMapa = new int[gp.getColMundoMax()][gp.getLinhaMundoMax()];
+
+        pegarImagemBloco();
+
+        // Associa os mapas com seus respectivos ambientes
+        ambientesMapeados.put(0, new AmbienteFloresta());
+        ambientesMapeados.put(1, new AmbienteRuinas());
+        ambientesMapeados.put(2, new AmbienteCaverna());
+
+        carregarMapa("/maps/caverna.txt", 2);
+    }
 
 
     // Métodos de acesso getters
@@ -35,19 +51,9 @@ public class GerenciadorBlocos {
         return blocos;
     }
 
-    public GerenciadorBlocos(PainelJogo gp){ //Construtor
-
-        this.gp=gp; //O this se refere ao atributo da instância da classe e não ao parâmetro do método
-
-        blocos = new Blocos[200]; //Quantidade dos tipos de bloco
-
-        numBlocosMapa= new int[gp.getColMundoMax()][gp.getLinhaMundoMax()];
-
-        pegarImagemBloco(); //Chamando o método no construtor
-        carregarMapa("/maps/floresta.txt",0);
-        //carregarMapa("/maps/ruinas.txt",1);
+    public Ambiente getAmbienteAtual() {
+        return ambienteAtual;
     }
-
 
     public void pegarImagemBloco(){ // Construtor que chama o método setup várias vezes passando o índice no vetor 'blocos', o nome da imagem e se o bloco tem colisão ou não
 
@@ -148,9 +154,41 @@ public class GerenciadorBlocos {
 
 
         // ilha
-        setup(100, "ilha01", false);
-        setup(101,"ilha02", false);
-        setup(102,"ilha03", false);
+        setup(100, "cave02", false);
+        setup(101, "cave01", true);
+        setup(102, "cave03", false);
+        setup(103, "cave04", true);
+        setup(104, "cave05", true);
+        setup(105, "cave06", true);
+        setup(106, "cave07", false);
+        setup(107, "cave08", false);
+        setup(108, "cave09", true);
+        setup(109, "cave10", true);
+        setup(110, "cave11", true);
+        setup(111, "cave12", true);
+        setup(112, "cave13", true);
+        setup(113, "cave14", true);
+        setup(114, "cave15", true);
+        setup(115, "cave16", true);
+        setup(116, "cave17", true);
+        setup(117, "cave18", true);
+        setup(118, "cave19", true);
+        setup(119, "cave20", true);
+        setup(120, "cave21", true);
+        setup(121, "cave22", false);
+        setup(122, "cave23", false);
+        setup(123, "cave24", false);
+        setup(124, "cave25", false);
+        setup(125, "cave26", true);
+        setup(126, "cave27", true);
+        setup(127, "cave28", true);
+        setup(128, "cave29", true);
+        setup(129, "cave30", true);
+        setup(130, "cave31", true);
+
+        setup(131, "ouro", true);
+
+
 
 
 
@@ -178,12 +216,9 @@ public class GerenciadorBlocos {
     }
 
 
-
     public boolean carregarMapa(String caminhoArquivo, int mapa) {
         try {
             InputStream is = getClass().getResourceAsStream(caminhoArquivo);
-
-            // Verifique se o arquivo foi carregado corretamente
             if (is == null) {
                 throw new IOException("Arquivo não encontrado: " + caminhoArquivo);
             }
@@ -194,11 +229,10 @@ public class GerenciadorBlocos {
 
             while (linha < gp.getLinhaMundoMax()) {
                 String line = br.readLine();
-                if (line == null) break; // Evita NullPointerException
+                if (line == null) break;
 
                 String[] numeros = line.split(" ");
 
-                // Verifica se o número de colunas é consistente
                 if (numeros.length != gp.getColMundoMax()) {
                     throw new IOException("Número incorreto de colunas na linha " + (linha + 1));
                 }
@@ -212,22 +246,17 @@ public class GerenciadorBlocos {
 
             br.close();
 
+            // Associa o ambiente atual ao mapa carregado
+            ambienteAtual = ambientesMapeados.get(mapa);
+
         } catch (Exception e) {
-            // Exibe uma mensagem detalhada sobre a exceção
             System.err.println("Erro ao carregar o mapa: " + e.getMessage());
-            e.printStackTrace(); // Imprime o erro para depuração
-            return false; // Retorna false em caso de erro
+            e.printStackTrace();
+            return false;
         }
 
-        if (mapa == 0) {
-            System.out.println("Floresta");
-        }
-
-        return true; // Retorna true se o mapa for carregado com sucesso
+        return true;
     }
-
-
-
 
     public void draw(Graphics2D g2) { // desenha os blocos na tela, baseando-se na posição do jogador
 
