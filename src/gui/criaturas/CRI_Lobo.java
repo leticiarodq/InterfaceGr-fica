@@ -20,7 +20,6 @@ public class CRI_Lobo extends Entidade {
 
         super(gp);
 
-        setTipo(2);
 
         setNome("Lobo");
         setVelocidade(1);

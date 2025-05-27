@@ -25,25 +25,26 @@ public class Jogador extends Entidade {
     private final int telaY;
     private Personagem personagemLogico;
 
-    public final int getTelaX(){
+    public final int getTelaX() {
         return telaX;
     }
-    public final int getTelaY(){
+
+    public final int getTelaY() {
         return telaY;
     }
 
     private boolean desidratado = false;
-    private boolean infectado=false;
+    private boolean infectado = false;
 
-    private ArrayList<Entidade> inventario=new ArrayList<>();
-    private final int tamanhoMaxInventario=20;
+    private ArrayList<Entidade> inventario = new ArrayList<>();
+    private final int tamanhoMaxInventario = 20;
 
     // Inventário
-    public final int getTamanhoMaxInventario(){
+    public final int getTamanhoMaxInventario() {
         return tamanhoMaxInventario;
     }
 
-    public ArrayList<Entidade> getInventario(){
+    public ArrayList<Entidade> getInventario() {
         return inventario;
     }
 
@@ -61,11 +62,11 @@ public class Jogador extends Entidade {
         return infectado;
     }
 
-    public void setInfectado(boolean infectado){
-        this.infectado=infectado;
+    public void setInfectado(boolean infectado) {
+        this.infectado = infectado;
     }
 
-    private int counter2=0;
+    private int counter2 = 0;
 
     CriadorAtivos criadorDeAtivos;
 
@@ -90,8 +91,8 @@ public class Jogador extends Entidade {
         );
 
 
-        telaX=gp.getTelaLargura()/2 - (gp.getTamanhoBloco()/2);
-        telaY=gp.getTelaAltura()/2 - (gp.getTamanhoBloco()/2);
+        telaX = gp.getTelaLargura() / 2 - (gp.getTamanhoBloco() / 2);
+        telaY = gp.getTelaAltura() / 2 - (gp.getTamanhoBloco() / 2);
 
         setAreaSolida(new Rectangle(8, 16, 32, 32));
         setAreaSolidaPadraoX(getAreaSolida().x);
@@ -145,16 +146,25 @@ public class Jogador extends Entidade {
 
 
     }
-    public void definirItens(){
+
+    public void definirItens() {
 
 
     }
 
-    public void getImagemJogador(){}
+    public void getImagemJogador() {
+    }
+
+    public void pegarImagemAtaque() {
+    }
 
     public void update() { //Este método atualiza a posição e a animação do jogador com base nas teclas pressionadas
 
-        if (eventosTeclado.isCimaPressionado() == true || eventosTeclado.isBaixoPressionado() == true || eventosTeclado.isEsquerdaPressionado() == true || eventosTeclado.isDireitaPressionado() == true) {
+
+        if (isAtaque() == true) {
+            ataque();
+
+        } else if (eventosTeclado.isCimaPressionado() == true || eventosTeclado.isBaixoPressionado() == true || eventosTeclado.isEsquerdaPressionado() == true || eventosTeclado.isDireitaPressionado() == true) {
 
             if (eventosTeclado.isCimaPressionado()) {
                 setDirecao("up");
@@ -171,22 +181,22 @@ public class Jogador extends Entidade {
             gp.getcColisoes().checarBloco(this);
 
             // Checar colisao objeto
-            int objIndice=gp.getcColisoes().checarObjeto(this, true);
+            int objIndice = gp.getcColisoes().checarObjeto(this, true);
             pegarObjeto(objIndice);
 
 
             // Checar colisao NPC
-            int npcIndice=gp.getcColisoes().checarEntidade(this, gp.getNpc());
+            int npcIndice = gp.getcColisoes().checarEntidade(this, gp.getNpc());
             interagirNPC(npcIndice);
 
             //Checar colisao criatura
-            int criaturaIndice=gp.getcColisoes().checarEntidade(this, gp.getCriatura());
-            contatoCriatura(criaturaIndice);
+            int criaturaIndice = gp.getcColisoes().checarEntidade(this, gp.getCriatura());
+            //contatoCriatura(criaturaIndice);
+            damageCriatura(criaturaIndice);
 
 
             // Checar evento
             gp.getManipuladorDeEventos().checarEvento();
-
 
 
             if (!isColisaoOn()) {
@@ -214,8 +224,10 @@ public class Jogador extends Entidade {
                         break;
                 }
 
+                gp.getEventosTeclado().setEnterPressionado(false);
+
                 setContadorSprite(getContadorSprite() + 1); //Conta quantas vezes o jogador se move e, quando atinge 20, troca a animação
-                if (getContadorSprite() > 20) {
+                if (getContadorSprite() > 12) {
                     if (getNumSprite() == 1) {
                         setNumSprite(2);
                     } else if (getNumSprite() == 2) {
@@ -227,64 +239,83 @@ public class Jogador extends Entidade {
 
         }
 
-        if (isInvisibilidade()){
 
-            setContadorInvisibilidade(getContadorInvisibilidade()+1);
+        if (isInvisibilidade()) {
+            setContadorInvisibilidade(getContadorInvisibilidade() + 1);
 
-            if(getContadorInvisibilidade()>60){
+            if (getContadorInvisibilidade() > 60) {
                 setInvisibilidade(false);
                 setContadorInvisibilidade(0);
             }
-
+        } else {
+            setContadorInvisibilidade(0);
         }
-        if(getVida()<=0){
+
+        if (getVida() <= 0) {
             gp.setEstadoJogo(gp.getEstadoJogoFinalizado());
         }
 
 
     }
 
+    public void ataque() {
 
-    public void pegarObjeto(int i){
+        setContadorSprite(getContadorSprite() + 1);
 
-        if(i !=999){
+        if (getContadorSprite() <= 5) {
+            setNumSprite(1);
+        }
+        if (getContadorSprite() > 5 && getContadorSprite() <= 25) {
+            setNumSprite(2);
+        }
+        if (getContadorSprite() > 25) {
+            setNumSprite(1);
+            setContadorSprite(0);
+            setAtaque(false);
+        }
+    }
+
+
+    public void pegarObjeto(int i) {
+
+        if (i != 999) {
 
             String texto;
 
-            if(inventario.size()!=tamanhoMaxInventario){
+            if (inventario.size() != tamanhoMaxInventario) {
 
-                inventario.add(gp.getObj()[i]);
-                texto="Pegou "+gp.getObj()[i].getNome()+"!";
+                inventario.add(gp.getObj()[gp.getMapaAtual()][i]);
+                texto = "Pegou " + gp.getObj()[gp.getMapaAtual()][i].getNome() + "!";
 
+                gp.getObj()[gp.getMapaAtual()][i] = null;  // corrigido aqui
 
-            }
-            else {
-                texto="Você antingiu o limite máximo no inventário!";
+            } else {
+                texto = "Você atingiu o limite máximo no inventário!";
             }
             gp.getIu().mostrarMensagem(texto);
-            gp.getObj()[i]=null;
         }
 
     }
 
 
-    public void interagirNPC(int i){
-        if(i!=999){
-
-            if (gp.getEventosTeclado().isEnterPressionado()) {
+    public void interagirNPC(int i) {
+        if (gp.getEventosTeclado().isEnterPressionado()) {
+            if (i != 999) {
                 gp.setEstadoJogo(gp.getEstadoDialogo());
-                gp.getNpc()[i].falar();
+                gp.getNpc()[gp.getMapaAtual()][i].falar();
+            } else {
+                // Se Enter não está pressionado, ativa ataque
+                setAtaque(true);
             }
         }
-        gp.getEventosTeclado().setEnterPressionado(false);
     }
 
 
-    public void contatoCriatura(int i){
-        if(i!=999){
+    public void contatoCriatura(int i) {
+        if (i != 999) {
 
-            if(isInvisibilidade()==false){
-                setVida(getVida()-1);
+            if (isInvisibilidade() == false) {
+                setVida(getVida() - 1);
                 setInvisibilidade(true);
 
             }
@@ -293,75 +324,96 @@ public class Jogador extends Entidade {
 
     }
 
+    public void damageCriatura(int i) {
+        if (i != 999) {
+            Entidade criatura = gp.getCriatura()[gp.getMapaAtual()][i];
+
+            if (!criatura.isInvisibilidade()) {
+                criatura.setVida(criatura.getVida() - 1); // Corrigido aqui
+                criatura.setInvisibilidade(true);
+
+                if (criatura.getVida() <= 0) {
+                    gp.getCriatura()[gp.getMapaAtual()][i].setMorto(true);
+                }
+            }
+        }
+    }
 
 
-    public void desenhar(Graphics2D g2){ //Este método desenha o jogador na tela
+    public void desenhar(Graphics2D g2) { //Este método desenha o jogador na tela
         BufferedImage imagem = null;
 
-            switch (getDirecao()) { //Verifica a direção atual e escolhe a imagem correspondente
-                case "up":
-                    if (getNumSprite() == 1) {
-                        imagem = getUp1();
-                    }
-                    if (getNumSprite() == 2) {
-                        imagem = getUp2();
-                    }
-                    break;
-                case "down":
-                    if (getNumSprite() == 1) {
-                        imagem = getDown1();
-                    }
-                    if (getNumSprite() == 2) {
-                        imagem = getDown2();
-                    }
-                    break;
-                case "left":
-                    if (getNumSprite() == 1) {
-                        imagem = getLeft1();
-                    }
-                    if (getNumSprite() == 2) {
-                        imagem = getLeft2();
-                    }
-                    break;
-                case "right":
-                    if (getNumSprite() == 1) {
-                        imagem = getRight1();
-                    }
-                    if (getNumSprite() == 2) {
-                        imagem = getRight2();
-                    }
-                    break;
+        // Escolha da imagem conforme direção e ataque
+        switch (getDirecao()) {
+            case "up":
+                if (!isAtaque()) {
+                    imagem = (getNumSprite() == 1) ? getUp1() : getUp2();
+                } else {
+                    imagem = (getNumSprite() == 1) ? getAtaqueUp1() : getAtaqueUp2();
+                }
+                break;
+
+            case "down":
+                if (!isAtaque()) {
+                    imagem = (getNumSprite() == 1) ? getDown1() : getDown2();
+                } else {
+                    imagem = (getNumSprite() == 1) ? getAtaqueDown1() : getAtaqueDown2();
+                }
+                break;
+
+            case "left":
+                if (!isAtaque()) {
+                    imagem = (getNumSprite() == 1) ? getLeft1() : getLeft2();
+                } else {
+                    imagem = (getNumSprite() == 1) ? getAtaqueLeft1() : getAtaqueLeft2();
+                }
+                break;
+
+            case "right":
+                if (!isAtaque()) {
+                    imagem = (getNumSprite() == 1) ? getRight1() : getRight2();
+                } else {
+                    imagem = (getNumSprite() == 1) ? getAtaqueRight1() : getAtaqueRight2();
+                }
+                break;
+        }
+
+        // Ajuste das posições para evitar que o personagem "saia" da tela
+        int x = telaX;
+        int y = telaY;
+
+        if (telaX > getMundoX()) {
+            x = getMundoX();
+        }
+        if (telaY > getMundoY()) {
+            y = getMundoY();
+        }
+        int rightOffset = gp.getTelaLargura() - telaX;
+        if (rightOffset > gp.getMundoLargura() - getMundoX()) {
+            x = gp.getTelaLargura() - (gp.getMundoLargura() - getMundoX());
+        }
+        int bottomOffset = gp.getTelaAltura() - telaY;
+        if (bottomOffset > gp.getMundoAltura() - getMundoY()) {
+            y = gp.getTelaAltura() - (gp.getMundoAltura() - getMundoY());
+        }
+
+        // Se estiver invisível, aplica transparência
+        if (isInvisibilidade()) {
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
+        }
+
+        // Desenha a imagem com tamanho correto conforme ataque e direção
+        if (isAtaque()) {
+            if (getDirecao().equals("up") || getDirecao().equals("down")) {
+                g2.drawImage(imagem, x, y, gp.getTamanhoBloco(), gp.getTamanhoBloco() * 2, null); // 32x64
+            } else {
+                g2.drawImage(imagem, x, y, gp.getTamanhoBloco() * 2, gp.getTamanhoBloco(), null); // 64x32
             }
+        } else {
+            g2.drawImage(imagem, x, y, gp.getTamanhoBloco(), gp.getTamanhoBloco(), null);
+        }
 
-            int x = telaX;
-            int y = telaY;
-
-            if (telaX > getMundoX()) {
-                x = getMundoX();
-            }
-            if (telaY > getMundoY()) {
-                y = getMundoY();
-            }
-            int rightOffset = gp.getTelaLargura() - telaX;
-            if (rightOffset > gp.getMundoLargura() - getMundoX()) {
-                x = gp.getTelaLargura() - (gp.getMundoLargura() - getMundoX());
-            }
-            int bottomOffset = gp.getTelaAltura() - telaY;
-            if (bottomOffset > gp.getMundoAltura() - getMundoY()) {
-                y = gp.getTelaAltura() - (gp.getMundoAltura() - getMundoY());
-            }
-
-            if(isInvisibilidade()==true){
-                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
-
-
-            }
-
-            g2.drawImage(imagem, x, y, gp.getTamanhoBloco(), gp.getTamanhoBloco(), null); //O jogador é desenhado na posição (x, y) com o tamanho da célula (tileSize), que está definido no GamePanel.
-
+        // Reseta a opacidade para 100% (não transparente)
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
-
-
     }
 }
-

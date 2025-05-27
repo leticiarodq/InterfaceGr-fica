@@ -15,22 +15,33 @@ public class Detective extends Jogador { //
         super(gp, eventosTeclado);
         this.rastreador = new Rastreador("Rastreador",getVida(), getFome(), getSede(), getEnergia(), getSanidade(), null, gp.getBlocosG().getAmbienteAtual().getNomeAmbiente(), 36.5);
         getImagemJogador();
+        pegarImagemAtaque();
+
         rastreador.exibirStatus();
     }
 
     @Override
     public void getImagemJogador() {
-        try {
-            setUp1(ImageIO.read(getClass().getResourceAsStream("/detective/ninja_up_01.png")));
-            setUp2(ImageIO.read(getClass().getResourceAsStream("/detective/ninja_up_02.png")));
-            setDown1(ImageIO.read(getClass().getResourceAsStream("/detective/ninja_down_01.png")));
-            setDown2(ImageIO.read(getClass().getResourceAsStream("/detective/ninja_down_02.png")));
-            setLeft1(ImageIO.read(getClass().getResourceAsStream("/detective/ninja_left_01.png")));
-            setLeft2(ImageIO.read(getClass().getResourceAsStream("/detective/ninja_left_02.png")));
-            setRight1(ImageIO.read(getClass().getResourceAsStream("/detective/ninja_right_01.png")));
-            setRight2(ImageIO.read(getClass().getResourceAsStream("/detective/ninja_right_02.png")));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            setUp1(setup("/detective/ninja_up_01"));
+            setUp2(setup("/detective/ninja_up_02"));
+            setDown1(setup("/detective/ninja_down_01"));
+            setDown2(setup("/detective/ninja_down_02"));
+            setLeft1(setup("/detective/ninja_left_01"));
+            setLeft2(setup("/detective/ninja_left_02"));
+            setRight1(setup("/detective/ninja_right_01"));
+            setRight2(setup("/detective/ninja_right_02"));
+    }
+    @Override
+    public void pegarImagemAtaque(){
+            setAtaqueUp1(setup("/detective/ninja_up_01_ataque"));
+            setAtaqueUp2(setup("/detective/ninja_up_02_ataque"));
+            setAtaqueDown1(setup("/detective/ninja_down_01_ataque"));
+            setAtaqueDown2(setup("/detective/ninja_down_02_ataque"));
+            setAtaqueLeft1(setup("/detective/ninja_left_01_ataque"));
+            setAtaqueLeft2(setup("/detective/ninja_left_02_ataque"));
+            setAtaqueRight1(setup("/detective/ninja_right_01_ataque"));
+            setAtaqueRight2(setup("/detective/ninja_right_02_ataque"));
+
+
     }
 }

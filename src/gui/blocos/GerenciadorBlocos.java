@@ -19,7 +19,7 @@ public class GerenciadorBlocos {
 
     private PainelJogo gp;
     private Blocos[] blocos;
-    private int[][] numBlocosMapa;
+    private int[][][] numBlocosMapa;
     private Map<Integer, Ambiente> ambientesMapeados = new HashMap<>();
 
     private Ambiente ambienteAtual;
@@ -29,22 +29,29 @@ public class GerenciadorBlocos {
         this.gp = gp;
 
         blocos = new Blocos[200];
-        numBlocosMapa = new int[gp.getColMundoMax()][gp.getLinhaMundoMax()];
+        numBlocosMapa = new int[gp.getMapaMax()][gp.getColMundoMax()][gp.getLinhaMundoMax()];
 
         pegarImagemBloco();
 
         // Associa os mapas com seus respectivos ambientes
         ambientesMapeados.put(0, new AmbienteFloresta());
-        ambientesMapeados.put(1, new AmbienteRuinas());
-        ambientesMapeados.put(2, new AmbienteCaverna());
+        ambientesMapeados.put(1, new AmbienteLagoRio());
+        ambientesMapeados.put(2, new AmbienteRuinas());
+        ambientesMapeados.put(3, new AmbienteMontanha());
+        ambientesMapeados.put(4, new AmbienteCaverna());
 
-        carregarMapa("/maps/caverna.txt", 2);
+
+        carregarMapa("/maps/floresta.txt", 0);
+        carregarMapa("/maps/lagoErio.txt", 1);
+        carregarMapa("/maps/ruinas.txt", 2);
+        carregarMapa("/maps/montanha.txt", 3);
+        carregarMapa("/maps/caverna.txt", 4);
     }
 
 
     // Métodos de acesso getters
 
-    public int[][] getNumBlocosMapa() {
+    public int[][][] getNumBlocosMapa() {
         return numBlocosMapa;
     }
     public Blocos[] getBlocos() {
@@ -153,7 +160,7 @@ public class GerenciadorBlocos {
         setup(78, "ruinas09", true);
 
 
-        // ilha
+
         setup(100, "cave02", false);
         setup(101, "cave01", true);
         setup(102, "cave03", false);
@@ -188,6 +195,20 @@ public class GerenciadorBlocos {
 
         setup(131, "ouro", true);
 
+
+        setup(170, "forest01", false);
+        setup(171, "forest02", false);
+        setup(172, "forest03", false);
+        setup(173, "forest04", false);
+        setup(174, "forest05", false);
+        setup(175, "forest06", false);
+        setup(176, "forest07", false);
+        setup(177, "forest08", false);
+        setup(178, "forest09", false);
+        setup(179, "forest10", false);
+        setup(180, "forest11", false);
+        setup(181, "forest12", false);
+        setup(182, "forest13", false);
 
 
 
@@ -239,7 +260,7 @@ public class GerenciadorBlocos {
 
                 for (int coluna = 0; coluna < gp.getColMundoMax(); coluna++) {
                     int num = Integer.parseInt(numeros[coluna]);
-                    numBlocosMapa[coluna][linha] = num;
+                    numBlocosMapa[mapa][coluna][linha] = num;
                 }
                 linha++;
             }
@@ -266,7 +287,7 @@ public class GerenciadorBlocos {
         // percorre cada coluna e linha do mundo (ou seja, cada bloco do mapa).
         while(mundoCol<gp.getColMundoMax() && mundoLinha<gp.getLinhaMundoMax()){
 
-            int numBloco= numBlocosMapa[mundoCol][mundoLinha]; // número que representa o tipo do bloco naquela posição
+            int numBloco= numBlocosMapa[gp.getMapaAtual()][mundoCol][mundoLinha]; // número que representa o tipo do bloco naquela posição
 
             // posição exata desse bloco no mundo, calculado multiplicando a posição na matriz pelo tamanho de cada bloco
             int mundoX= mundoCol * gp.getTamanhoBloco();

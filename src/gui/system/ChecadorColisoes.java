@@ -27,42 +27,37 @@ public class ChecadorColisoes {
         int personagemLinhaBaixo = personagemMundoYbaixo / gp.getTamanhoBloco();
 
         // Corrige para não sair da matriz
-        personagemColunaEsquerda = Math.max(0, Math.min(personagemColunaEsquerda, gp.getBlocosG().getNumBlocosMapa().length - 1));
-        personagemColunaDireita = Math.max(0, Math.min(personagemColunaDireita, gp.getBlocosG().getNumBlocosMapa().length - 1));
-        personagemLinhaCima = Math.max(0, Math.min(personagemLinhaCima, gp.getBlocosG().getNumBlocosMapa()[0].length - 1));
-        personagemLinhaBaixo = Math.max(0, Math.min(personagemLinhaBaixo, gp.getBlocosG().getNumBlocosMapa()[0].length - 1));
+        int numColunas = gp.getBlocosG().getNumBlocosMapa()[gp.getMapaAtual()].length;
+        int numLinhas = gp.getBlocosG().getNumBlocosMapa()[gp.getMapaAtual()][0].length;
 
+        personagemColunaEsquerda = Math.max(0, Math.min(personagemColunaEsquerda, numColunas - 1));
+        personagemColunaDireita = Math.max(0, Math.min(personagemColunaDireita, numColunas - 1));
+        personagemLinhaCima = Math.max(0, Math.min(personagemLinhaCima, numLinhas - 1));
+        personagemLinhaBaixo = Math.max(0, Math.min(personagemLinhaBaixo, numLinhas - 1));
 
         int blocoNum1 = 0;
         int blocoNum2 = 0;
 
-        if (personagemColunaEsquerda >= 0 && personagemColunaEsquerda < gp.getBlocosG().getNumBlocosMapa().length &&
-                personagemLinhaCima >= 0 && personagemLinhaCima < gp.getBlocosG().getNumBlocosMapa()[0].length) {
-            blocoNum1 = gp.getBlocosG().getNumBlocosMapa()[personagemColunaEsquerda][personagemLinhaCima];
+        if (personagemColunaEsquerda >= 0 && personagemColunaEsquerda < numColunas &&
+                personagemLinhaCima >= 0 && personagemLinhaCima < numLinhas) {
+            blocoNum1 = gp.getBlocosG().getNumBlocosMapa()[gp.getMapaAtual()][personagemColunaEsquerda][personagemLinhaCima];
         }
 
         switch (entidade.getDirecao()) {
             case "up":
-                // Simula o movimento e verifica quais blocos serão alcançados
                 personagemLinhaCima = (personagemMundoYcima - entidade.getVelocidade()) / gp.getTamanhoBloco();
+                personagemLinhaCima = Math.max(0, Math.min(personagemLinhaCima, numLinhas - 1));
 
-                personagemLinhaCima = Math.max(0, Math.min(personagemLinhaCima, gp.getBlocosG().getNumBlocosMapa()[0].length - 1));
+                if (personagemColunaEsquerda >= 0 && personagemColunaEsquerda < numColunas &&
+                        personagemColunaDireita >= 0 && personagemColunaDireita < numColunas &&
+                        personagemLinhaCima >= 0 && personagemLinhaCima < numLinhas) {
 
-                blocoNum1 = gp.getBlocosG().getNumBlocosMapa()[personagemColunaEsquerda][personagemLinhaCima];
-                blocoNum2 = gp.getBlocosG().getNumBlocosMapa()[personagemColunaDireita][personagemLinhaCima];
-                // Checa se algum desses blocos tem colisão ativada:
-                if (personagemColunaEsquerda >= 0 && personagemColunaEsquerda < gp.getBlocosG().getNumBlocosMapa().length &&
-                        personagemColunaDireita >= 0 && personagemColunaDireita < gp.getBlocosG().getNumBlocosMapa().length &&
-                        personagemLinhaCima >= 0 && personagemLinhaCima < gp.getBlocosG().getNumBlocosMapa()[0].length) {
+                    blocoNum1 = gp.getBlocosG().getNumBlocosMapa()[gp.getMapaAtual()][personagemColunaEsquerda][personagemLinhaCima];
+                    blocoNum2 = gp.getBlocosG().getNumBlocosMapa()[gp.getMapaAtual()][personagemColunaDireita][personagemLinhaCima];
 
-                    blocoNum1 = gp.getBlocosG().getNumBlocosMapa()[personagemColunaEsquerda][personagemLinhaCima];
-                    blocoNum2 = gp.getBlocosG().getNumBlocosMapa()[personagemColunaDireita][personagemLinhaCima];
-
-                    // Verifica se os índices dos blocos estão dentro dos limites válidos do array de blocos
                     if (blocoNum1 >= 0 && blocoNum1 < gp.getBlocosG().getBlocos().length &&
                             blocoNum2 >= 0 && blocoNum2 < gp.getBlocosG().getBlocos().length) {
 
-                        // Checa se algum desses blocos tem colisão ativada:
                         if (gp.getBlocosG().getBlocos()[blocoNum1].isColisao() || gp.getBlocosG().getBlocos()[blocoNum2].isColisao()) {
                             entidade.setColisaoOn(true);
                         }
@@ -72,19 +67,15 @@ public class ChecadorColisoes {
 
             case "down":
                 personagemLinhaBaixo = (personagemMundoYbaixo + entidade.getVelocidade()) / gp.getTamanhoBloco();
+                personagemLinhaBaixo = Math.max(0, Math.min(personagemLinhaBaixo, numLinhas - 1));
 
-                // Garante que o índice esteja dentro dos limites
-                personagemLinhaBaixo = Math.max(0, Math.min(personagemLinhaBaixo, gp.getBlocosG().getNumBlocosMapa()[0].length - 1));
+                if (personagemColunaEsquerda >= 0 && personagemColunaEsquerda < numColunas &&
+                        personagemColunaDireita >= 0 && personagemColunaDireita < numColunas &&
+                        personagemLinhaBaixo >= 0 && personagemLinhaBaixo < numLinhas) {
 
-                // Acessa os blocos apenas se os índices forem válidos
-                if (personagemColunaEsquerda >= 0 && personagemColunaEsquerda < gp.getBlocosG().getNumBlocosMapa().length &&
-                        personagemColunaDireita >= 0 && personagemColunaDireita < gp.getBlocosG().getNumBlocosMapa().length &&
-                        personagemLinhaBaixo >= 0 && personagemLinhaBaixo < gp.getBlocosG().getNumBlocosMapa()[0].length) {
+                    blocoNum1 = gp.getBlocosG().getNumBlocosMapa()[gp.getMapaAtual()][personagemColunaEsquerda][personagemLinhaBaixo];
+                    blocoNum2 = gp.getBlocosG().getNumBlocosMapa()[gp.getMapaAtual()][personagemColunaDireita][personagemLinhaBaixo];
 
-                    blocoNum1 = gp.getBlocosG().getNumBlocosMapa()[personagemColunaEsquerda][personagemLinhaBaixo];
-                    blocoNum2 = gp.getBlocosG().getNumBlocosMapa()[personagemColunaDireita][personagemLinhaBaixo];
-
-                    // Verifica se os índices dos blocos estão dentro dos limites válidos do array de blocos
                     if (blocoNum1 >= 0 && blocoNum1 < gp.getBlocosG().getBlocos().length &&
                             blocoNum2 >= 0 && blocoNum2 < gp.getBlocosG().getBlocos().length) {
 
@@ -94,16 +85,17 @@ public class ChecadorColisoes {
                     }
                 }
                 break;
+
             case "right":
                 personagemColunaDireita = (personagemMundoXdireita + entidade.getVelocidade()) / gp.getTamanhoBloco();
-                personagemColunaDireita = Math.max(0, Math.min(personagemColunaDireita, gp.getBlocosG().getNumBlocosMapa().length - 1));
+                personagemColunaDireita = Math.max(0, Math.min(personagemColunaDireita, numColunas - 1));
 
-                if (personagemColunaDireita >= 0 && personagemColunaDireita < gp.getBlocosG().getNumBlocosMapa().length &&
-                        personagemLinhaCima >= 0 && personagemLinhaCima < gp.getBlocosG().getNumBlocosMapa()[0].length &&
-                        personagemLinhaBaixo >= 0 && personagemLinhaBaixo < gp.getBlocosG().getNumBlocosMapa()[0].length) {
+                if (personagemColunaDireita >= 0 && personagemColunaDireita < numColunas &&
+                        personagemLinhaCima >= 0 && personagemLinhaCima < numLinhas &&
+                        personagemLinhaBaixo >= 0 && personagemLinhaBaixo < numLinhas) {
 
-                    blocoNum1 = gp.getBlocosG().getNumBlocosMapa()[personagemColunaDireita][personagemLinhaCima];
-                    blocoNum2 = gp.getBlocosG().getNumBlocosMapa()[personagemColunaDireita][personagemLinhaBaixo];
+                    blocoNum1 = gp.getBlocosG().getNumBlocosMapa()[gp.getMapaAtual()][personagemColunaDireita][personagemLinhaCima];
+                    blocoNum2 = gp.getBlocosG().getNumBlocosMapa()[gp.getMapaAtual()][personagemColunaDireita][personagemLinhaBaixo];
 
                     if (blocoNum1 >= 0 && blocoNum1 < gp.getBlocosG().getBlocos().length &&
                             blocoNum2 >= 0 && blocoNum2 < gp.getBlocosG().getBlocos().length) {
@@ -114,16 +106,17 @@ public class ChecadorColisoes {
                     }
                 }
                 break;
+
             case "left":
                 personagemColunaEsquerda = (personagemMundoXesquerda - entidade.getVelocidade()) / gp.getTamanhoBloco();
-                personagemColunaEsquerda = Math.max(0, Math.min(personagemColunaEsquerda, gp.getBlocosG().getNumBlocosMapa().length - 1));
+                personagemColunaEsquerda = Math.max(0, Math.min(personagemColunaEsquerda, numColunas - 1));
 
-                if (personagemColunaEsquerda >= 0 && personagemColunaEsquerda < gp.getBlocosG().getNumBlocosMapa().length &&
-                        personagemLinhaCima >= 0 && personagemLinhaCima < gp.getBlocosG().getNumBlocosMapa()[0].length &&
-                        personagemLinhaBaixo >= 0 && personagemLinhaBaixo < gp.getBlocosG().getNumBlocosMapa()[0].length) {
+                if (personagemColunaEsquerda >= 0 && personagemColunaEsquerda < numColunas &&
+                        personagemLinhaCima >= 0 && personagemLinhaCima < numLinhas &&
+                        personagemLinhaBaixo >= 0 && personagemLinhaBaixo < numLinhas) {
 
-                    blocoNum1 = gp.getBlocosG().getNumBlocosMapa()[personagemColunaEsquerda][personagemLinhaCima];
-                    blocoNum2 = gp.getBlocosG().getNumBlocosMapa()[personagemColunaEsquerda][personagemLinhaBaixo];
+                    blocoNum1 = gp.getBlocosG().getNumBlocosMapa()[gp.getMapaAtual()][personagemColunaEsquerda][personagemLinhaCima];
+                    blocoNum2 = gp.getBlocosG().getNumBlocosMapa()[gp.getMapaAtual()][personagemColunaEsquerda][personagemLinhaBaixo];
 
                     if (blocoNum1 >= 0 && blocoNum1 < gp.getBlocosG().getBlocos().length &&
                             blocoNum2 >= 0 && blocoNum2 < gp.getBlocosG().getBlocos().length) {
@@ -141,14 +134,14 @@ public class ChecadorColisoes {
     public int checarObjeto(Entidade entidade, boolean jogador) {
         int indice = 999;
 
-        for (int i = 0; i < gp.getObj().length; i++) {
-            if (gp.getObj()[i] != null) {
+        for (int i = 0; i < gp.getObj()[1].length; i++) {
+            if (gp.getObj()[gp.getMapaAtual()][i] != null) {
                 // Atualiza as posições das áreas sólidas de entidade e objeto
                 entidade.getAreaSolida().x = entidade.getMundoX() + entidade.getAreaSolidaPadraoX();
                 entidade.getAreaSolida().y = entidade.getMundoY() + entidade.getAreaSolidaPadraoY();
 
-                gp.getObj()[i].getAreaSolida().x = gp.getObj()[i].getMundoX() + gp.getObj()[i].getAreaSolidaPadraoX();
-                gp.getObj()[i].getAreaSolida().y = gp.getObj()[i].getMundoY() + gp.getObj()[i].getAreaSolidaPadraoY();
+                gp.getObj()[gp.getMapaAtual()][i].getAreaSolida().x = gp.getObj()[gp.getMapaAtual()][i].getMundoX() + gp.getObj()[gp.getMapaAtual()][i].getAreaSolidaPadraoX();
+                gp.getObj()[gp.getMapaAtual()][i].getAreaSolida().y = gp.getObj()[gp.getMapaAtual()][i].getMundoY() + gp.getObj()[gp.getMapaAtual()][i].getAreaSolidaPadraoY();
 
                 switch (entidade.getDirecao()) {
                     case "up":
@@ -173,8 +166,8 @@ public class ChecadorColisoes {
                         break;
                 }
 
-                if (entidade.getAreaSolida().intersects(gp.getObj()[i].getAreaSolida())) {
-                    if (gp.getObj()[i].isColisao()) {
+                if (entidade.getAreaSolida().intersects(gp.getObj()[gp.getMapaAtual()][i].getAreaSolida())) {
+                    if (gp.getObj()[gp.getMapaAtual()][i].isColisao()) {
                         entidade.setColisaoOn(true);
                     }
                     if (jogador == true) {
@@ -185,8 +178,8 @@ public class ChecadorColisoes {
                 // Reset das áreas sólidas
                 entidade.getAreaSolida().x = entidade.getAreaSolidaPadraoX();
                 entidade.getAreaSolida().y = entidade.getAreaSolidaPadraoY();
-                gp.getObj()[i].getAreaSolida().x = gp.getObj()[i].getAreaSolidaPadraoX();
-                gp.getObj()[i].getAreaSolida().y = gp.getObj()[i].getAreaSolidaPadraoY();
+                gp.getObj()[gp.getMapaAtual()][i].getAreaSolida().x = gp.getObj()[gp.getMapaAtual()][i].getAreaSolidaPadraoX();
+                gp.getObj()[gp.getMapaAtual()][i].getAreaSolida().y = gp.getObj()[gp.getMapaAtual()][i].getAreaSolidaPadraoY();
             }
         }
 
@@ -194,18 +187,18 @@ public class ChecadorColisoes {
     }
 
     // Verifica colisão com outras entidades
-    public int checarEntidade(Entidade entidade, Entidade[] alvo) {
+    public int checarEntidade(Entidade entidade, Entidade[][] alvo) {
 
         int indice = 999;
 
-        for (int i = 0; i < alvo.length; i++) {
-            if (alvo[i] != null) {
+        for (int i = 0; i < alvo[1].length; i++) {
+            if (alvo[gp.getMapaAtual()][i] != null) {
 
                 entidade.getAreaSolida().x = entidade.getMundoX() + entidade.getAreaSolidaPadraoX();
                 entidade.getAreaSolida().y = entidade.getMundoY() + entidade.getAreaSolidaPadraoY();
 
-                alvo[i].getAreaSolida().x = alvo[i].getMundoX() + alvo[i].getAreaSolidaPadraoX();
-                alvo[i].getAreaSolida().y = alvo[i].getMundoY() + alvo[i].getAreaSolidaPadraoY();
+                alvo[gp.getMapaAtual()][i].getAreaSolida().x = alvo[gp.getMapaAtual()][i].getMundoX() + alvo[gp.getMapaAtual()][i].getAreaSolidaPadraoX();
+                alvo[gp.getMapaAtual()][i].getAreaSolida().y = alvo[gp.getMapaAtual()][i].getMundoY() + alvo[gp.getMapaAtual()][i].getAreaSolidaPadraoY();
 
                 switch (entidade.getDirecao()) {
                     case "up":
@@ -227,9 +220,9 @@ public class ChecadorColisoes {
 
                 }
 
-                if (entidade.getAreaSolida().intersects(alvo[i].getAreaSolida())) {
+                if (entidade.getAreaSolida().intersects(alvo[gp.getMapaAtual()][i].getAreaSolida())) {
 
-                    if (alvo[i] != entidade) {
+                    if (alvo[gp.getMapaAtual()][i] != entidade) {
                         entidade.setColisaoOn(true);
                         indice = i;
 
@@ -241,8 +234,8 @@ public class ChecadorColisoes {
                 // Reset das áreas sólidas
                 entidade.getAreaSolida().x = entidade.getAreaSolidaPadraoX();
                 entidade.getAreaSolida().y = entidade.getAreaSolidaPadraoY();
-                alvo[i].getAreaSolida().x = alvo[i].getAreaSolidaPadraoX();
-                alvo[i].getAreaSolida().y = alvo[i].getAreaSolidaPadraoY();
+                alvo[gp.getMapaAtual()][i].getAreaSolida().x = alvo[gp.getMapaAtual()][i].getAreaSolidaPadraoX();
+                alvo[gp.getMapaAtual()][i].getAreaSolida().y = alvo[gp.getMapaAtual()][i].getAreaSolidaPadraoY();
             }
 
         }

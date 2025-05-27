@@ -18,7 +18,7 @@ public class InterfaceUsuario {
     private Font Font05, Font03;
     private Graphics2D g2;
 
-    private BufferedImage fundo2, vida_cheia, vida_vazia, vida_metade;
+    private BufferedImage fundo2, fundoHistoria, vida_cheia, vida_vazia, vida_metade;
 
     //private boolean jogoFinalizado = true;
 
@@ -109,6 +109,7 @@ public class InterfaceUsuario {
 
         try {
             fundo2 = ImageIO.read(getClass().getResourceAsStream("/fundo/fundo02.png"));
+            fundoHistoria=ImageIO.read(getClass().getResourceAsStream("/fundo/fundoHistoria.png"));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -121,6 +122,7 @@ public class InterfaceUsuario {
 
 
     }
+
 
 
     public void desenhar(Graphics2D g2) {
@@ -147,10 +149,13 @@ public class InterfaceUsuario {
         } else if (gp.getEstadoJogo() == gp.getEstadoJogoFinalizado()) {
             desenharTelaJogoFinalizado();
 
+        } else if(gp.getEstadoJogo()==gp.getEstadoJogoDescricao()){
+            desenharTelaDescricao();
         }
 
-        if (mensagemOn == true) {
+        desenharNomeMapa(g2);
 
+        if(mensagemOn == true) {
             g2.setColor(Color.BLACK);
             g2.setFont(Font05.deriveFont(25f));
             g2.drawString(mensagem, (gp.getTamanhoBloco() / 2) + 3, 300 + 2);
@@ -173,7 +178,85 @@ public class InterfaceUsuario {
         }
 
 
+
     }
+
+    // Variáveis que você pode declarar na sua classe PainelJogo ou onde desenha:
+    private int alphaMensagem = 0;
+    private int contadorFade = 0;
+    private boolean mostrandoMensagem = false;
+    private String textoMapaAtual = "";
+    private int ultimoMapa = -1;  // <- novo
+    // Tempo total: 60 + 180 + 60 = 300 frames (~5 segundos se 60 fps)
+
+
+    public void desenharNomeMapa(Graphics2D g2) {
+        int mapaAtual = gp.getMapaAtual();
+
+        if (gp.getEstadoJogo() == gp.getEstadoPlay()) {
+
+            if (mapaAtual != ultimoMapa) {
+                ultimoMapa = mapaAtual;
+                mostrandoMensagem = true;
+                contadorFade = 0;
+                alphaMensagem = 0;
+
+                if (mapaAtual == 0) {
+                    textoMapaAtual = "Floresta";
+                } else if (mapaAtual == 1) {
+                    textoMapaAtual = "Lago e Rio";
+                } else if (mapaAtual == 2) {
+                    textoMapaAtual = "Ruínas";
+                } else if(mapaAtual==3){
+                    textoMapaAtual="Montanha";
+                } else if(mapaAtual==4) {
+                    textoMapaAtual="Caverna";
+                }
+
+            }
+
+            if (mostrandoMensagem) {
+                int duracaoFadeIn = 150;
+                int duracaoFixo = 360;
+                int duracaoFadeOut = 150;
+
+                // Fade-in
+                if (contadorFade <= duracaoFadeIn) {
+                    alphaMensagem = (int)((contadorFade / (float)duracaoFadeIn) * 255);
+                }
+                // Mensagem fixa
+                else if (contadorFade <= duracaoFadeIn + duracaoFixo) {
+                    alphaMensagem = 255;
+                }
+                // Fade-out
+                else if (contadorFade <= duracaoFadeIn + duracaoFixo + duracaoFadeOut) {
+                    int fadeOutContador = contadorFade - duracaoFadeIn - duracaoFixo;
+                    alphaMensagem = 255 - (int)((fadeOutContador / (float)duracaoFadeOut) * 255);
+                } else {
+                    mostrandoMensagem = false;
+                }
+
+                contadorFade++;
+
+
+                int x = 40; // margem à esquerda
+                int y = gp.getTelaAltura() - 60; // 20 pixels acima da parte inferior
+
+                g2.setFont(Font05.deriveFont(30f));
+
+                g2.setColor(new Color(0f, 0f, 0f, alphaMensagem / 255f)); // sombra preta com alpha
+                g2.drawString(textoMapaAtual, x + 2, y + 2); // deslocamento leve para dar efeito
+
+
+                g2.setColor(new Color(1f, 1f, 1f, alphaMensagem / 255f)); // branco com alpha
+                g2.drawString(textoMapaAtual, x, y);
+
+            }
+        }
+    }
+
+
+
 
     public void setDialogos(String[] dialogos) {
         this.dialogos = dialogos;
@@ -218,9 +301,8 @@ public class InterfaceUsuario {
 
         return linhas;
     }
-
     public void desenharTelaJogoFinalizado() {
-        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8f));
 
         g2.setColor(Color.BLACK);
         g2.fillRect(0, 0, gp.getTelaLargura(), gp.getTelaAltura());
@@ -249,8 +331,9 @@ public class InterfaceUsuario {
 
         g2.setColor(Color.WHITE);
         g2.drawString(texto, x, y);
-        if (comandoNum == 0) g2.drawString(">", x - 40, y);
         desenharTextoSombra(texto,x,y);
+        if (comandoNum == 0) g2.drawString(">", x - 40, y);
+
 
         // Texto "Sair" com borda
         texto = "Sair";
@@ -262,9 +345,10 @@ public class InterfaceUsuario {
 
         g2.setColor(Color.WHITE);
         g2.drawString(texto, x, y);
+        desenharTextoSombra(texto,x,y);
         if (comandoNum == 1) g2.drawString(">", x - 40, y);
 
-        desenharTextoSombra(texto,x,y);
+
     }
 
 
@@ -468,6 +552,22 @@ public class InterfaceUsuario {
 
     }
 
+
+    private String historiaCompleta = "Num mundo devastado, onde a natureza resiste\n"
+            + "e a tecnologia ruiu, poucos permanecem.\n"
+            + "Você é parte dos últimos sobreviventes\n"
+            + "em busca de um novo começo na Última Fronteira.\n\n"
+            + "Escolha com sabedoria. Cada passo será decisivo.";
+
+    private String textoAtual = "";  // Vai crescendo letra por letra
+    private int contadorLetra = 0;
+    private long ultimoTempo = 0;
+    private long intervalo = 60; // milissegundos
+    private boolean historiaCompletaExibida = false;
+    float alpha = 0.0f;
+    boolean fadeInAtivo = false;
+
+
     public void desenharTelaTitulo() {
 
         if (telaMenu == 0) {
@@ -508,7 +608,7 @@ public class InterfaceUsuario {
                     g2.drawString(">", xTexto - gp.getTamanhoBloco(), yTexto);
                 }
             }
-        } else if (telaMenu == 1) {
+        } else if (telaMenu == 2) {
 
             //gp.telaMenuPersonagens.paintComponent(g2);
 
@@ -593,10 +693,12 @@ public class InterfaceUsuario {
             }
 
 
-        } else if (telaMenu == 2) { // Tela de Descrição do Personagem
+        } else if (telaMenu == 3) { // Tela de Descrição do Personagem
             // Definindo o fundo
             //g2.setColor(Color.BLACK);
             //g2.fillRect(0, 0, gp.getTelaLargura(), gp.getTelaAltura());
+
+
             g2.drawImage(fundo2, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null); // Ajusta a imagem de fundo à tela
 
 
@@ -668,8 +770,62 @@ public class InterfaceUsuario {
             g2.drawString(instrucoes, x, 500);
             desenharTextoSombra(instrucoes, x, 500);
 
+        } else if (telaMenu == 1) { // Tela da história do jogo
+
+            g2.drawImage(fundoHistoria, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null); // Fundo
+
+            g2.setColor(Color.WHITE);
+            g2.setFont(Font03.deriveFont(32f));
+
+            String historia =
+                    "Num mundo devastado, onde a natureza resiste\n" +
+                            "e a tecnologia ruiu, poucos permanecem.\n" +
+                            "Você é parte dos últimos sobreviventes\n" +
+                            "em busca de um novo começo na Última Fronteira.\n\n" +
+                            "Escolha com sabedoria. Cada passo será decisivo.";
+
+            String[] linhas = historia.split("\n");
+            int y = gp.getTamanhoBloco() * 4;
+
+            long agora = System.currentTimeMillis();
+            if (!historiaCompletaExibida && contadorLetra < historiaCompleta.length()) {
+                if (agora - ultimoTempo >= intervalo) {
+                    textoAtual += historiaCompleta.charAt(contadorLetra);
+                    contadorLetra++;
+                    ultimoTempo = agora;
+                }
+            }
+
+            if (contadorLetra >= historiaCompleta.length()) {
+                historiaCompletaExibida = true;
+            }
+
+            linhas = textoAtual.split("\n");
+            y = gp.getTamanhoBloco() * 4;
+            for (String linha : linhas) {
+                int x = obterXCentralizarTexto(linha);
+                g2.drawString(linha, x, y);
+                desenharTextoSombra(linha, x, y);
+                y += 40;
+            }
+
+         /*   g2.setFont(Font03.deriveFont(28f));
+        String instrucoes = "Pressione ENTER para continuar...";
+        int x = obterXCentralizarTexto(instrucoes);
+        g2.drawString(instrucoes, x, gp.getTelaAltura() - gp.getTamanhoBloco() * 2);
+        desenharTextoSombra(instrucoes, x, gp.getTelaAltura() - gp.getTamanhoBloco() * 2);
+
+          */
         }
     }
+
+    public void reiniciarEfeitoDigitacao() {
+        textoAtual = "";
+        contadorLetra = 0;
+        ultimoTempo = 0;
+        historiaCompletaExibida = false;
+    }
+
 
     public void desenharTextoSombra(String texto, int x, int y) {
         // Cor da borda (preta)
@@ -711,6 +867,103 @@ public class InterfaceUsuario {
         // Desenha o texto
         g2.drawString(texto, x, y);
         desenharTextoSombra(texto, x, y);
+
+    }
+
+    public void exibirInformacoesDoMapa(Graphics2D g2, String titulo, String descricao, String atributos, String recursos, String eventos) {
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8f));
+        g2.setColor(Color.BLACK);
+        g2.fillRect(0, 0, gp.getTelaLargura(), gp.getTelaAltura());
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+
+        g2.setColor(Color.WHITE);
+        g2.setFont(Font05.deriveFont(35f));
+
+        int x = obterXCentralizarTexto(titulo);
+        int y = 90;
+        g2.drawString(titulo, x, y);
+        desenharTextoSombra(titulo, x, y);
+
+        int larguraMaxima = (int) (gp.getTelaLargura() * 0.9);
+        int margemEsquerda = gp.getTamanhoBloco();
+        y = gp.getTelaAltura() - 380;
+        int espacoEntreLinhas = 25;
+
+        g2.setFont(Font03.deriveFont(25f));
+
+        for (String linha : quebrarTexto(descricao, larguraMaxima)) {
+            g2.drawString(linha, margemEsquerda, y);
+            y += espacoEntreLinhas;
+        }
+
+        y += 20;
+        for (String linha : quebrarTexto(atributos, larguraMaxima)) {
+            g2.drawString(linha, margemEsquerda, y);
+            y += espacoEntreLinhas;
+        }
+
+        y += 20;
+        for (String linha : quebrarTexto(recursos, larguraMaxima)) {
+            g2.drawString(linha, margemEsquerda, y);
+            y += espacoEntreLinhas;
+        }
+
+        y += 20;
+        for (String linha : quebrarTexto(eventos, larguraMaxima)) {
+            g2.drawString(linha, margemEsquerda, y);
+            y += espacoEntreLinhas;
+        }
+    }
+
+
+    public void desenharTelaDescricao() {
+
+        if(gp.getMapaAtual()==0){
+            exibirInformacoesDoMapa(
+                    g2,
+                    "FLORESTA",
+                    "Uma área rica em recursos naturais, mas também habitada por predadores.",
+                    "Atributos adicionais: [Vegetação densa] [Fauna abundante] [Clima úmido]",
+                    "Recursos disponíveis: [Frutas, raízes e cogumelos] [Madeira para fogueiras e ferramentas] [Pequenos animais para caça]",
+                    "Eventos comuns: [Ataque de lobo] [Encontro com um explorador perdido] [Chuva intensa, dificultando a exploração]"
+            );
+
+
+        } else if(gp.getMapaAtual()==1){
+            exibirInformacoesDoMapa(g2,
+                    "LAGO E RIO",
+                    "Regiões ricas em água, mas que podem esconder riscos como afogamento ou\n" +
+                            "criaturas aquáticas.",
+                    "Atributos adicionais: [Água abundante] [Possibilidade de pesca] [Terreno lamacento]",
+                    "Recursos disponíveis: [Peixes e algas comestíveis] [Água doce] [Vegetação ribeirinha]",
+                    "Eventos comuns: [Ataque de criatura aquática] [Tempestade] [Encontro de um barco abandonado]"
+                    );
+
+        } else if(gp.getMapaAtual()==2){
+            exibirInformacoesDoMapa(g2,
+                    "RUÍNAS ABANDONADAS",
+                    "Restos de antigas construções que podem conter suprimentos valiosos ou armadilhas.",
+                    "Atributos adicionais: [Estruturas instáveis] [Presença de outros sobreviventes] [Baixo risco climático]",
+                    "Recursos disponíveis: [Ferramentas antigas e munição] [Alimentos enlatados ainda comestíveis] [Mapas e pistas sobre o ambiente ao redor]",
+                    "Eventos comuns: [Encontrar um grupo de sobreviventes] [Armadilhas deixadas por antigos ocupantes] [Descoberta de uma passagem secreta para outra área]"
+                    );
+        } else if(gp.getMapaAtual()==3){
+            exibirInformacoesDoMapa(g2,
+                    "MONTANHA",
+                    "Uma região de difícil acesso, mas rica em minérios e pedras preciosas.",
+                    "Atributos adicionais: [Terreno acidentado] [Clima instável] [Baixa vegetação]",
+                    "Recursos disponíveis: [Minérios e pedras preciosas] [Água de degelo] [Refúgios naturais em cavernas",
+                    "Eventos comuns: [Nevasca repentina] [Deslizamento de pedras] [Descoberta de uma caverna segura]");
+        } else if(gp.getMapaAtual()==4){
+            exibirInformacoesDoMapa(g2,
+                    "CAVERNA",
+                    "Um ambiente subterrâneo que pode oferecer abrigo contra o clima, mas esconde\n" +
+                            "perigos desconhecidos.",
+                    "Atributos adicionais: [Pouca luz] [Presença de criaturas desconhecidas] [Água de gotejamento]",
+                    "Recursos disponíveis: [Rochas e minérios raros] [Pequenos lagos subterrâneos] [Ossos e vestígios de exploradores antigos]",
+                    "Eventos comuns: [Encontro com uma criatura hostil] [Descoberta de um túnel oculto] [Desmoronamento parcial]");
+        }
+
 
     }
 

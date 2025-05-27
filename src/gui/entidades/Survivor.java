@@ -16,21 +16,32 @@ public class Survivor extends Jogador {
         super(gp, eventosTeclado);
         this.sobreviventeNato = new SobreviventeNato("Elfa", 100, 100, 100, 100, 100, null, "Floresta", 36.5);
         getImagemJogador();
+        pegarImagemAtaque();
         sobreviventeNato.exibirStatus();
     }
     @Override
     public void getImagemJogador() {
-        try {
-            setUp1(ImageIO.read(getClass().getResourceAsStream("/survivor/sobrevivente_up_1.png")));
-            setUp2(ImageIO.read(getClass().getResourceAsStream("/survivor/sobrevivente_up_2.png")));
-            setDown1(ImageIO.read(getClass().getResourceAsStream("/survivor/sobrevivente_down_1.png")));
-            setDown2(ImageIO.read(getClass().getResourceAsStream("/survivor/sobrevivente_down_2.png")));
-            setLeft1(ImageIO.read(getClass().getResourceAsStream("/survivor/sobrevivente_left_1.png")));
-            setLeft2(ImageIO.read(getClass().getResourceAsStream("/survivor/sobrevivente_left_2.png")));
-            setRight1(ImageIO.read(getClass().getResourceAsStream("/survivor/sobrevivente_right_1.png")));
-            setRight2(ImageIO.read(getClass().getResourceAsStream("/survivor/sobrevivente_right_2.png")));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        setUp1(setup("/survivor/sobrevivente_up_1"));
+        setUp2(setup("/survivor/sobrevivente_up_2"));
+        setDown1(setup("/survivor/sobrevivente_down_1"));
+        setDown2(setup("/survivor/sobrevivente_down_2"));
+        setLeft1(setup("/survivor/sobrevivente_left_1"));
+        setLeft2(setup("/survivor/sobrevivente_left_2"));
+        setRight1(setup("/survivor/sobrevivente_right_1"));
+        setRight2(setup("/survivor/sobrevivente_right_2"));
+
+    }
+    @Override
+    public void pegarImagemAtaque(){
+
+        setAtaqueUp1(setup("/survivor/sobrevivente_up_1_ataque"));
+        setAtaqueUp2(setup("/survivor/sobrevivente_up_2_ataque"));
+        setAtaqueDown1(setup("/survivor/sobrevivente_down_1_ataque"));
+        setAtaqueDown2(setup("/survivor/sobrevivente_down_2_ataque"));
+        setAtaqueLeft1(setup("/survivor/sobrevivente_left_1_ataque"));
+        setAtaqueLeft2(setup("/survivor/sobrevivente_left_2_ataque"));
+        setAtaqueRight1(setup("/survivor/sobrevivente_right_1_ataque"));
+        setAtaqueRight2(setup("/survivor/sobrevivente_right_2_ataque"));
+
     }
 }

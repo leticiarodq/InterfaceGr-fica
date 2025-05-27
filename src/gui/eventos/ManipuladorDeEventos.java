@@ -8,8 +8,12 @@ import java.awt.*;
 public class ManipuladorDeEventos {
 
     private PainelJogo gp;
-    private Rectangle retEvento;
-    private int eventoRetanguloPadraoX, eventoRetanguloPadraoY;
+    private EventoRetangulo eventoRetangulo[][][];
+
+
+    private int eventoAnteriorX;
+    private int eventoAnteriorY;
+    private boolean eventoPodeTocar=true;
 
     private EventoClima eventoClima;
     private EventoDoencaFerimento eventoDoencaFerimento;
@@ -17,143 +21,189 @@ public class ManipuladorDeEventos {
 
     public ManipuladorDeEventos(PainelJogo gp) {
         this.gp = gp;
-
+        eventoRetangulo=new EventoRetangulo[gp.getMapaMax()][gp.getColMundoMax()][gp.getLinhaMundoMax()];
         this.eventoClima = new EventoClima(gp);
         this.eventoDoencaFerimento= new EventoDoencaFerimento(gp);
 
-        retEvento = new Rectangle();
-        retEvento.x = 23;
-        retEvento.y = 23;
-        retEvento.width = 2;
-        retEvento.height = 2;
-        eventoRetanguloPadraoX = retEvento.x;
-        eventoRetanguloPadraoY = retEvento.y;
+        int mapa=0;
+        int coluna=0;
+        int linha=0;
+        while(mapa< gp.getMapaMax() && coluna<gp.getColMundoMax() && linha<gp.getLinhaMundoMax()){
+            eventoRetangulo[mapa][coluna][linha] = new EventoRetangulo();
+            eventoRetangulo[mapa][coluna][linha].x = 23;
+            eventoRetangulo[mapa][coluna][linha].y = 23;
+            eventoRetangulo[mapa][coluna][linha].width = 2;
+            eventoRetangulo[mapa][coluna][linha].height = 2;
+            eventoRetangulo[mapa][coluna][linha].setEventoRetanguloPadraoX(eventoRetangulo[mapa][coluna][linha].x);
+            eventoRetangulo[mapa][coluna][linha].setEventoRetanguloPadraoY(eventoRetangulo[mapa][coluna][linha].y);
+
+            coluna++;
+            if(coluna==gp.getColMundoMax()){
+                coluna=0;
+                linha++;
+
+                if(linha==gp.getLinhaMundoMax()){
+                    linha=0;
+                    mapa++;
+                }
+            }
+
+        }
 
     }
 
 
 
     public void checarEvento() {
+
         boolean eventoMapaAtivo = false;  // Flag para bloquear eventos de mapa
 
-        // Eventos de interação com o mapa
-        if (acertar(26, 17, "up")) {
-            pocoDeDanos(gp.getEstadoDialogo());
-            return;
-        }
-        if (acertar(16, 23, "up")) {
-            pocoDeDanos(gp.getEstadoDialogo());
-            return;
-        }
-        if (acertar(15, 18, "up")) {
-            pocoDeDanos(gp.getEstadoDialogo());
-            return;
-        }
-        if (acertar(20, 13, "up")) {
-            pocoDeDanos(gp.getEstadoDialogo());
-            return;
-        }
-        if (acertar(25, 25, "up")) {
-            teleporte(gp.getEstadoDialogo());
-            return;
-        }
-        if (acertar(34, 24, "right")) {
-            recuperarSede(gp.getEstadoDialogo());
-            return;
-        }
-        if (acertar(12, 28, "left")) {
-            eventoDoencaFerimento.aguaContaminada(gp.getEstadoDialogo());
-            return;
-        }
-        if (acertar(28, 9, "up")) {
-            mensagemBoasVindas(gp.getEstadoDialogo());
-            return;
+        int xDistancia=Math.abs(gp.jogador.getMundoX()-eventoAnteriorX);
+        int yDistancia=Math.abs(gp.jogador.getMundoY()-eventoAnteriorY);
+        int distancia=Math.max(xDistancia, yDistancia);
+        if(distancia>gp.getTamanhoBloco()){
+            eventoPodeTocar=true;
         }
 
-        if (!eventoMapaAtivo && gp.getEstadoJogo() != gp.getEstadoDialogo()) {
-            // Escolhe aleatoriamente apenas um evento climático para ocorrer
-            int eventoAleatorio = new java.util.Random().nextInt(5);
+        if(eventoPodeTocar==true){
+            // Eventos de interação com o mapa
+            if (acertar(0,26, 17, "up")) {
+                pocoDeDanos(gp.getEstadoDialogo());
+                return;
+            }
+            else if (acertar(0, 16, 23, "up")) {
+                pocoDeDanos(gp.getEstadoDialogo());
+                return;
+            }
+            else if (acertar(0,15, 18, "up")) {
+                pocoDeDanos( gp.getEstadoDialogo());
+                return;
+            }
+            else if (acertar(0, 20, 13, "up")) {
+                pocoDeDanos(gp.getEstadoDialogo());
+                return;
+            }
+            else if (acertar(0, 34, 24, "right")) {
+                recuperarSede(gp.getEstadoDialogo());
+                return;
+            }
+            else if (acertar(0, 12, 28, "left")) {
+                eventoDoencaFerimento.aguaContaminada(gp.getEstadoDialogo());
+                return;
+            }
+            else if (acertar(0, 28, 9, "up")) {
+                mensagemBoasVindas(gp.getEstadoDialogo());
+                return;
+            }
 
-            switch (eventoAleatorio) {
-                case 0:
-                    eventoClima.eventoChuva();
-                    break;
-                case 1:
-                    eventoClima.eventoCalorExtremo();
-                    break;
-                case 2:
-                    eventoClima.eventoNevasca();
-                    break;
-                case 3:
-                    eventoDoencaFerimento.eventoDesidratacao();
-                    break;
+            else if(acertar(0, 45,49, "down")){
+                teleporte(1, 31, 32);
 
-                case 4:
-                    eventoDoencaFerimento.eventoInfectado();
-                    break;
-
+            }
+            else if(acertar(1, 31, 32, "up")){
+                teleporte(0, 45,49);
 
             }
 
-            // Sempre executa a redução de energia
-            baixarEnergia();
+            if (!eventoMapaAtivo && gp.getEstadoJogo() != gp.getEstadoDialogo()) {
+                // Escolhe aleatoriamente apenas um evento climático para ocorrer
+                int eventoAleatorio = new java.util.Random().nextInt(5);
+
+                switch (eventoAleatorio) {
+                    case 0:
+                        eventoClima.eventoChuva();
+                        break;
+                    case 1:
+                        eventoClima.eventoCalorExtremo(1);
+                        break;
+                    case 2:
+                        eventoClima.eventoNevasca();
+                        break;
+                    case 3:
+                        eventoDoencaFerimento.eventoDesidratacao();
+                        break;
+
+                    case 4:
+                        eventoDoencaFerimento.eventoInfectado();
+                        break;
+
+
+                }
+
+                // Sempre executa a redução de energia
+                baixarEnergia();
+
+            }
 
         }
+
+
     }
 
+    public boolean acertar(int mapa, int coluna, int linha, String direcaoRegistro) {
 
-
-        public boolean acertar(int eventoCol, int eventoLinha, String direcaoRegistro) {
         boolean acertar = false;
 
-        // Pegamos a área sólida do jogador
-        Rectangle areaSolidaJogador = gp.jogador.getAreaSolida();
+        if(mapa==gp.getMapaAtual()){
 
-        // Salvamos a posição original da área sólida
-        int areaSolidaOriginalX = areaSolidaJogador.x;
-        int areaSolidaOriginalY = areaSolidaJogador.y;
+            // Pegamos a área sólida do jogador
+            Rectangle areaSolidaJogador = gp.jogador.getAreaSolida();
 
-        // Atualizamos a posição absoluta da área sólida no mundo
-        areaSolidaJogador.x = gp.jogador.getMundoX() + gp.jogador.getAreaSolidaPadraoX();
-        areaSolidaJogador.y = gp.jogador.getMundoY() + gp.jogador.getAreaSolidaPadraoY();
+            // Salvamos a posição original da área sólida
+            int areaSolidaOriginalX = areaSolidaJogador.x;
+            int areaSolidaOriginalY = areaSolidaJogador.y;
 
-        // Posicionamos o retângulo do evento no mundo
-        retEvento.x = eventoCol * gp.getTamanhoBloco() + eventoRetanguloPadraoX;
-        retEvento.y = eventoLinha * gp.getTamanhoBloco() + eventoRetanguloPadraoY;
+            // Atualizamos a posição absoluta da área sólida no mundo
+            areaSolidaJogador.x = gp.jogador.getMundoX() + gp.jogador.getAreaSolidaPadraoX();
+            areaSolidaJogador.y = gp.jogador.getMundoY() + gp.jogador.getAreaSolidaPadraoY();
 
-        // Verificamos colisão
-        if (areaSolidaJogador.intersects(retEvento)) {
-            if (gp.jogador.getDirecao().equals(direcaoRegistro) || direcaoRegistro.equals("any")) {
-                acertar = true;
+            // Posicionamos o retângulo do evento no mundo
+            eventoRetangulo[mapa][coluna][linha].x = coluna * gp.getTamanhoBloco() + eventoRetangulo[mapa][coluna][linha].x;
+            eventoRetangulo[mapa][coluna][linha].y = linha * gp.getTamanhoBloco() +  eventoRetangulo[mapa][coluna][linha].y;
+
+            // Verificamos colisão
+            if (gp.jogador.getAreaSolida().intersects(eventoRetangulo[mapa][coluna][linha]) && !eventoRetangulo[mapa][coluna][linha].isEventoTerminado()) {
+                if (gp.jogador.getDirecao().contentEquals(direcaoRegistro) || direcaoRegistro.contentEquals("any")) {
+                    acertar = true;
+
+                    eventoAnteriorX=gp.jogador.getMundoX();
+                    eventoAnteriorY=gp.jogador.getMundoY();
+                }
             }
-        }
 
-        // Restauramos as posições originais
-        areaSolidaJogador.x = areaSolidaOriginalX;
-        areaSolidaJogador.y = areaSolidaOriginalY;
-        retEvento.x = eventoRetanguloPadraoX;
-        retEvento.y = eventoRetanguloPadraoY;
+            // Restauramos as posições originais
+            areaSolidaJogador.x = areaSolidaOriginalX;
+            areaSolidaJogador.y = areaSolidaOriginalY;
+            eventoRetangulo[mapa][coluna][linha].x = eventoRetangulo[mapa][coluna][linha].getEventoRetanguloPadraoX();
+            eventoRetangulo[mapa][coluna][linha].y = eventoRetangulo[mapa][coluna][linha].getEventoRetanguloPadraoY();
+
+
+        }
 
         return acertar;
     }
 
 
-    public void teleporte(int estadoJogo) {
+    public void teleporte(int mapa, int coluna, int linha){
 
-        gp.setEstadoJogo(estadoJogo);
-        gp.getIu().setDialogoAtual("Teleporte.");
-        gp.jogador.setMundoX(gp.getTamanhoBloco() * 40);
-        gp.jogador.setMundoY(gp.getTamanhoBloco() * 30);
+        gp.setMapaAtual(mapa);
+        gp.jogador.setMundoX(gp.getTamanhoBloco() * coluna);
+        gp.jogador.setMundoY(gp.getTamanhoBloco() * linha);
+        eventoAnteriorX=gp.jogador.getMundoX();
+        eventoAnteriorY=gp.jogador.getMundoY();
+        eventoPodeTocar=false;
 
 
     }
+
 
     public void pocoDeDanos(int estadoJogo) {
 
         gp.setEstadoJogo(estadoJogo);
         gp.getIu().setDialogoAtual("Você foi afetado por um\n cogumelo venenoso!");
         gp.jogador.setVida(gp.jogador.getVida() - 1);
-
+        //eventoRetangulo[mapa][coluna][linha].isEventoTerminado()=true;
+        eventoPodeTocar=false;
     }
 
     public void recuperarSede(int estadoJogo) {

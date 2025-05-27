@@ -18,11 +18,13 @@ public class Mechanic extends Jogador {
         super(gp, eventosTeclado);
         this.mecanico = new Mecanico("Mecanico", 100, 100, 100, 100, 100, null, gp.getBlocosG().getAmbienteAtual().getNomeAmbiente(), 36.5);
         getImagemJogador();
+        pegarImagemAtaque();
+
         mecanico.exibirStatus();
     }
 
     @Override
-    public void  getImagemJogador() {
+    public void getImagemJogador() {
         try {
             setUp1(ImageIO.read(getClass().getResourceAsStream("/mechanic/mecanica_up_01.png")));
             setUp2(ImageIO.read(getClass().getResourceAsStream("/mechanic/mecanica_up_02.png")));
@@ -35,5 +37,21 @@ public class Mechanic extends Jogador {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void pegarImagemAtaque(){
+        try {
+            setAtaqueUp1(ImageIO.read(getClass().getResourceAsStream("/mechanic/mecanica_up_01_ataque.png")));
+            setAtaqueUp2(ImageIO.read(getClass().getResourceAsStream("/mechanic/mecanica_up_02_ataque.png")));
+            setAtaqueDown1(ImageIO.read(getClass().getResourceAsStream("/mechanic/mecanica_down_01_ataque.png")));
+            setAtaqueDown2(ImageIO.read(getClass().getResourceAsStream("/mechanic/mecanica_down_02_ataque.png")));
+            setAtaqueLeft1(ImageIO.read(getClass().getResourceAsStream("/mechanic/mecanica_left_01_ataque.png")));
+            setAtaqueLeft2(ImageIO.read(getClass().getResourceAsStream("/mechanic/mecanica_left_02_ataque.png")));
+            setAtaqueRight1(ImageIO.read(getClass().getResourceAsStream("/mechanic/mecanica_right_01_ataque.png")));
+            setAtaqueRight2(ImageIO.read(getClass().getResourceAsStream("/mechanic/mecanica_right_02_ataque.png")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

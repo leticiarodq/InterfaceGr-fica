@@ -20,24 +20,34 @@ public class Doctor extends Jogador {
         super(gp, eventosTeclado);
         this.medico = new Medico("Dr. Eduardo",100, 100, 100, 100, 100, null, gp.getBlocosG().getAmbienteAtual().getNomeAmbiente(), 36.5);
         getImagemJogador();
+        pegarImagemAtaque();
+
         medico.exibirStatus();
     }
 
 
     @Override
-    public void  getImagemJogador() {
-        try {
-            setUp1(ImageIO.read(getClass().getResourceAsStream("/doctor/curandeiro_up_01.png")));
-            setUp2(ImageIO.read(getClass().getResourceAsStream("/doctor/curandeiro_up_02.png")));
-            setDown1(ImageIO.read(getClass().getResourceAsStream("/doctor/curandeiro_down_01.png")));
-            setDown2(ImageIO.read(getClass().getResourceAsStream("/doctor/curandeiro_down_02.png")));
-            setLeft1(ImageIO.read(getClass().getResourceAsStream("/doctor/curandeiro_left_01.png")));
-            setLeft2(ImageIO.read(getClass().getResourceAsStream("/doctor/curandeiro_left_02.png")));
-            setRight1(ImageIO.read(getClass().getResourceAsStream("/doctor/curandeiro_right_01.png")));
-            setRight2(ImageIO.read(getClass().getResourceAsStream("/doctor/curandeiro_right_02.png")));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void getImagemJogador() {
+            setUp1(setup("/doctor/curandeiro_up_01"));
+            setUp2(setup("/doctor/curandeiro_up_02"));
+            setDown1(setup("/doctor/curandeiro_down_01"));
+            setDown2(setup("/doctor/curandeiro_down_02"));
+            setLeft1(setup("/doctor/curandeiro_left_01"));
+            setLeft2(setup("/doctor/curandeiro_left_02"));
+            setRight1(setup("/doctor/curandeiro_right_01"));
+            setRight2(setup("/doctor/curandeiro_right_02"));
+
+    }
+    @Override
+    public void pegarImagemAtaque(){
+            setAtaqueUp1(setup("/doctor/curandeiro_up_01_ataque"));
+            setAtaqueUp2(setup("/doctor/curandeiro_up_02_ataque"));
+            setAtaqueDown1(setup("/doctor/curandeiro_down_01_ataque"));
+            setAtaqueDown2(setup("/doctor/curandeiro_down_02_ataque"));
+            setAtaqueLeft1(setup("/doctor/curandeiro_left_01_ataque"));
+            setAtaqueLeft2(setup("/doctor/curandeiro_left_02_ataque"));
+            setAtaqueRight1(setup("/doctor/curandeiro_right_01_ataque"));
+            setAtaqueRight2(setup("/doctor/curandeiro_right_02_ataque"));
 
     }
 

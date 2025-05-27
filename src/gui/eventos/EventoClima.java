@@ -32,36 +32,43 @@ public class EventoClima {
 
         if (contadorChuva >= intervaloChuva && !calorExtremoAtivo && !nevascaAtiva) {
             int chance = random.nextInt(100);
-            if (chance < 10) { // 10% de chance
+            if (chance < 100) { // 10% de chance
                 gp.setEstadoJogo(gp.getEstadoDialogo());
                 gp.getIu().setDialogoAtual("CHUVA FORTE\nUma chuva forte começou!\nVocê perdeu 1 ponto de vida.");
                 gp.jogador.setVida(gp.jogador.getVida() - 1);
                 gp.iniciarChuva(100);
                 chuvaAtiva = true; // Marca chuva como ativa
+
+
             }
             contadorChuva = 0; // reseta o contador após ativar
         } else {
             contadorChuva++;
             gp.setMostrarChuva(false);
+
+
         }
     }
 
-    public void eventoCalorExtremo() {
-        if (contadorCalor >= intervaloCalor) {
-            Random random = new Random();
-            int chance = random.nextInt(100); // 0 a 99
+    public void eventoCalorExtremo(int mapa) {
+        if(mapa==gp.getMapaAtual()){
+            if (contadorCalor >= intervaloCalor) {
+                Random random = new Random();
+                int chance = random.nextInt(100); // 0 a 99
 
-            if (chance < 100) { // 10% de chance
-                gp.setEstadoJogo(gp.getEstadoDialogo());
-                gp.getIu().setDialogoAtual("CALOR EXTREMO\nParece que o clima\nesquentou...\nVocê precisa beber água.");
-                gp.jogador.setSede(gp.jogador.getSede() - 2);
+                if (chance < 100) { // 10% de chance
+                    gp.setEstadoJogo(gp.getEstadoDialogo());
+                    gp.getIu().setDialogoAtual("CALOR EXTREMO\nParece que o clima\nesquentou...\nVocê precisa beber água.");
+                    gp.jogador.setSede(gp.jogador.getSede() - 2);
 
+                }
+
+                contadorCalor = 0; // reseta o contador só após tentar ativar
+            } else {
+                contadorCalor++;
             }
-
-            contadorCalor = 0; // reseta o contador só após tentar ativar
-        } else {
-            contadorCalor++;
         }
+
     }
 
 

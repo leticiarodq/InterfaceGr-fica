@@ -7,6 +7,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class Entidade {
 
@@ -26,18 +27,27 @@ public class Entidade {
     // Invisibilidade
     private int contadorInvisibilidade;
     private boolean invisibilidade=false;
+
+    // Ataque
     private int tipo; //0=player, 1=npc, 2=criatura
+    private boolean ataque=false;
+    private boolean vivo=true;
+    private boolean morto=false;
+    private int contadorMorto=0;
 
     // Imagens do personagem
     private BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
+    private BufferedImage ataqueUp1, ataqueUp2, ataqueDown1, ataqueDown2, ataqueLeft1, ataqueLeft2, ataqueRight1, ataqueRight2;
 
     // Colisão
-    private Rectangle areaSolida = new Rectangle(0, 0, 40, 40);
+    private Rectangle areaSolida = new Rectangle(0, 0, 64, 64);
     private int areaSolidaPadraoX, areaSolidaPadraoY;
     private boolean colisaoOn = false;
 
     // Controle de ações
     private int contadorDeBloqueioDeAcao = 0;
+
+
 
     // Diálogos
     private String dialogos[] = new String[20];
@@ -278,8 +288,36 @@ public class Entidade {
         return tipo;
     }
 
+    public boolean isAtaque() {
+        return ataque;
+    }
+
+    public boolean isMorto() {
+        return morto;
+    }
+
+    public boolean isVivo() {
+        return vivo;
+    }
+
     public void setTipo(int tipo) {
         this.tipo = tipo;
+    }
+
+    public boolean isTocou() {
+        return tocou;
+    }
+
+    public void setMorto(boolean morto) {
+        this.morto = morto;
+    }
+
+    public void setTocou(boolean tocou) {
+        this.tocou = tocou;
+    }
+
+    public void setAtaque(boolean ataque) {
+        this.ataque = ataque;
     }
 
     // Diálogos
@@ -332,6 +370,38 @@ public class Entidade {
         return right2;
     }
 
+    public BufferedImage getAtaqueDown1() {
+        return ataqueDown1;
+    }
+
+    public BufferedImage getAtaqueDown2() {
+        return ataqueDown2;
+    }
+
+    public BufferedImage getAtaqueLeft1() {
+        return ataqueLeft1;
+    }
+
+    public BufferedImage getAtaqueLeft2() {
+        return ataqueLeft2;
+    }
+
+    public BufferedImage getAtaqueRight1() {
+        return ataqueRight1;
+    }
+
+    public BufferedImage getAtaqueRight2() {
+        return ataqueRight2;
+    }
+
+    public BufferedImage getAtaqueUp1() {
+        return ataqueUp1;
+    }
+
+    public BufferedImage getAtaqueUp2() {
+        return ataqueUp2;
+    }
+
     // Imagens setters
     public void setUp1(BufferedImage up1) {
         this.up1 = up1;
@@ -365,6 +435,37 @@ public class Entidade {
         this.right2 = right2;
     }
 
+    public void setAtaqueDown1(BufferedImage ataqueDown1) {
+        this.ataqueDown1 = ataqueDown1;
+    }
+
+    public void setAtaqueDown2(BufferedImage ataqueDown2) {
+        this.ataqueDown2 = ataqueDown2;
+    }
+
+    public void setAtaqueLeft1(BufferedImage ataqueLeft1) {
+        this.ataqueLeft1 = ataqueLeft1;
+    }
+
+    public void setAtaqueLeft2(BufferedImage ataqueLeft2) {
+        this.ataqueLeft2 = ataqueLeft2;
+    }
+
+    public void setAtaqueRight1(BufferedImage ataqueRight1) {
+        this.ataqueRight1 = ataqueRight1;
+    }
+
+    public void setAtaqueRight2(BufferedImage ataqueRight2) {
+        this.ataqueRight2 = ataqueRight2;
+    }
+
+    public void setAtaqueUp1(BufferedImage ataqueUp1) {
+        this.ataqueUp1 = ataqueUp1;
+    }
+
+    public void setAtaqueUp2(BufferedImage ataqueUp2) {
+        this.ataqueUp2 = ataqueUp2;
+    }
     // Objetos getters
 
     public BufferedImage getImagem() {
@@ -429,57 +530,58 @@ public class Entidade {
         gp.getcColisoes().checarObjeto(this, false);
         gp.getcColisoes().checarEntidade(this, gp.getNpc());
         gp.getcColisoes().checarEntidade(this, gp.getCriatura());
-        boolean contatoJogador= gp.getcColisoes().checarJogador(this);
+        boolean contatoJogador = gp.getcColisoes().checarJogador(this);
 
-        if(this.getTipo()==2 && contatoJogador==true){
-            if(gp.jogador.isInvisibilidade()==false){
-
-                gp.jogador.setVida(getVida()-1);
+        if (this.getTipo() == 2 && contatoJogador) {
+            if (!gp.jogador.isInvisibilidade()) {
+                gp.jogador.setVida(gp.jogador.getVida() - 1); // Corrigido aqui também!
                 gp.jogador.setInvisibilidade(true);
             }
         }
 
+        // Movimento
         if (!isColisaoOn()) {
-
             switch (getDirecao()) {
                 case "up":
-                    if (getMundoY() - getVelocidade() >= 0) { //Verifica se não vai além do topo
+                    if (getMundoY() - getVelocidade() >= 0) {
                         setMundoY(getMundoY() - getVelocidade());
                     }
                     break;
                 case "down":
-                    if (getMundoY() + getVelocidade() <= gp.getMundoAltura() - gp.getTamanhoBloco()) { //Verifica se não vai além do fundo
+                    if (getMundoY() + getVelocidade() <= gp.getMundoAltura() - gp.getTamanhoBloco()) {
                         setMundoY(getMundoY() + getVelocidade());
                     }
                     break;
                 case "left":
-                    if (getMundoX() - getVelocidade() >= 0) { //Verifica se não vai além da esquerda
+                    if (getMundoX() - getVelocidade() >= 0) {
                         setMundoX(getMundoX() - getVelocidade());
                     }
                     break;
                 case "right":
-                    if (getMundoX() + getVelocidade() <= gp.getMundoLargura() - gp.getTamanhoBloco()) { //Verifica se não vai além da direita
+                    if (getMundoX() + getVelocidade() <= gp.getMundoLargura() - gp.getTamanhoBloco()) {
                         setMundoX(getMundoX() + getVelocidade());
                     }
                     break;
             }
 
-            setContadorSprite(getContadorSprite() + 1); //Conta quantas vezes o jogador se move e, quando atinge 20, troca a animação
+            setContadorSprite(getContadorSprite() + 1);
             if (getContadorSprite() > 20) {
-                if (getNumSprite() == 1) {
-                    setNumSprite(2);
-                } else if (getNumSprite() == 2) {
-                    setNumSprite(1);
-                }
+                setNumSprite(getNumSprite() == 1 ? 2 : 1);
                 setContadorSprite(0);
             }
-
         }
 
+        // Invisibilidade deve ser contada SEMPRE
+        if (invisibilidade) {
+            contadorInvisibilidade++;
+            if (contadorInvisibilidade > 60) {
+                invisibilidade = false;
+                contadorInvisibilidade = 0;
+            }
+        }
     }
 
     public void desenhar(Graphics2D g2) {
-
         BufferedImage imagem = null;
 
         int telaX = mundoX - gp.jogador.getMundoX() + gp.jogador.getTelaX();
@@ -490,69 +592,102 @@ public class Entidade {
                 mundoY + gp.getTamanhoBloco() > gp.jogador.getMundoY() - gp.jogador.getTelaY() &&
                 mundoY - gp.getTamanhoBloco() < gp.jogador.getMundoY() + gp.jogador.getTelaY()) {
 
-
-            switch (getDirecao()) { //Verifica a direção atural e escolhe a imagem correspondente
+            switch (getDirecao()) {
                 case "up":
-                    if (getNumSprite() == 1) {
-                        imagem = getUp1();
-                    }
-                    if (getNumSprite() == 2) {
-                        imagem = getUp2();
-                    }
+                    imagem = (getNumSprite() == 1) ? getUp1() : getUp2();
                     break;
                 case "down":
-                    if (getNumSprite() == 1) {
-                        imagem = getDown1();
-                    }
-                    if (getNumSprite() == 2) {
-                        imagem = getDown2();
-                    }
+                    imagem = (getNumSprite() == 1) ? getDown1() : getDown2();
                     break;
                 case "left":
-                    if (getNumSprite() == 1) {
-                        imagem = getLeft1();
-                    }
-                    if (getNumSprite() == 2) {
-                        imagem = getLeft2();
-                    }
+                    imagem = (getNumSprite() == 1) ? getLeft1() : getLeft2();
                     break;
                 case "right":
-                    if (getNumSprite() == 1) {
-                        imagem = getRight1();
-                    }
-                    if (getNumSprite() == 2) {
-                        imagem = getRight2();
-                    }
+                    imagem = (getNumSprite() == 1) ? getRight1() : getRight2();
                     break;
+            }
+
+            if (isInvisibilidade()) {
+                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
+            }
+            if(isMorto()){
+                mortoAnimacao(g2);
             }
 
             g2.drawImage(imagem, telaX, telaY, gp.getTamanhoBloco(), gp.getTamanhoBloco(), null);
 
+            // **Importante:** Resetar opacidade para 100%
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+        }
+    }
 
+    public void mortoAnimacao(Graphics2D g2){
+
+
+        contadorMorto++;
+
+        int i=5;
+
+        if(contadorMorto<=5){
+            mudarOpacidade(g2,0f);
         }
 
+        if(contadorMorto>5 && contadorMorto<=10){
+
+            mudarOpacidade(g2,1f);
+        }
+        if(contadorMorto>10 && contadorMorto<=15){
+            mudarOpacidade(g2,0f);
+        }
+        if(contadorMorto>15 && contadorMorto<=20){
+            mudarOpacidade(g2,1f);
+        }
+        if(contadorMorto>20 && contadorMorto<=25){
+            mudarOpacidade(g2,0f);
+        }
+        if(contadorMorto>25 && contadorMorto<=30){
+            mudarOpacidade(g2,1f);
+        }
+
+        if(contadorMorto>30 && contadorMorto<=35){
+            mudarOpacidade(g2,0f);
+        }
+        if(contadorMorto>35 && contadorMorto<=40){
+            mudarOpacidade(g2,1f);
+        }
+        if(contadorMorto>40){
+            morto=false;
+            vivo=false;
+        }
 
     }
+
+    public void mudarOpacidade(Graphics2D g2, float valorOpacidade){
+
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, valorOpacidade));
+
+    }
+
 
     public BufferedImage setup(String imagemPath){
-        FerramentasUteis ferramentasUteis = new FerramentasUteis();
-        BufferedImage imagem = null;
+    FerramentasUteis ferramentasUteis = new FerramentasUteis();
+    BufferedImage imagem = null;
 
-        try
+    try
 
-        {
-            imagem = ImageIO.read(getClass().getResourceAsStream(imagemPath + ".png"));
-            imagem = ferramentasUteis.escalar(imagem, gp.getTamanhoBloco(), gp.getTamanhoBloco());
+    {
+        imagem = ImageIO.read(getClass().getResourceAsStream(imagemPath + ".png"));
+        imagem = ferramentasUteis.escalar(imagem, gp.getTamanhoBloco(), gp.getTamanhoBloco());
 
-        }catch(
-                IOException e)
+    }catch(
+            IOException e)
 
-        {
-            e.printStackTrace();
-        }return imagem;
+    {
+        e.printStackTrace();
+    }return imagem;
+
 
     }
-
 
 
 }

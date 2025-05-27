@@ -59,15 +59,21 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
 
     Thread threadJogo; //Essa Thread permitirá que o jogo rode continuamente.
 
+    // Mapa do jogo
+
+    private final int mapaMax=10;
+    private int mapaAtual=0;
+
     // Entidade e objeto
 
     public Jogador jogador = new Jogador(this, eventosTeclado);
-    private Entidade obj[] = new Entidade[100];
-    private Entidade npc[] = new Entidade[100];
-    private Entidade coelho[]=new Entidade[10];
-    private Entidade criatura[]=new Entidade[10];
+    private Som som=new Som();
+    private Entidade obj[][] = new Entidade[mapaMax][100];
+    private Entidade npc[][] = new Entidade[mapaMax][100];
+    private Entidade coelho[][]=new Entidade[mapaMax][10];
+    private Entidade criatura[][]=new Entidade[mapaMax][10];
     private ArrayList<Entidade> entidadeLista= new ArrayList<>();
-    private Entidade alimento[]=new Entidade[10];
+    private Entidade alimento[][]=new Entidade[mapaMax][10];
 
    // public BlocoInterativo blocoInterativo[][]=new BlocoInterativo[mapaMax][50];
 
@@ -84,11 +90,9 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
     private int estadoDescricao = 3;
     private int estadoPersonagem=5;
     private int estadoJogoFinalizado=6;
-
-    // Mapa do jogo
-
-    private final int mapaMax=10;
-    private int mapaAtual=0;
+    private int estadoJogoDescricao=7;
+    private int estadoTelaCombate=8;
+    private int estadoTelaLuta=9;
 
     // Métodos de acesso getters
 
@@ -130,6 +134,9 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         return iu;
     }
 
+    public Som getSom(){
+        return som;
+    }
     public String getPersonagemSelecionado() {
         return personagemSelecionado;
     }
@@ -139,7 +146,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
     public GerenciadorBlocos getBlocosG() {
         return blocosG;
     }
-    public Entidade[] getObj() {
+    public Entidade[][] getObj() {
         return obj;
     }
     public boolean isJogoIniciado() {
@@ -148,25 +155,36 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
     public int getEstadoJogo() {
         return estadoJogo;
     }
-
     public int getEstadoJogoFinalizado() {
         return estadoJogoFinalizado;
     }
-
+    public int getEstadoTelaCombate(){
+        return estadoTelaCombate;
+    }
+    public int getEstadoTelaLuta(){
+        return estadoTelaLuta;
+    }
+    public void setEstadoTelaLuta(int estadoTelaLuta){
+        this.estadoTelaLuta=estadoTelaLuta;
+    }
     public final int getEstadoPlay() {
         return estadoPlay;
     }
     public final int getEstadoPausa() {
         return estadoPausa;
     }
-    public Entidade[] getNpc() {
+
+    public int getEstadoJogoDescricao(){
+        return estadoJogoDescricao;
+    }
+    public Entidade[][] getNpc() {
         return npc;
     }
     public ManipuladorDeEventos getManipuladorDeEventos(){
         return manipuladorDeEventos;
     }
 
-    public Entidade[] getCriatura() {
+    public Entidade[][] getCriatura() {
         return criatura;
     }
 
@@ -181,7 +199,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         return entidadeLista;
     }
 
-    public Entidade[] getAlimento(){
+    public Entidade[][] getAlimento(){
         return alimento;
     }
 
@@ -198,7 +216,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
     public void setPersonagemSelecionado(String personagemSelecionado) {
         this.personagemSelecionado = personagemSelecionado;
     }
-    public void setObj(Entidade[] obj) {
+    public void setObj(Entidade[][] obj) {
         this.obj = obj;
     }
     public void setEstadoJogo(int estadoJogo) {
@@ -211,6 +229,9 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         this.estadoJogo = estadoPausa;
     }
 
+    public void setMapaAtual(int mapaAtual){
+        this.mapaAtual=mapaAtual;
+    }
     public void setBlocosG(GerenciadorBlocos blocosG) {
         this.blocosG = blocosG;
     }
@@ -275,7 +296,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         cAtivos.setNPC();
         cAtivos.setCOELHO();
         cAtivos.setCriatura();
-
+        playMusica(0);
 
         estadoJogo=estadoTitulo;
 
@@ -333,18 +354,22 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
             jogador.update();
 
 
-            // NPC
-           for (int i = 0; i < npc.length; i++) {
-                if (npc[i] != null) {
-                    npc[i].update();
+            //NPC
+
+            for (int i = 0; i < npc[1].length; i++) {
+                if (npc[mapaAtual][i] != null) {
+                    npc[mapaAtual][i].update();
                 }
             }
 
             // CRIATURA
 
-          for (int i = 0; i < criatura.length; i++) {
-                if (criatura[i] != null) {
-                    criatura[i].update();
+            for (int i = 0; i < criatura[1].length; i++) {
+                if (criatura[mapaAtual][i] != null) {
+                    if(criatura[mapaAtual][i].isVivo()==true){
+                        criatura[mapaAtual][i].update();
+                    }
+
                 }
             }
 
@@ -498,10 +523,6 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        long drawStart = 0;
-        if (eventosTeclado.isChecarDesenhoTempo()) {
-            drawStart = System.nanoTime();
-        }
 
         // TELA DE TÍTULO
         if (estadoJogo == estadoTitulo) {
@@ -514,31 +535,23 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
             // Adicionar entidades à lista de desenho
             entidadeLista.add(jogador);
 
-            for (int i = 0; i < npc.length; i++) {
-                if (npc[i] != null) {
-                    entidadeLista.add(npc[i]);
+            for (int i = 0; i < npc[1].length; i++) {
+                if (npc[mapaAtual][i] != null) {
+                    entidadeLista.add(npc[mapaAtual][i]);
                 }
             }
 
-            for (int i = 0; i < obj.length; i++) {
-                if (obj[i] != null) {
-                    entidadeLista.add(obj[i]);
+            for (int i = 0; i < obj[1].length; i++) {
+                if (obj[mapaAtual][i] != null) {
+                    entidadeLista.add(obj[mapaAtual][i]);
                 }
             }
 
-
-
-           for (int i = 0; i < criatura.length; i++) {
-                if (criatura[i] != null) {
-                    entidadeLista.add(criatura[i]);
+           for (int i = 0; i < criatura[1].length; i++) {
+                if (criatura[mapaAtual][i] != null) {
+                    entidadeLista.add(criatura[mapaAtual][i]);
                 }
             }
-
-
-
-
-
-
 
             // Ordenar entidades pelo eixo Y
             Collections.sort(entidadeLista, new Comparator<Entidade>() {
@@ -566,6 +579,8 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
 
             if (mostrarChuva) {
                 desenharChuva(g2);
+
+
             }
 
             if (mostrarNevasca) {
@@ -573,6 +588,49 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
             }
         }
 
+        long desenhoComeco = System.nanoTime();
+
+        if (eventosTeclado.isMostrarTextoDebug()) {
+            long desenhoFinal=System.nanoTime();
+            long passou=desenhoFinal-desenhoComeco;
+
+            g2.setFont(new Font("Arial", Font.PLAIN, 20));
+            g2.setColor(Color.white);
+            int x=10;
+            int y=400;
+            int linhaLargura=20;
+
+            g2.drawString("Mundo X: " + jogador.getMundoX(), x, y); y+=linhaLargura;
+            g2.drawString("Mundo Y: " + jogador.getMundoY(), x, y); y+=linhaLargura;
+            g2.drawString("Coluna: " + (jogador.getMundoX() + jogador.getAreaSolida().x)/tamanhoBloco, x, y); y+=linhaLargura;
+            g2.drawString("Linha: " + (jogador.getMundoY() + jogador.getAreaSolida().y)/tamanhoBloco, x, y); y+=linhaLargura;
+
+
+
+            g2.drawString("Draw time: "+ passou, 10,480);
+            System.out.println("Draw time: "+ passou);
+        }
+
         g2.dispose();
+    }
+
+    public void playMusica(int i){
+
+        som.pegarArquivo(i);
+        som.play();
+        som.loop();
+
+    }
+
+    public void pararMusica(int i){
+
+        som.pegarArquivo(i);
+        som.stop();
+    }
+
+    public void playSE(int i){
+
+        som.pegarArquivo(i);
+        som.play();
     }
 }
