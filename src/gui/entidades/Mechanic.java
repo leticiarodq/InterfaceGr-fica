@@ -19,7 +19,7 @@ public class Mechanic extends Jogador {
         this.mecanico = new Mecanico("Mecanico", 100, 100, 100, 100, 100, null, gp.getBlocosG().getAmbienteAtual().getNomeAmbiente(), 36.5);
         getImagemJogador();
         pegarImagemAtaque();
-
+        setVelocidade(4);
         mecanico.exibirStatus();
     }
 

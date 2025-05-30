@@ -1,15 +1,10 @@
 package gui.entidades;
 
-import ambientes.Ambiente;
-import ambientes.GerenciadorDeAmbientes;
-import gui.objetos.ALIMENTO_Enlatado;
-import gui.objetos.REMEDIO_Analgesico;
-import gui.objetos.REMEDIO_Antibiotico;
-import gui.objetos.REMEDIO_Bandagem;
+import gui.itens.Armas;
 import gui.system.CriadorAtivos;
 import gui.system.EventosTeclado;
-import gui.system.InterfaceUsuario;
 import gui.system.PainelJogo;
+import itens.Arma;
 import personagens.*;
 
 import java.awt.*;
@@ -73,6 +68,7 @@ public class Jogador extends Entidade {
     public Jogador(PainelJogo gp, EventosTeclado eventosTeclado) { //Construtor da classe que recebe o painel de jogo e manipulador de teclas
 
         super(gp);
+        setTipo(getTipo_jogador());
 
         this.gp = gp;
         this.eventosTeclado = eventosTeclado;
@@ -109,14 +105,14 @@ public class Jogador extends Entidade {
 
         //setMundoX(gp.getTamanhoBloco() * 26);
         //setMundoY(gp.getTamanhoBloco() * 9);
-        setMundoX(gp.getTamanhoBloco() * 31);
-        setMundoY(gp.getTamanhoBloco() * 20);
-        setVelocidade(2);
+        setMundoX(gp.getTamanhoBloco() * 21);
+        setMundoY(gp.getTamanhoBloco() * 10);
+        setVelocidade(4);
         setDirecao("down");
 
         // Status do jogador
 
-        /*setVidaMaxima(6);
+        setVidaMaxima(6);
         setVida(getVidaMaxima());
 
         setSedeMaxima(8);
@@ -130,9 +126,10 @@ public class Jogador extends Entidade {
 
         setEnergiaMaxima(6);
         setEnergia(getEnergiaMaxima());
-         */
 
-        setVida(personagemLogico.getVida());
+
+
+        /*setVida(personagemLogico.getVida());
         setSede(personagemLogico.getSede());
         setFome(personagemLogico.getFome());
         setSanidade(personagemLogico.getSanidade());
@@ -145,104 +142,118 @@ public class Jogador extends Entidade {
         setEnergiaMaxima(6);
 
 
+         */
     }
 
+    public void posicoesPadrao(){
+        setMundoX(gp.getTamanhoBloco() * 21);
+        setMundoY(gp.getTamanhoBloco() * 10);
+        setDirecao("down");
+
+    }
+
+    public void restaurarVida(){
+
+        setVida(getVidaMaxima());
+        setInvisibilidade(false);
+    }
     public void definirItens() {
 
+        inventario.clear();
 
     }
 
     public void getImagemJogador() {
+
     }
 
     public void pegarImagemAtaque() {
+
+
     }
 
-    public void update() { //Este método atualiza a posição e a animação do jogador com base nas teclas pressionadas
-
-
-        if (isAtaque() == true) {
-            ataque();
-
-        } else if (eventosTeclado.isCimaPressionado() == true || eventosTeclado.isBaixoPressionado() == true || eventosTeclado.isEsquerdaPressionado() == true || eventosTeclado.isDireitaPressionado() == true) {
-
-            if (eventosTeclado.isCimaPressionado()) {
-                setDirecao("up");
-            } else if (eventosTeclado.isBaixoPressionado()) {
-                setDirecao("down");
-            } else if (eventosTeclado.isEsquerdaPressionado()) {
-                setDirecao("left");
-            } else if (eventosTeclado.isDireitaPressionado()) {
-                setDirecao("right");
-            }
-
-            setColisaoOn(false);
-
-            gp.getcColisoes().checarBloco(this);
-
-            // Checar colisao objeto
-            int objIndice = gp.getcColisoes().checarObjeto(this, true);
-            pegarObjeto(objIndice);
-
-
-            // Checar colisao NPC
-            int npcIndice = gp.getcColisoes().checarEntidade(this, gp.getNpc());
-            interagirNPC(npcIndice);
-
-            //Checar colisao criatura
-            int criaturaIndice = gp.getcColisoes().checarEntidade(this, gp.getCriatura());
-            //contatoCriatura(criaturaIndice);
-            damageCriatura(criaturaIndice);
-
-
-            // Checar evento
-            gp.getManipuladorDeEventos().checarEvento();
-
-
-            if (!isColisaoOn()) {
-
-                switch (getDirecao()) {
-                    case "up":
-                        if (getMundoY() - getVelocidade() >= 0) { //Verifica se não vai além do topo
-                            setMundoY(getMundoY() - getVelocidade());
-                        }
-                        break;
-                    case "down":
-                        if (getMundoY() + getVelocidade() <= gp.getMundoAltura() - gp.getTamanhoBloco()) { //Verifica se não vai além do fundo
-                            setMundoY(getMundoY() + getVelocidade());
-                        }
-                        break;
-                    case "left":
-                        if (getMundoX() - getVelocidade() >= 0) { //Verifica se não vai além da esquerda
-                            setMundoX(getMundoX() - getVelocidade());
-                        }
-                        break;
-                    case "right":
-                        if (getMundoX() + getVelocidade() <= gp.getMundoLargura() - gp.getTamanhoBloco()) { //Verifica se não vai além da direita
-                            setMundoX(getMundoX() + getVelocidade());
-                        }
-                        break;
-                }
-
-                gp.getEventosTeclado().setEnterPressionado(false);
-
-                setContadorSprite(getContadorSprite() + 1); //Conta quantas vezes o jogador se move e, quando atinge 20, troca a animação
-                if (getContadorSprite() > 12) {
-                    if (getNumSprite() == 1) {
-                        setNumSprite(2);
-                    } else if (getNumSprite() == 2) {
-                        setNumSprite(1);
-                    }
-                    setContadorSprite(0);
-                }
-            }
-
+    public void update() {
+        // Se Enter foi pressionado e não está atacando, inicia o ataque e limpa o Enter
+        if (eventosTeclado.isEnterPressionado() && !isAtaque()) {
+            setAtaque(true);
+            eventosTeclado.setEnterPressionado(false);
         }
 
+        if (isAtaque()) {
+            // Durante o ataque, executa a animação de ataque e causa dano nas criaturas próximas
+            ataque();
 
+            int criaturaIndice = gp.getcColisoes().checarEntidade(this, gp.getCriatura());
+            damageCriatura(criaturaIndice);
+        } else {
+            // Se não está atacando, verifica dano ao jogador por contato com criatura
+            int criaturaIndice = gp.getcColisoes().checarEntidade(this, gp.getCriatura());
+            contatoCriatura(criaturaIndice);
+
+            // Verifica movimentação apenas se alguma tecla de direção estiver pressionada
+            if (eventosTeclado.isCimaPressionado() || eventosTeclado.isBaixoPressionado() ||
+                    eventosTeclado.isEsquerdaPressionado() || eventosTeclado.isDireitaPressionado()) {
+
+                // Atualiza a direção com base na tecla pressionada
+                if (eventosTeclado.isCimaPressionado()) {
+                    setDirecao("up");
+                } else if (eventosTeclado.isBaixoPressionado()) {
+                    setDirecao("down");
+                } else if (eventosTeclado.isEsquerdaPressionado()) {
+                    setDirecao("left");
+                } else if (eventosTeclado.isDireitaPressionado()) {
+                    setDirecao("right");
+                }
+
+                setColisaoOn(false);
+
+                gp.getcColisoes().checarBloco(this);
+
+                int objIndice = gp.getcColisoes().checarObjeto(this, true);
+                pegarObjeto(objIndice);
+
+                int npcIndice = gp.getcColisoes().checarEntidade(this, gp.getNpc());
+                interagirNPC(npcIndice);
+
+                gp.getManipuladorDeEventos().checarEvento();
+
+                if (!isColisaoOn()) {
+                    switch (getDirecao()) {
+                        case "up":
+                            if (getMundoY() - getVelocidade() >= 0) {
+                                setMundoY(getMundoY() - getVelocidade());
+                            }
+                            break;
+                        case "down":
+                            if (getMundoY() + getVelocidade() <= gp.getMundoAltura() - gp.getTamanhoBloco()) {
+                                setMundoY(getMundoY() + getVelocidade());
+                            }
+                            break;
+                        case "left":
+                            if (getMundoX() - getVelocidade() >= 0) {
+                                setMundoX(getMundoX() - getVelocidade());
+                            }
+                            break;
+                        case "right":
+                            if (getMundoX() + getVelocidade() <= gp.getMundoLargura() - gp.getTamanhoBloco()) {
+                                setMundoX(getMundoX() + getVelocidade());
+                            }
+                            break;
+                    }
+
+                    // Atualiza animação de movimento
+                    setContadorSprite(getContadorSprite() + 1);
+                    if (getContadorSprite() > 12) {
+                        setNumSprite(getNumSprite() == 1 ? 2 : 1);
+                        setContadorSprite(0);
+                    }
+                }
+            }
+        }
+
+        // Controle de invisibilidade
         if (isInvisibilidade()) {
             setContadorInvisibilidade(getContadorInvisibilidade() + 1);
-
             if (getContadorInvisibilidade() > 60) {
                 setInvisibilidade(false);
                 setContadorInvisibilidade(0);
@@ -251,12 +262,12 @@ public class Jogador extends Entidade {
             setContadorInvisibilidade(0);
         }
 
-        if (getVida() <= 0) {
+        // Finaliza o jogo se vida ou sanidade acabarem
+        if (getVida() <= 0 || getSanidade() <= 0) {
             gp.setEstadoJogo(gp.getEstadoJogoFinalizado());
         }
-
-
     }
+
 
     public void ataque() {
 
@@ -299,7 +310,7 @@ public class Jogador extends Entidade {
 
 
     public void interagirNPC(int i) {
-        if (gp.getEventosTeclado().isEnterPressionado()) {
+        if (gp.getEventosTeclado().isEnterPressionado()==true) {
             if (i != 999) {
                 gp.setEstadoJogo(gp.getEstadoDialogo());
                 gp.getNpc()[gp.getMapaAtual()][i].falar();
@@ -310,19 +321,15 @@ public class Jogador extends Entidade {
         }
     }
 
-
     public void contatoCriatura(int i) {
-        if (i != 999) {
-
-            if (isInvisibilidade() == false) {
-                setVida(getVida() - 1);
-                setInvisibilidade(true);
-
-            }
-
+        if (i != 999 && !isInvisibilidade() && !isAtaque()) {
+            System.out.println("Contato com criatura de índice " + i);
+            setVida(getVida() - 1);
+            setInvisibilidade(true);
         }
-
     }
+
+
 
     public void damageCriatura(int i) {
         if (i != 999) {
@@ -335,6 +342,28 @@ public class Jogador extends Entidade {
                 if (criatura.getVida() <= 0) {
                     gp.getCriatura()[gp.getMapaAtual()][i].setMorto(true);
                 }
+            }
+        }
+    }
+
+
+
+    public void selecaoItem(){
+
+        int itemIndice= gp.getIu().pegarItemSlot();
+        if(itemIndice<inventario.size()){
+            Entidade itemSelecionado=inventario.get(itemIndice);
+
+           /* if(itemSelecionado.getTipo()==getTipo_espada() || itemSelecionado.getTipo()==getTipo_machado() || selecaoItem.getTipo()==getTipo_picareta()){
+                armaAtual=itemSelecionado;
+                ataque=pegarImagemAtaque();
+            }
+
+            */
+            if(itemSelecionado.getTipo()==getTipo_consumivel()){
+                itemSelecionado.usar(this);
+                inventario.remove(itemIndice);
+
             }
         }
     }

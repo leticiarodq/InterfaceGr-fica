@@ -30,6 +30,19 @@ public class Entidade {
 
     // Ataque
     private int tipo; //0=player, 1=npc, 2=criatura
+    private final int tipo_jogador=0;
+    private final int tipo_npc=1;
+    private final int tipo_criatura=2;
+    private final int tipo_consumivel=3;
+    private final int tipo_espada=4;
+    private final int tipo_machado=5;
+    private final int tipo_picareta=6;
+    private final int tipo_escudo=7;
+
+
+
+
+
     private boolean ataque=false;
     private boolean vivo=true;
     private boolean morto=false;
@@ -288,6 +301,38 @@ public class Entidade {
         return tipo;
     }
 
+    public int getTipo_criatura() {
+        return tipo_criatura;
+    }
+
+    public int getTipo_consumivel() {
+        return tipo_consumivel;
+    }
+
+    public int getTipo_escudo() {
+        return tipo_escudo;
+    }
+
+    public int getTipo_espada() {
+        return tipo_espada;
+    }
+
+    public int getTipo_jogador() {
+        return tipo_jogador;
+    }
+
+    public int getTipo_machado() {
+        return tipo_machado;
+    }
+
+    public int getTipo_picareta() {
+        return tipo_picareta;
+    }
+
+    public int getTipo_npc() {
+        return tipo_npc;
+    }
+
     public boolean isAtaque() {
         return ataque;
     }
@@ -534,7 +579,7 @@ public class Entidade {
 
         if (this.getTipo() == 2 && contatoJogador) {
             if (!gp.jogador.isInvisibilidade()) {
-                gp.jogador.setVida(gp.jogador.getVida() - 1); // Corrigido aqui também!
+                gp.jogador.setVida(gp.jogador.getVida() - 1);
                 gp.jogador.setInvisibilidade(true);
             }
         }
@@ -607,60 +652,75 @@ public class Entidade {
                     break;
             }
 
+            // barra
+
+            if(tipo==2){
+
+                double umaEscala= (double)gp.getTamanhoBloco()/vidaMaxima;
+                double barraHpValor= umaEscala*vida;
+
+                g2.setColor(new Color(35,35,35));
+                g2.fillRect(telaX-1, telaY-21, gp.getTamanhoBloco()+2, 10);
+                g2.setColor(new Color(255, 0, 30));
+                g2.fillRect(telaX, telaY-20, (int) barraHpValor, 8);
+
+            }
+
+
+
             if (isInvisibilidade()) {
                 g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
             }
             if(isMorto()){
                 mortoAnimacao(g2);
+
             }
 
             g2.drawImage(imagem, telaX, telaY, gp.getTamanhoBloco(), gp.getTamanhoBloco(), null);
 
-            // **Importante:** Resetar opacidade para 100%
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
         }
+
+
     }
+    public void usar(Entidade entidade){}
 
     public void mortoAnimacao(Graphics2D g2){
 
-
         contadorMorto++;
 
-        int i=5;
+        int i = 5;
 
-        if(contadorMorto<=5){
-            mudarOpacidade(g2,0f);
+        if(contadorMorto <= i){
+            mudarOpacidade(g2, 0f);
         }
-
-        if(contadorMorto>5 && contadorMorto<=10){
-
-            mudarOpacidade(g2,1f);
+        else if(contadorMorto <= i*2){
+            mudarOpacidade(g2, 1f);
         }
-        if(contadorMorto>10 && contadorMorto<=15){
-            mudarOpacidade(g2,0f);
+        else if(contadorMorto <= i*3){
+            mudarOpacidade(g2, 0f);
         }
-        if(contadorMorto>15 && contadorMorto<=20){
-            mudarOpacidade(g2,1f);
+        else if(contadorMorto <= i*4){
+            mudarOpacidade(g2, 1f);
         }
-        if(contadorMorto>20 && contadorMorto<=25){
-            mudarOpacidade(g2,0f);
+        else if(contadorMorto <= i*5){
+            mudarOpacidade(g2, 0f);
         }
-        if(contadorMorto>25 && contadorMorto<=30){
-            mudarOpacidade(g2,1f);
+        else if(contadorMorto <= i*6){
+            mudarOpacidade(g2, 1f);
         }
-
-        if(contadorMorto>30 && contadorMorto<=35){
-            mudarOpacidade(g2,0f);
+        else if(contadorMorto <= i*7){
+            mudarOpacidade(g2, 0f);
         }
-        if(contadorMorto>35 && contadorMorto<=40){
-            mudarOpacidade(g2,1f);
+        else if(contadorMorto <= i*8){
+            mudarOpacidade(g2, 1f);
         }
-        if(contadorMorto>40){
-            morto=false;
-            vivo=false;
+        else {
+            morto = false;
+            vivo = false;
         }
-
     }
+
 
     public void mudarOpacidade(Graphics2D g2, float valorOpacidade){
 

@@ -23,7 +23,8 @@ public class Main { // Define a classe Main, que contém o método principal do 
         window.setLocationRelativeTo(null); // Centraliza a janela na tela
         window.setVisible(true); // Torna a janela visível
 
-        //painelJogo.setupJogo();
+        painelJogo.setupJogo();
         painelJogo.iniciarThreadJogo();
+
     }
 }

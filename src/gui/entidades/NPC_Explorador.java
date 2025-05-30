@@ -16,7 +16,7 @@ public class NPC_Explorador extends Entidade{
         super(gp);
         this.gp = gp;
 
-
+        setTipo(getTipo_npc());
         setDirecao("down");
         setVelocidade(1);
         carregarImagemExplorador();

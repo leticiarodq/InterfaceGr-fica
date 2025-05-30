@@ -1,8 +1,7 @@
 package gui.system;
 
-import gui.entidades.Entidade;
-import gui.objetos.*;
-import personagens.Personagem;
+import gui.entidades.*;
+import gui.itens.*;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -608,11 +607,44 @@ public class InterfaceUsuario {
                     g2.drawString(">", xTexto - gp.getTamanhoBloco(), yTexto);
                 }
             }
-        } else if (telaMenu == 2) {
+        } else if (telaMenu == 1) { // Tela da história do jogo
 
-            //gp.telaMenuPersonagens.paintComponent(g2);
+            g2.drawImage(fundoHistoria, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null); // Fundo
 
-            //gp.telaMenuPersonagens.desenhar(g2);
+            g2.setColor(Color.WHITE);
+            g2.setFont(Font03.deriveFont(32f));
+
+            String historia =
+                    "Num mundo devastado, onde a natureza resiste\n" +
+                            "e a tecnologia ruiu, poucos permanecem.\n" +
+                            "Você é parte dos últimos sobreviventes\n" +
+                            "em busca de um novo começo na Última Fronteira.\n\n" +
+                            "Escolha com sabedoria. Cada passo será decisivo.";
+
+            String[] linhas = historia.split("\n");
+            int y = gp.getTamanhoBloco() * 4;
+
+            long agora = System.currentTimeMillis();
+            if (!historiaCompletaExibida && contadorLetra < historiaCompleta.length()) {
+                if (agora - ultimoTempo >= intervalo) {
+                    textoAtual += historiaCompleta.charAt(contadorLetra);
+                    contadorLetra++;
+                    ultimoTempo = agora;
+                }
+            }
+
+            if (contadorLetra >= historiaCompleta.length()) {
+                historiaCompletaExibida = true;
+            }
+
+            linhas = textoAtual.split("\n");
+            y = gp.getTamanhoBloco() * 4;
+            for (String linha : linhas) {
+                int x = obterXCentralizarTexto(linha);
+                g2.drawString(linha, x, y);
+                desenharTextoSombra(linha, x, y);
+                y += 40;
+            }}else if (telaMenu == 2) {
 
             g2.drawImage(fundo2, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null); // Ajusta a imagem de fundo à tela
 
@@ -694,10 +726,6 @@ public class InterfaceUsuario {
 
 
         } else if (telaMenu == 3) { // Tela de Descrição do Personagem
-            // Definindo o fundo
-            //g2.setColor(Color.BLACK);
-            //g2.fillRect(0, 0, gp.getTelaLargura(), gp.getTelaAltura());
-
 
             g2.drawImage(fundo2, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null); // Ajusta a imagem de fundo à tela
 
@@ -705,6 +733,7 @@ public class InterfaceUsuario {
             // Definindo a cor e a fonte do texto
             g2.setColor(Color.WHITE);
             g2.setFont(Font03.deriveFont(35f)); // Ajuste de tamanho da fonte
+
 
             // Descrição e vantagens de cada personagem
             String descricao = "";
@@ -727,6 +756,8 @@ public class InterfaceUsuario {
                 nome = "A SOBREVIVENTE";
                 g2.drawImage(fundo2, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null); // Ajusta a imagem de fundo à tela
             }
+
+
 
             // Calcular a largura máxima para o texto (por exemplo, 80% da largura total)
             int larguraMaxima = (int) (gp.getTelaLargura() * 0.9);
@@ -770,53 +801,8 @@ public class InterfaceUsuario {
             g2.drawString(instrucoes, x, 500);
             desenharTextoSombra(instrucoes, x, 500);
 
-        } else if (telaMenu == 1) { // Tela da história do jogo
-
-            g2.drawImage(fundoHistoria, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null); // Fundo
-
-            g2.setColor(Color.WHITE);
-            g2.setFont(Font03.deriveFont(32f));
-
-            String historia =
-                    "Num mundo devastado, onde a natureza resiste\n" +
-                            "e a tecnologia ruiu, poucos permanecem.\n" +
-                            "Você é parte dos últimos sobreviventes\n" +
-                            "em busca de um novo começo na Última Fronteira.\n\n" +
-                            "Escolha com sabedoria. Cada passo será decisivo.";
-
-            String[] linhas = historia.split("\n");
-            int y = gp.getTamanhoBloco() * 4;
-
-            long agora = System.currentTimeMillis();
-            if (!historiaCompletaExibida && contadorLetra < historiaCompleta.length()) {
-                if (agora - ultimoTempo >= intervalo) {
-                    textoAtual += historiaCompleta.charAt(contadorLetra);
-                    contadorLetra++;
-                    ultimoTempo = agora;
-                }
-            }
-
-            if (contadorLetra >= historiaCompleta.length()) {
-                historiaCompletaExibida = true;
-            }
-
-            linhas = textoAtual.split("\n");
-            y = gp.getTamanhoBloco() * 4;
-            for (String linha : linhas) {
-                int x = obterXCentralizarTexto(linha);
-                g2.drawString(linha, x, y);
-                desenharTextoSombra(linha, x, y);
-                y += 40;
-            }
-
-         /*   g2.setFont(Font03.deriveFont(28f));
-        String instrucoes = "Pressione ENTER para continuar...";
-        int x = obterXCentralizarTexto(instrucoes);
-        g2.drawString(instrucoes, x, gp.getTelaAltura() - gp.getTamanhoBloco() * 2);
-        desenharTextoSombra(instrucoes, x, gp.getTelaAltura() - gp.getTamanhoBloco() * 2);
-
-          */
         }
+
     }
 
     public void reiniciarEfeitoDigitacao() {

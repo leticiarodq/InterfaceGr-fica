@@ -21,6 +21,7 @@ public class Doctor extends Jogador {
         this.medico = new Medico("Dr. Eduardo",100, 100, 100, 100, 100, null, gp.getBlocosG().getAmbienteAtual().getNomeAmbiente(), 36.5);
         getImagemJogador();
         pegarImagemAtaque();
+        setVelocidade(4);
 
         medico.exibirStatus();
     }

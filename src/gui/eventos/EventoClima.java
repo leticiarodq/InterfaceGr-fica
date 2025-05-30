@@ -10,7 +10,7 @@ public class EventoClima {
     private PainelJogo gp;
 
     private int contadorChuva = 0;
-    private final int intervaloChuva = 1200; // número de frames (ajuste como quiser)
+    private final int intervaloChuva = 1200;
     private int contadorCalor = 0;
     private final int intervaloCalor = 1200;
     private int contadorNevasca = 0;
@@ -19,6 +19,7 @@ public class EventoClima {
 
     private final Random random = new Random();
 
+
     public boolean chuvaAtiva = false;
     public boolean calorExtremoAtivo = false;
     public boolean nevascaAtiva = false;
@@ -26,69 +27,129 @@ public class EventoClima {
     public EventoClima(PainelJogo gp) {
         this.gp = gp;
 
+
     }
 
-    public void eventoChuva() {
+    public void eventoChuva(int mapa) {
+        if (mapa == gp.getMapaAtual()) {
+            if (contadorChuva >= intervaloChuva && !calorExtremoAtivo && !nevascaAtiva) {
+                int chanceMaxima;
+                switch (mapa) {
+                    case 0:
+                        chanceMaxima = 16;
+                        break;
+                    case 1:
+                        chanceMaxima = 15;
+                        break;
+                    case 2:
+                        chanceMaxima = 10;
+                        break;
+                    case 3:
+                        chanceMaxima = 5;
+                        break;
 
-        if (contadorChuva >= intervaloChuva && !calorExtremoAtivo && !nevascaAtiva) {
-            int chance = random.nextInt(100);
-            if (chance < 100) { // 10% de chance
-                gp.setEstadoJogo(gp.getEstadoDialogo());
-                gp.getIu().setDialogoAtual("CHUVA FORTE\nUma chuva forte começou!\nVocê perdeu 1 ponto de vida.");
-                gp.jogador.setVida(gp.jogador.getVida() - 1);
-                gp.iniciarChuva(100);
-                chuvaAtiva = true; // Marca chuva como ativa
+                    default:
+                        chanceMaxima = 0;
+                        break;
+                }
 
+                int chance = random.nextInt(100);
+                if (chance < chanceMaxima) {
+                    gp.setEstadoJogo(gp.getEstadoDialogo());
+                    gp.getIu().setDialogoAtual("CHUVA FORTE\nUma chuva forte começou!\nVocê perdeu energia.");
+                    gp.jogador.setVida(gp.jogador.getEnergia() - 1);
+                    gp.iniciarChuva(100);
+                    chuvaAtiva = true;
+                }
 
+                contadorChuva = 0; // Reseta o contador após a verificação
+            } else {
+                contadorChuva++;
+                gp.setMostrarChuva(false);
             }
-            contadorChuva = 0; // reseta o contador após ativar
-        } else {
-            contadorChuva++;
-            gp.setMostrarChuva(false);
-
-
         }
     }
 
+
     public void eventoCalorExtremo(int mapa) {
-        if(mapa==gp.getMapaAtual()){
+
+        String personagem = gp.getPersonagemSelecionado();
+
+        if (mapa == gp.getMapaAtual()) {
             if (contadorCalor >= intervaloCalor) {
                 Random random = new Random();
-                int chance = random.nextInt(100); // 0 a 99
 
-                if (chance < 100) { // 10% de chance
+                int chanceMaxima;
+                switch (mapa) {
+                    case 0:
+                        chanceMaxima = 100; // 15% de chance no mapa 1
+                        break;
+                    case 1:
+                        chanceMaxima = 5; // 10% no mapa 2
+                        break;
+                    case 2:
+                        chanceMaxima = 10; // 5% no mapa 3
+                        break;
+                    case 3:
+                        chanceMaxima = 5; // 5% no mapa 3
+                        break;
+                    default:
+                        chanceMaxima = 8; // valor padrão
+                        break;
+                }
+
+                int chance = random.nextInt(100); // 0 a 99
+                if (chance < chanceMaxima) {
                     gp.setEstadoJogo(gp.getEstadoDialogo());
                     gp.getIu().setDialogoAtual("CALOR EXTREMO\nParece que o clima\nesquentou...\nVocê precisa beber água.");
-                    gp.jogador.setSede(gp.jogador.getSede() - 2);
+                    if ("sobrevivente".contentEquals(personagem)) {
+                        gp.jogador.setSede(gp.jogador.getSede() - 1);
+                    } else {
+                        gp.jogador.setSede(gp.jogador.getSede() - 2);
+                    }
 
                 }
 
-                contadorCalor = 0; // reseta o contador só após tentar ativar
+                contadorCalor = 0; // reseta o contador após tentar ativar
             } else {
                 contadorCalor++;
             }
         }
-
     }
 
 
+    public void eventoNevasca(int mapa) {
+        if (mapa == gp.getMapaAtual()) {
+            if (contadorNevasca >= intervaloNevasca) {
+                Random random = new Random();
 
-    public void eventoNevasca() {
-        if (contadorNevasca >= intervaloNevasca) {
-            Random random = new Random();
-            int chance = random.nextInt(100); // 0 a 99
+                int chanceMaxima;
+                switch (mapa) {
+                    case 0:
+                        chanceMaxima = 0; // 15% de chance no mapa 1
+                        break;
+                    case 1:
+                        chanceMaxima = 0; // 10% no mapa 2
+                        break;
+                    case 2:
+                        chanceMaxima = 15; // 5% no mapa 3
+                        break;
+                    case 3:
+                        chanceMaxima = 10; // 5% no mapa 3
+                        break;
+                    default:
+                        chanceMaxima = 0; // valor padrão
+                        break;
+                }
 
-            if (chance < 5) { // 10% de chance
-                gp.setEstadoJogo(gp.getEstadoDialogo());
-                gp.getIu().setDialogoAtual("NEVASCA\nO vento gelado sopra com\nforça...\nVocê está perdeu energia!");
-                gp.jogador.setEnergia(gp.jogador.getEnergia() - 1);
-                gp.iniciarNevasca(100);
+                int chance = random.nextInt(100); // 0 a 99
+                if (chance < chanceMaxima) {
+                    gp.setEstadoJogo(gp.getEstadoDialogo());
+                    gp.getIu().setDialogoAtual("NEVASCA\nO vento gelado sopra com\nforça...\nVocê perdeu energia.");
+                    gp.jogador.setEnergia(gp.jogador.getEnergia() - 1);
+                    gp.iniciarNevasca(100);
+                }
             }
-
-            contadorNevasca = 0; // reseta o contador só após tentar ativar
-        } else {
-            contadorNevasca++;
-            gp.setMostrarNevasca(false);
         }
     }
 }

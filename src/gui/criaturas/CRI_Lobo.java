@@ -19,8 +19,7 @@ public class CRI_Lobo extends Entidade {
     public CRI_Lobo(PainelJogo gp){
 
         super(gp);
-
-
+        setTipo(getTipo_criatura());
         setNome("Lobo");
         setVelocidade(1);
         setVidaMaxima(6);

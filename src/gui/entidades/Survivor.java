@@ -17,6 +17,7 @@ public class Survivor extends Jogador {
         this.sobreviventeNato = new SobreviventeNato("Elfa", 100, 100, 100, 100, 100, null, "Floresta", 36.5);
         getImagemJogador();
         pegarImagemAtaque();
+        setVelocidade(4);
         sobreviventeNato.exibirStatus();
     }
     @Override

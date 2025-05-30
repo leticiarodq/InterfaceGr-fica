@@ -1,13 +1,8 @@
 package gui.system;
 
-import gui.criaturas.CRI_Lobo;
-import gui.entidades.Entidade;
-import gui.entidades.NPC_Coelho;
+import gui.criaturas.*;
 import gui.entidades.NPC_Explorador;
-import gui.objetos.*;
-import eventos.*;
-
-import java.util.Random;
+import gui.itens.ALIMENTO_Fruta;
 
 public class CriadorAtivos {
 
@@ -21,90 +16,14 @@ public class CriadorAtivos {
 
     public void setObjeto() {
 
-        int i=0;
-        int numMapa=0;
+           int i=0;
+           int numMapa=0;
 
-        String personagem = gp.getPersonagemSelecionado();
+           gp.getObj()[numMapa][i] = new ALIMENTO_Fruta(gp, "banana");
+           gp.getObj()[numMapa][i].setMundoX(21 * gp.getTamanhoBloco());
+           gp.getObj()[numMapa][i].setMundoY(34 * gp.getTamanhoBloco());
 
-        // Define a quantidade de objetos para cada personagem escolhido
-        if ("médico".equals(personagem)) {
-
-            // Médico começa com mais remédios
-            gp.getObj()[numMapa][i] = new REMEDIO_Antibiotico(gp);
-            gp.getObj()[numMapa][i].setMundoX(35 * gp.getTamanhoBloco());
-            gp.getObj()[numMapa][i].setMundoY(21 * gp.getTamanhoBloco());
-            i++;
-
-            gp.getObj()[numMapa][i] = new REMEDIO_Analgesico(gp);
-            gp.getObj()[numMapa][i].setMundoX(32 * gp.getTamanhoBloco());
-            gp.getObj()[numMapa][i].setMundoY(45 * gp.getTamanhoBloco());
-            i++;
-
-            gp.getObj()[numMapa][i] = new REMEDIO_Bandagem(gp);
-            gp.getObj()[numMapa][i].setMundoX(32 * gp.getTamanhoBloco());
-            gp.getObj()[numMapa][i].setMundoY(32 * gp.getTamanhoBloco());
-            i++;
-
-
-        } else if ("mecânico".equals(personagem)) {
-
-
-            // Mecânico começa com ferramentas, por exemplo
-            gp.getObj()[numMapa][i] = new REMEDIO_Bandagem(gp);
-            gp.getObj()[numMapa][i].setMundoX(29 * (gp.getTamanhoBloco()));
-            gp.getObj()[numMapa][i].setMundoY(30 * gp.getTamanhoBloco());
-            i++;
-
-            gp.getObj()[numMapa][i] = new ferramentas(gp, "machado");
-            gp.getObj()[numMapa][i].setMundoX(24 * gp.getTamanhoBloco());
-            gp.getObj()[numMapa][i].setMundoY(21 * gp.getTamanhoBloco());
-            i++;
-
-            gp.getObj()[numMapa][i] = new ferramentas(gp, "picareta");
-            gp.getObj()[numMapa][i].setMundoX(23 * gp.getTamanhoBloco());
-            gp.getObj()[numMapa][i].setMundoY(22 * gp.getTamanhoBloco());
-            i++;
-
-            gp.getObj()[numMapa][i] = new ferramentas(gp, "espada");
-            gp.getObj()[numMapa][i].setMundoX(26 * gp.getTamanhoBloco());
-            gp.getObj()[numMapa][i].setMundoY(27 * gp.getTamanhoBloco());
-            i++;
-
-        } else if ("rastreador".equals(personagem)) {
-
-
-            gp.getObj()[numMapa][i] = new ALIMENTO_Fruta(gp, "banana");
-            gp.getObj()[numMapa][i].setMundoX(33 * gp.getTamanhoBloco());
-            gp.getObj()[numMapa][i].setMundoY(23 * gp.getTamanhoBloco());
-            i++;
-
-
-            gp.getObj()[numMapa][i] = new ALIMENTO_Fruta(gp, "laranja");
-            gp.getObj()[numMapa][i].setMundoX(32 * gp.getTamanhoBloco());
-            gp.getObj()[numMapa][i].setMundoY(24 * gp.getTamanhoBloco());
-            i++;
-
-
-
-
-
-        } else {
-
-            gp.getObj()[numMapa][i] = new ALIMENTO_Fruta(gp, "maçã");
-            gp.getObj()[numMapa][i].setMundoX(30 * gp.getTamanhoBloco());
-            gp.getObj()[numMapa][i].setMundoY(25 * gp.getTamanhoBloco());
-            i++;
-
-            gp.getObj()[numMapa][i] = new ALIMENTO_Fruta(gp, "banana");
-            gp.getObj()[numMapa][i].setMundoX(31 * gp.getTamanhoBloco());
-            gp.getObj()[numMapa][i].setMundoY(26 * gp.getTamanhoBloco());
-            i++;
-
-
-
-
-        }
-
+           i++;
 
     }
 
@@ -127,9 +46,9 @@ public class CriadorAtivos {
         int i=0;
         int numMapa=0;
 
-        gp.getNpc()[numMapa][i] = new NPC_Coelho(gp);
-        gp.getNpc()[numMapa][i].setMundoX(21 * gp.getTamanhoBloco());
-        gp.getNpc()[numMapa][i].setMundoY(26 * gp.getTamanhoBloco());
+        gp.getCriatura()[numMapa][i] = new NPC_Coelho(gp);
+        gp.getCriatura()[numMapa][i].setMundoX(21 * gp.getTamanhoBloco());
+        gp.getCriatura()[numMapa][i].setMundoY(26 * gp.getTamanhoBloco());
         i++;
 
 
@@ -137,7 +56,7 @@ public class CriadorAtivos {
 
 
 
-  public void setCriatura(){
+  public void setLobo(){
 
           int i=0;
           int numMapa=0;
@@ -148,8 +67,50 @@ public class CriadorAtivos {
           i++;
 
 
+    }
+
+    public void setMorcego(){
+        int i=0;
+        int numMapa=4;
+
+        gp.getCriatura()[numMapa][i]=new CRI_Morcego(gp);
+        gp.getCriatura()[numMapa][i].setMundoX(25 * gp.getTamanhoBloco());
+        gp.getCriatura()[numMapa][i].setMundoY(25 * gp.getTamanhoBloco());
+
+        gp.getCriatura()[numMapa][1]=new CRI_Morcego(gp);
+        gp.getCriatura()[numMapa][1].setMundoX(30 * gp.getTamanhoBloco());
+        gp.getCriatura()[numMapa][1].setMundoY(21 * gp.getTamanhoBloco());
+        i++;
+
+        gp.getCriatura()[numMapa][2]=new CRI_Morcego(gp);
+        gp.getCriatura()[numMapa][2].setMundoX(16 * gp.getTamanhoBloco());
+        gp.getCriatura()[numMapa][2].setMundoY(13 * gp.getTamanhoBloco());
+        i++;
 
     }
+
+    public void setAranha(){
+        int i=0;
+        int numMapa=4;
+
+        gp.getCriatura()[numMapa][i]=new CRI_Aranha(gp);
+        gp.getCriatura()[numMapa][i].setMundoX(23 * gp.getTamanhoBloco());
+        gp.getCriatura()[numMapa][i].setMundoY(21 * gp.getTamanhoBloco());
+        i++;
+
+    }
+
+    public void setUrso(){
+        int i=0;
+        int numMapa=0;
+
+        gp.getCriatura()[numMapa][i]=new CRI_Urso(gp);
+        gp.getCriatura()[numMapa][i].setMundoX(20 * gp.getTamanhoBloco());
+        gp.getCriatura()[numMapa][i].setMundoY(20 * gp.getTamanhoBloco());
+        i++;
+
+    }
+
 
 
 

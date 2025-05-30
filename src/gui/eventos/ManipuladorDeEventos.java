@@ -67,73 +67,92 @@ public class ManipuladorDeEventos {
 
         if(eventoPodeTocar==true){
             // Eventos de interação com o mapa
-            if (acertar(0,26, 17, "up")) {
+
+            if (acertar(0, 37, 23, "up")) {
                 pocoDeDanos(gp.getEstadoDialogo());
                 return;
             }
-            else if (acertar(0, 16, 23, "up")) {
-                pocoDeDanos(gp.getEstadoDialogo());
-                return;
-            }
-            else if (acertar(0,15, 18, "up")) {
-                pocoDeDanos( gp.getEstadoDialogo());
-                return;
-            }
-            else if (acertar(0, 20, 13, "up")) {
-                pocoDeDanos(gp.getEstadoDialogo());
-                return;
-            }
-            else if (acertar(0, 34, 24, "right")) {
+            else if (acertar(0, 36, 11, "up")) {
                 recuperarSede(gp.getEstadoDialogo());
                 return;
             }
-            else if (acertar(0, 12, 28, "left")) {
+            else if (acertar(0, 11, 17, "left")) {
                 eventoDoencaFerimento.aguaContaminada(gp.getEstadoDialogo());
                 return;
             }
-            else if (acertar(0, 28, 9, "up")) {
+            else if (acertar(0, 23, 10, "up")) {
                 mensagemBoasVindas(gp.getEstadoDialogo());
                 return;
             }
 
-            else if(acertar(0, 45,49, "down")){
-                teleporte(1, 31, 32);
+            else if(acertar(0, 16,49, "down")){
+                teleporte(1, 24, 0);
 
             }
-            else if(acertar(1, 31, 32, "up")){
-                teleporte(0, 45,49);
+            else if(acertar(1, 24, 0, "up")){
+                teleporte(0, 16,49);
+
+            }
+            else if(acertar(1, 44,0, "up")){
+                teleporte(2, 25, 0);
+
+            }
+            else if(acertar(2, 25, 0, "up")){
+                teleporte(1, 44,0);
+
+            }
+
+            else if(acertar(2, 35, 35, "up")){
+                teleporte(3, 23,0);
+
+            }
+            else if(acertar(3, 23,0, "up")){
+                teleporte(2, 35, 35);
+
+            }
+
+            else if(acertar(3, 33,37, "up")){
+                teleporte(4, 25, 7);
+
+            }
+
+            else if(acertar(4, 25, 7, "up")){
+                teleporte(3, 33,37);
 
             }
 
             if (!eventoMapaAtivo && gp.getEstadoJogo() != gp.getEstadoDialogo()) {
-                // Escolhe aleatoriamente apenas um evento climático para ocorrer
+
                 int eventoAleatorio = new java.util.Random().nextInt(5);
 
                 switch (eventoAleatorio) {
                     case 0:
-                        eventoClima.eventoChuva();
+                        eventoClima.eventoChuva(0);
+                        eventoClima.eventoChuva(1);
+                        eventoClima.eventoChuva(2);
+                        eventoClima.eventoChuva(3);
+
                         break;
                     case 1:
+                        eventoClima.eventoCalorExtremo(0);
                         eventoClima.eventoCalorExtremo(1);
+                        eventoClima.eventoCalorExtremo(2);
+                        eventoClima.eventoCalorExtremo(3);
                         break;
                     case 2:
-                        eventoClima.eventoNevasca();
+                        eventoClima.eventoNevasca(0);
+                        eventoClima.eventoNevasca(1);
+                        eventoClima.eventoNevasca(2);
+                        eventoClima.eventoNevasca(3);
                         break;
-                    case 3:
-                        eventoDoencaFerimento.eventoDesidratacao();
-                        break;
-
-                    case 4:
-                        eventoDoencaFerimento.eventoInfectado();
-                        break;
-
 
                 }
 
-                // Sempre executa a redução de energia
-                baixarEnergia();
-
             }
+
+            baixarEnergia();
+            eventoDoencaFerimento.eventoDesidratacao();
+            eventoDoencaFerimento.eventoInfectado();
 
         }
 
