@@ -340,19 +340,33 @@ public class Jogador extends Entidade {
 
         if (i != 999) {
 
-            String texto;
+            if(gp.getObj()[gp.getMapaAtual()][i].getTipo()==getTipo_consumivel()){
 
-            if (inventario.size() != tamanhoMaxInventario) {
 
-                inventario.add(gp.getObj()[gp.getMapaAtual()][i]);
-                texto = "Pegou " + gp.getObj()[gp.getMapaAtual()][i].getNome() + "!";
+                gp.getObj()[gp.getMapaAtual()][i].coletar(this);
+                gp.getObj()[gp.getMapaAtual()][i] = null;
 
-                gp.getObj()[gp.getMapaAtual()][i] = null;  // corrigido aqui
-
-            } else {
-                texto = "Você atingiu o limite máximo no inventário!";
             }
-            gp.getIu().mostrarMensagem(texto);
+
+            else{
+                String texto;
+
+                if (inventario.size() != tamanhoMaxInventario) {
+
+                    inventario.add(gp.getObj()[gp.getMapaAtual()][i]);
+                    texto = "Pegou " + gp.getObj()[gp.getMapaAtual()][i].getNome() + "!";
+
+                    gp.getObj()[gp.getMapaAtual()][i] = null;  // corrigido aqui
+
+                } else {
+                    texto = "Você atingiu o limite máximo no inventário!";
+                }
+                gp.getIu().mostrarMensagem(texto);
+
+
+            }
+
+
         }
 
     }

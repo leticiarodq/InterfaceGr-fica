@@ -453,6 +453,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
                         criatura[mapaAtual][i].update();
                     }
                     if(criatura[mapaAtual][i].isVivo()==false){
+                        criatura[mapaAtual][i].checarDrop();
                         criatura[mapaAtual][i]=null;
                     }
 

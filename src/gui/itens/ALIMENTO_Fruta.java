@@ -15,7 +15,7 @@ public class ALIMENTO_Fruta extends Entidade {
         setNome(tipoFruta);
 
         switch (tipoFruta.toLowerCase()) {
-            case "maçã":
+            case "maca":
                 setDown1(setup("/alimentos/maca"));
                 setDescricao("[Maçã]\nMata a fome e é fácil de\nencontrar.\nRica em fibras\ne vitaminas.");
                 break;
@@ -61,5 +61,14 @@ public class ALIMENTO_Fruta extends Entidade {
         gp.getIu().setDialogoAtual("Você comeu "+ getNome());
         entidade.setFome(getFome()+1);
     }
+
+    public void coletar(Entidade entidade){
+
+        int i=0;
+        gp.jogador.getInventario().add(gp.getObj()[gp.getMapaAtual()][i]);
+        gp.getIu().mostrarMensagem("Carne crua");
+
+    }
+
 }
 

@@ -2,6 +2,9 @@ package gui.criaturas;
 
 import eventos.EventoCriatura;
 import gui.entidades.Entidade;
+import gui.itens.ALIMENTO_Carne;
+import gui.itens.ALIMENTO_Fruta;
+import gui.itens.REMEDIO_Analgesico;
 import gui.system.PainelJogo;
 
 import javax.imageio.ImageIO;
@@ -19,6 +22,7 @@ public class CRI_Urso extends Entidade {
     public CRI_Urso(PainelJogo gp) {
 
         super(gp);
+        this.gp = gp;
         setTipo(getTipo_criatura());
         setNome("Urso");
         setVelocidade(1);
@@ -70,4 +74,11 @@ public class CRI_Urso extends Entidade {
             setContadorDeBloqueioDeAcao(0);
         }
     }
+
+    public void checarDrop() {
+
+        droparItem(new ALIMENTO_Carne(gp, "carnecrua"));
+
+    }
+
 }

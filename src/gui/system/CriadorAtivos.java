@@ -16,7 +16,7 @@ public class CriadorAtivos {
 
     public void setObjeto() {
 
-           int i=0;
+          /* int i=0;
            int numMapa=0;
 
            gp.getObj()[numMapa][i] = new ALIMENTO_Fruta(gp, "banana");
@@ -25,6 +25,8 @@ public class CriadorAtivos {
 
            i++;
 
+
+           */
     }
 
 

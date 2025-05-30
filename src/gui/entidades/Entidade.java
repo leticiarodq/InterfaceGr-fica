@@ -1,5 +1,6 @@
 package gui.entidades;
 
+import gui.itens.ALIMENTO_Carne;
 import gui.system.FerramentasUteis;
 import gui.system.PainelJogo;
 
@@ -8,6 +9,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Random;
 
 public class Entidade {
 
@@ -38,6 +40,8 @@ public class Entidade {
     private final int tipo_machado=5;
     private final int tipo_picareta=6;
     private final int tipo_escudo=7;
+
+    // Dropar item
 
 
 
@@ -686,6 +690,7 @@ public class Entidade {
     }
     public void usar(Entidade entidade){}
 
+    public void coletar(Entidade entidade){}
     public void mortoAnimacao(Graphics2D g2){
 
         contadorMorto++;
@@ -746,6 +751,32 @@ public class Entidade {
     {
         e.printStackTrace();
     }return imagem;
+
+
+    }
+
+    public void checarDrop(){
+
+
+
+    }
+
+    public void droparItem(Entidade itemDropado){
+        for(int i=0; i<gp.getObj()[gp.getMapaAtual()].length; i++){
+
+            if(gp.getObj()[gp.getMapaAtual()][i]==null){
+                gp.getObj()[gp.getMapaAtual()][i]=itemDropado;
+                gp.getObj()[gp.getMapaAtual()][i].setMundoX(getMundoX());
+                gp.getObj()[gp.getMapaAtual()][i].setMundoY(getMundoY());
+                System.out.println("Dropado em: " + getMundoX() + ", " + getMundoY());
+
+
+
+                break;
+
+            }
+
+        }
 
 
     }
