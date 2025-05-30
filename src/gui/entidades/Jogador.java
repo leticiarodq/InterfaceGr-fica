@@ -90,9 +90,13 @@ public class Jogador extends Entidade {
         telaX = gp.getTelaLargura() / 2 - (gp.getTamanhoBloco() / 2);
         telaY = gp.getTelaAltura() / 2 - (gp.getTamanhoBloco() / 2);
 
-        setAreaSolida(new Rectangle(8, 16, 48, 48));
+        setAreaSolida(new Rectangle(8, 16, 32, 32));
         setAreaSolidaPadraoX(getAreaSolida().x);
         setAreaSolidaPadraoY(getAreaSolida().y);
+
+        areaAtaque.width=48;
+        areaAtaque.height=48;
+
 
         setValoresPadrao(); //Chama o método que vai configurar valores padrão para o jogador
         getImagemJogador(); //Aqui garantimos que as imagens do jogador sejam carregadas
@@ -187,16 +191,14 @@ public class Jogador extends Entidade {
             }
         }
 
-        int criaturaIndice = gp.getcColisoes().checarEntidade(this, gp.getCriatura());
         if (isAtaque()) {
-            // Durante o ataque, executa a animação de ataque e causa dano nas criaturas próximas
             ataque();
-
-
-            damageCriatura(criaturaIndice);
+            //int criaturaIndice = gp.getcColisoes().checarEntidade(this, gp.getCriatura());
+            //damageCriatura(criaturaIndice);
         } else {
             // Se não está atacando, verifica dano ao jogador por contato com criatura
-            contatoCriatura(criaturaIndice);
+            //int criaturaIndice = gp.getcColisoes().checarEntidade(this, gp.getCriatura());
+            //contatoCriatura(criaturaIndice);
 
             // Verifica movimentação apenas se alguma tecla de direção estiver pressionada
             if (eventosTeclado.isCimaPressionado() || eventosTeclado.isBaixoPressionado() ||
@@ -223,12 +225,12 @@ public class Jogador extends Entidade {
                 int npcIndice = gp.getcColisoes().checarEntidade(this, gp.getNpc());
                 interagirNPC(npcIndice);
 
-                criaturaIndice = gp.getcColisoes().checarEntidade(this, gp.getCriatura());
+                int criaturaIndice = gp.getcColisoes().checarEntidade(this, gp.getCriatura());
                 contatoCriatura(criaturaIndice);
 
                 gp.getManipuladorDeEventos().checarEvento();
 
-                if (!isColisaoOn()) {
+                if (!isColisaoOn() && eventosTeclado.isEnterPressionado()==false) {
                     switch (getDirecao()) {
                         case "up":
                             if (getMundoY() - getVelocidade() >= 0) {
@@ -252,6 +254,7 @@ public class Jogador extends Entidade {
                             break;
                     }
 
+                    gp.getEventosTeclado().setEnterPressionado(false);
                     // Atualiza animação de movimento
                     setContadorSprite(getContadorSprite() + 1);
                     if (getContadorSprite() > 12) {
@@ -281,7 +284,6 @@ public class Jogador extends Entidade {
 
 
     public void ataque() {
-
         setContadorSprite(getContadorSprite() + 1);
 
         if (getContadorSprite() <= 5) {
@@ -289,14 +291,50 @@ public class Jogador extends Entidade {
         }
         if (getContadorSprite() > 5 && getContadorSprite() <= 25) {
             setNumSprite(2);
+
+            // Salva as coordenadas e área original do personagem
+            int mundoXatual = getMundoX();
+            int mundoYatual = getMundoY();
+            int areaSolidaLargura = getAreaSolida().width;
+            int areaSolidaAltura = getAreaSolida().height;
+
+            // Ajusta a posição do personagem baseado na direção do ataque
+            switch (getDirecao()) {
+                case "up":
+                    setMundoY(getMundoY() - areaAtaque.height);
+                    break;
+                case "down":
+                    setMundoY(getMundoY() + areaSolidaAltura);
+                    break;
+                case "left":
+                    setMundoX(getMundoX() - areaAtaque.width);
+                    break;
+                case "right":
+                    setMundoX(getMundoX() + areaSolidaLargura);
+                    break;
+            }
+
+            // Define a área sólida como a área de ataque
+            getAreaSolida().width = areaAtaque.width;
+            getAreaSolida().height = areaAtaque.height;
+
+            // Verifica colisão com criaturas usando a nova área
+            int indiceCriatura = gp.getcColisoes().checarEntidade(this, gp.getCriatura());
+            damageCriatura(indiceCriatura);
+
+            // Restaura as coordenadas e área original do personagem
+            setMundoX(mundoXatual);
+            setMundoY(mundoYatual);
+            getAreaSolida().width = areaSolidaLargura;
+            getAreaSolida().height = areaSolidaAltura;
         }
+
         if (getContadorSprite() > 25) {
             setNumSprite(1);
             setContadorSprite(0);
             setAtaque(false);
         }
     }
-
 
     public void pegarObjeto(int i) {
 

@@ -56,6 +56,7 @@ public class Entidade {
     private Rectangle areaSolida = new Rectangle(0, 0, 64, 64);
     private int areaSolidaPadraoX, areaSolidaPadraoY;
     private boolean colisaoOn = false;
+    public Rectangle areaAtaque=new Rectangle(0,0,0,0);
 
     // Controle de ações
     private int contadorDeBloqueioDeAcao = 0;
