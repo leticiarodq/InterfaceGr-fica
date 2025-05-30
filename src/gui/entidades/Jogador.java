@@ -90,7 +90,7 @@ public class Jogador extends Entidade {
         telaX = gp.getTelaLargura() / 2 - (gp.getTamanhoBloco() / 2);
         telaY = gp.getTelaAltura() / 2 - (gp.getTamanhoBloco() / 2);
 
-        setAreaSolida(new Rectangle(8, 16, 32, 32));
+        setAreaSolida(new Rectangle(8, 16, 48, 48));
         setAreaSolidaPadraoX(getAreaSolida().x);
         setAreaSolidaPadraoY(getAreaSolida().y);
 
@@ -174,20 +174,28 @@ public class Jogador extends Entidade {
 
     public void update() {
 
-        if (eventosTeclado.isEnterPressionado() && !isAtaque()) {
-            setAtaque(true);
-            eventosTeclado.setEnterPressionado(false);
+        if (eventosTeclado.isEnterPressionado()) {
+            int npcIndice = gp.getcColisoes().checarEntidade(this, gp.getNpc());
+
+            if (npcIndice != 999) {
+                interagirNPC(npcIndice);
+                eventosTeclado.setEnterPressionado(false);
+            } else if (!isAtaque()) {
+                setAtaque(true);
+                setContadorSprite(0); // Reinicia a animação de ataque
+                eventosTeclado.setEnterPressionado(false);
+            }
         }
 
+        int criaturaIndice = gp.getcColisoes().checarEntidade(this, gp.getCriatura());
         if (isAtaque()) {
             // Durante o ataque, executa a animação de ataque e causa dano nas criaturas próximas
             ataque();
 
-            int criaturaIndice = gp.getcColisoes().checarEntidade(this, gp.getCriatura());
+
             damageCriatura(criaturaIndice);
         } else {
             // Se não está atacando, verifica dano ao jogador por contato com criatura
-            int criaturaIndice = gp.getcColisoes().checarEntidade(this, gp.getCriatura());
             contatoCriatura(criaturaIndice);
 
             // Verifica movimentação apenas se alguma tecla de direção estiver pressionada
