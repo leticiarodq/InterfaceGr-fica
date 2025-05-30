@@ -173,7 +173,7 @@ public class Jogador extends Entidade {
     }
 
     public void update() {
-        // Se Enter foi pressionado e não está atacando, inicia o ataque e limpa o Enter
+
         if (eventosTeclado.isEnterPressionado() && !isAtaque()) {
             setAtaque(true);
             eventosTeclado.setEnterPressionado(false);
@@ -214,6 +214,9 @@ public class Jogador extends Entidade {
 
                 int npcIndice = gp.getcColisoes().checarEntidade(this, gp.getNpc());
                 interagirNPC(npcIndice);
+
+                criaturaIndice = gp.getcColisoes().checarEntidade(this, gp.getCriatura());
+                contatoCriatura(criaturaIndice);
 
                 gp.getManipuladorDeEventos().checarEvento();
 
@@ -310,12 +313,11 @@ public class Jogador extends Entidade {
 
 
     public void interagirNPC(int i) {
-        if (gp.getEventosTeclado().isEnterPressionado()==true) {
+        if (gp.getEventosTeclado().isEnterPressionado()) {
             if (i != 999) {
                 gp.setEstadoJogo(gp.getEstadoDialogo());
                 gp.getNpc()[gp.getMapaAtual()][i].falar();
             } else {
-                // Se Enter não está pressionado, ativa ataque
                 setAtaque(true);
             }
         }

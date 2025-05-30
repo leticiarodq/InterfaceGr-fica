@@ -35,8 +35,8 @@ public class CriadorAtivos {
         int numMapa=0;
 
         gp.getNpc()[numMapa][i] = new NPC_Explorador(gp);
-        gp.getNpc()[numMapa][i].setMundoX(42 * gp.getTamanhoBloco());
-        gp.getNpc()[numMapa][i].setMundoY(29 * gp.getTamanhoBloco());
+        gp.getNpc()[numMapa][i].setMundoX(36 * gp.getTamanhoBloco());
+        gp.getNpc()[numMapa][i].setMundoY(28 * gp.getTamanhoBloco());
 
         i++;
     }
