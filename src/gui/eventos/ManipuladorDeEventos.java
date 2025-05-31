@@ -239,6 +239,10 @@ public class ManipuladorDeEventos {
 
         if (gp.jogador.getEnergia() <= 3) {
             gp.jogador.setVelocidade(1);
+            //gp.setEstadoJogo(gp.getEstadoDialogo());
+            //gp.getIu().setDialogoAtual("Você precisa recuperar energia!");
+
+
         }
 
 

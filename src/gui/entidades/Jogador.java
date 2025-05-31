@@ -105,7 +105,9 @@ public class Jogador extends Entidade {
 
         setValoresPadrao();
         definirImagemJogador();
-        definirImagemAtaque();
+
+
+        //definirImagemAtaque();
         definirItens();
     }
 
@@ -148,11 +150,20 @@ public class Jogador extends Entidade {
         setSanidadeMaxima(6);
         setEnergiaMaxima(6);
 
-        setArmaAtual(new Ferramentas(gp, "machado"));
-        setAtacar(definirAtaque());
+        setArmaAtual(null);
+        //setAtacar(definirAtaque());
+
 
     }
+    /*public int definirAtaque() {
 
+        areaAtaque = getArmaAtual().areaAtaque;
+        setAtacar(getArmaAtual().getValorAtaque());
+
+        return getAtacar();
+    }
+
+     */
     public void posicoesPadrao(){
         setMundoX(gp.getTamanhoBloco() * 21);
         setMundoY(gp.getTamanhoBloco() * 10);
@@ -191,18 +202,20 @@ public class Jogador extends Entidade {
             if (npcIndice != 999) {
                 interagirNPC(npcIndice);
                 eventosTeclado.setEnterPressionado(false);
-            } else if (!isAtaque()) {
+            } else if (!isAtaque() && getArmaAtual() != null) { // Só ataca se tem arma equipada
                 setAtaque(true);
                 setContadorSprite(0);
+                eventosTeclado.setEnterPressionado(false);
+            } else if (getArmaAtual() == null) {
+                // Mostra mensagem informando que precisa de uma arma
+                gp.getIu().mostrarMensagem("Você precisa equipar uma arma para atacar!");
                 eventosTeclado.setEnterPressionado(false);
             }
         }
 
         if (isAtaque()) {
             ataque();
-
         } else {
-
             // Verifica movimentação apenas se alguma tecla de direção estiver pressionada
             if (eventosTeclado.isCimaPressionado() || eventosTeclado.isBaixoPressionado() ||
                     eventosTeclado.isEsquerdaPressionado() || eventosTeclado.isDireitaPressionado()) {
@@ -231,12 +244,12 @@ public class Jogador extends Entidade {
                 int criaturaIndice = gp.getcColisoes().checarEntidade(this, gp.getCriatura());
                 contatoCriatura(criaturaIndice);
 
-                int presaIndice=gp.getcColisoes().checarEntidade(this, gp.getPresa());
+                int presaIndice = gp.getcColisoes().checarEntidade(this, gp.getPresa());
                 cacar(presaIndice);
 
                 gp.getManipuladorDeEventos().checarEvento();
 
-                if (!isColisaoOn() && eventosTeclado.isEnterPressionado()==false) {
+                if (!isColisaoOn() && eventosTeclado.isEnterPressionado() == false) {
                     switch (getDirecao()) {
                         case "up":
                             if (getMundoY() - getVelocidade() >= 0) {
@@ -297,6 +310,17 @@ public class Jogador extends Entidade {
         if (getContadorSprite() > 5 && getContadorSprite() <= 25) {
             setNumSprite(2);
 
+            // Se não há arma equipada, ainda pode atacar mas com menos dano/alcance
+            if (getArmaAtual() == null) {
+                // Ataque sem arma - pode ter menor área de ataque
+                areaAtaque.width = 32;  // Menor que com arma
+                areaAtaque.height = 32;
+            } else {
+                // Usar área de ataque da arma equipada
+                areaAtaque.width = 48;
+                areaAtaque.height = 48;
+            }
+
             // Salva as coordenadas e área original do personagem
             int mundoXatual = getMundoX();
             int mundoYatual = getMundoY();
@@ -327,7 +351,7 @@ public class Jogador extends Entidade {
             int indiceCriatura = gp.getcColisoes().checarEntidade(this, gp.getCriatura());
             danoCriatura(indiceCriatura);
 
-            int presaIndice=gp.getcColisoes().checarEntidade(this, gp.getPresa());
+            int presaIndice = gp.getcColisoes().checarEntidade(this, gp.getPresa());
             cacar(presaIndice);
 
             // Restaura as coordenadas e área original do personagem
@@ -343,7 +367,6 @@ public class Jogador extends Entidade {
             setAtaque(false);
         }
     }
-
     public void pegarObjeto(int i) {
         if (i != 999) {
             if (gp.getObj()[gp.getMapaAtual()][i].getTipo() == getTipo_dropavel()) {
@@ -383,75 +406,49 @@ public class Jogador extends Entidade {
             setInvisibilidade(true);
         }
     }
-
     public void cacar(int i) {
-
-        if(isAtaque()){
+        // Só pode caçar se está atacando E tem arma equipada
+        if (isAtaque() && getArmaAtual() != null) {
             if (i != 999) {
                 Entidade presa = gp.getPresa()[gp.getMapaAtual()][i];
 
                 if (!presa.isInvisibilidade()) {
-                    presa.setVida(presa.getVida() - 1); // Corrigido aqui
+                    presa.setVida(presa.getVida() - 1);
                     presa.setInvisibilidade(true);
 
                     if (presa.getVida() <= 0) {
                         gp.getPresa()[gp.getMapaAtual()][i].setMorto(true);
 
-                        String personagem=gp.getPersonagemSelecionado();
+                        String personagem = gp.getPersonagemSelecionado();
 
-                            if("sobrevivente".equals(personagem)){
-                                setEnergia(getEnergia());
-                            }
-                            else{
-                                setEnergia(getEnergia()-1);
-                            }
+                        if ("sobrevivente".equals(personagem)) {
+                            setEnergia(getEnergia());
+                        } else {
+                            setEnergia(getEnergia() - 1);
                         }
                     }
                 }
-
+            }
         }
-
-        
     }
-
-    public int definirAtaque() {
-
-        areaAtaque = getArmaAtual().areaAtaque;
-        setAtacar(getArmaAtual().getValorAtaque());
-
-        return getAtacar();
-    }
-
-
-
-
-    public void madeirar(){
-
-    }
-
-    public void minerar(){
-
-    }
-
 
     public void danoCriatura(int i) {
-        if (i != 999) {
+        // Só pode causar dano se tem arma equipada
+        if (i != 999 && getArmaAtual() != null) {
             Entidade criatura = gp.getCriatura()[gp.getMapaAtual()][i];
 
             if (!criatura.isInvisibilidade()) {
-                criatura.setVida(criatura.getVida() - 1); // Corrigido aqui
+                criatura.setVida(criatura.getVida() - 1);
                 criatura.setInvisibilidade(true);
 
                 if (criatura.getVida() <= 0) {
                     gp.getCriatura()[gp.getMapaAtual()][i].setMorto(true);
-                    String personagem=gp.getPersonagemSelecionado();
+                    String personagem = gp.getPersonagemSelecionado();
 
-                    if("sobrevivente".equals(personagem)){
-                        gp.jogador.setEnergia(getEnergia()-1);
-                    }
-
-                    else{
-                        gp.jogador.setEnergia(getEnergia()-2);
+                    if ("sobrevivente".equals(personagem)) {
+                        gp.jogador.setEnergia(getEnergia() - 1);
+                    } else {
+                        gp.jogador.setEnergia(getEnergia() - 2);
                     }
                 }
             }
@@ -459,40 +456,31 @@ public class Jogador extends Entidade {
     }
 
 
-
-
     public void selecaoItem(){
+        int itemIndice = gp.getIu().pegarItemSlot();
 
-        int itemIndice= gp.getIu().pegarItemSlot();
+        if(itemIndice < inventario.size()){
+            Entidade itemSelecionado = inventario.get(itemIndice);
 
-        if(itemIndice<inventario.size()){
-            Entidade itemSelecionado=inventario.get(itemIndice);
-
-            if(itemSelecionado.getTipo()==getTipo_espada() || itemSelecionado.getTipo()==getTipo_machado()){
+            if(itemSelecionado.getTipo() == getTipo_espada() || itemSelecionado.getTipo() == getTipo_machado()){
                 setArmaAtual(itemSelecionado);
-                //setAtacar(definirAtaque());
+                // Chama definirImagemAtaque() APÓS equipar a arma
                 definirImagemAtaque();
             }
 
-
-            if(itemSelecionado.getTipo()==getTipo_consumivel()){
-                    itemSelecionado.usar(this);
-                    inventario.remove(itemIndice);
+            if(itemSelecionado.getTipo() == getTipo_consumivel()){
+                itemSelecionado.usar(this);
+                inventario.remove(itemIndice);
             }
 
-            if(itemSelecionado.getTipo()==getTipo_dropavel()){
-
-                if(gp.jogador.getFome()<gp.jogador.getFomeMaxima()){
+            if(itemSelecionado.getTipo() == getTipo_dropavel()){
+                if(gp.jogador.getFome() < gp.jogador.getFomeMaxima()){
                     itemSelecionado.usar(this);
-
                     inventario.remove(itemIndice);
-
-                }else{
+                } else {
                     gp.setEstadoJogo(gp.getEstadoDialogo());
                     gp.getIu().setDialogoAtual("Você já está satisfeito.\nNão pode comer mais agora.");
                 }
-
-
             }
         }
     }

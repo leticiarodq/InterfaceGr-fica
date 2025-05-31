@@ -17,7 +17,7 @@ public class Detective extends Jogador { //
 
         this.rastreador = new Rastreador("Rastreador", getVida(), getFome(), getSede(), getEnergia(), getSanidade(), null, gp.getBlocosG().getAmbienteAtual().getNomeAmbiente(), 36.5);
         definirImagemJogador();
-        definirImagemAtaque();
+        //definirImagemAtaque();
     }
 
     @Override
@@ -34,6 +34,7 @@ public class Detective extends Jogador { //
 
     @Override
     public void definirImagemAtaque() {
+        
 
         if (getArmaAtual().getTipo() == getTipo_espada()) {
 
@@ -48,7 +49,7 @@ public class Detective extends Jogador { //
 
         }
 
-        if (getArmaAtual().getTipo() == getTipo_machado()) {
+        else if (getArmaAtual().getTipo() == getTipo_machado()) {
             setAtaqueUp1(setup("/detective/ninja_up_01_machado"));
             setAtaqueUp2(setup("/detective/ninja_up_02_machado"));
             setAtaqueDown1(setup("/detective/ninja_down_01_machado"));
@@ -58,6 +59,8 @@ public class Detective extends Jogador { //
             setAtaqueRight1(setup("/detective/ninja_right_01_machado"));
             setAtaqueRight2(setup("/detective/ninja_right_02_machado"));
         }
+
+
 
     }
 }
