@@ -34,18 +34,15 @@ public class CRI_Galinha extends Entidade {
     }
 
     public void carregarImagemGalinha() {
-        try {
-            setUp1(ImageIO.read(getClass().getResourceAsStream("/animais/galinha_up_01.png")));
-            setUp2(ImageIO.read(getClass().getResourceAsStream("/animais/galinha_up_02.png")));
-            setDown1(ImageIO.read(getClass().getResourceAsStream("/animais/galinha_down_01.png")));
-            setDown2(ImageIO.read(getClass().getResourceAsStream("/animais/galinha_down_02.png")));
-            setLeft1(ImageIO.read(getClass().getResourceAsStream("/animais/galinha_left_01.png")));
-            setLeft2(ImageIO.read(getClass().getResourceAsStream("/animais/galinha_left_02.png")));
-            setRight1(ImageIO.read(getClass().getResourceAsStream("/animais/galinha_right_01.png")));
-            setRight2(ImageIO.read(getClass().getResourceAsStream("/animais/galinha_right_02.png")));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        setUp1(setup("/animais/galinha_up_01", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
+        setUp2(setup("/animais/galinha_up_02", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
+        setDown1(setup("/animais/galinha_down_01", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
+        setDown2(setup("/animais/galinha_down_02", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
+        setLeft1(setup("/animais/galinha_left_01", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
+        setLeft2(setup("/animais/galinha_left_02", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
+        setRight1(setup("/animais/galinha_right_01", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
+        setRight2(setup("/animais/galinha_right_02", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
+
     }
 
     public void setAcao(){

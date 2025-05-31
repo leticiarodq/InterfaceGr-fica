@@ -944,7 +944,7 @@ public class InterfaceUsuario {
                     "MONTANHA",
                     "Uma região de difícil acesso, mas rica em minérios e pedras preciosas.",
                     "Atributos adicionais: [Terreno acidentado] [Clima instável] [Baixa vegetação]",
-                    "Recursos disponíveis: [Minérios e pedras preciosas] [Água de degelo] [Refúgios naturais em cavernas",
+                    "Recursos disponíveis: [Minérios e pedras preciosas] [Água de degelo] [Refúgios naturais em cavernas]",
                     "Eventos comuns: [Nevasca repentina] [Deslizamento de pedras] [Descoberta de uma caverna segura]");
         } else if(gp.getMapaAtual()==4){
             exibirInformacoesDoMapa(g2,

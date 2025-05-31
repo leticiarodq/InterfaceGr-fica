@@ -18,7 +18,7 @@ public class REMEDIO_Analgesico extends Entidade {
 
         setTipo(getTipo_consumivel());
         setNome(remedioLogico.getTipo());
-        setDown1(setup("/objetos/analgesico"));
+        setDown1(setup("/objetos/analgesico", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
         setColisao(true);
         setDescricao("["+ getNome() +"]\nAlivia a dor rapidamente.\nÚtil em situações de\nemergência.");
 

@@ -5,28 +5,25 @@ import gui.itens.ALIMENTO_Fruta;
 import gui.itens.Material;
 import gui.system.PainelJogo;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 
-public class BI_Arvore extends BlocoInterativo {
+public class BI_Minerio extends BlocoInterativo{
 
     PainelJogo gp;
 
-    public BI_Arvore(PainelJogo gp, int coluna, int linha) {
+    public BI_Minerio(PainelJogo gp, int coluna, int linha) {
 
         super(gp, coluna, linha);
         this.gp = gp;
-        setVida(4);
+        setVida(8);
 
-        setDown1(setup("/tiles_interativos/arvore_maca", gp.getTamanhoBloco() * 2, gp.getTamanhoBloco() * 2));
+        setDown1(setup("/tiles_interativos/minerio_diamante", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
         setDestrutivel(true);
 
         this.setMundoX(gp.getTamanhoBloco()*coluna);
         this.setMundoY(gp.getTamanhoBloco()*linha);
 
-        setAreaSolida(new Rectangle(3, 18, 48, 48));
+        setAreaSolida(new Rectangle(6, 18, 48, 48));
         setAreaSolidaPadraoX(getAreaSolida().x);
         setAreaSolidaPadraoY(getAreaSolida().y);
     }
@@ -49,9 +46,9 @@ public class BI_Arvore extends BlocoInterativo {
 
     public void checarDrop() {
 
-        droparItem(new Material(gp, "madeira"));
-        droparItem(new ALIMENTO_Fruta(gp, "maca"));
-        coletar(gp.jogador);
+        //droparItem(new Material(gp, "madeira"));
+        //droparItem(new ALIMENTO_Fruta(gp, "maca"));
+        //coletar(gp.jogador);
 
     }
 
@@ -65,6 +62,7 @@ public class BI_Arvore extends BlocoInterativo {
         System.out.println("Item adicionado! Novo tamanho: " + gp.jogador.getInventario().size());
         gp.getIu().mostrarMensagem("Coletou " + madeira.getNome() + "!");
     }
+
 
 
 }

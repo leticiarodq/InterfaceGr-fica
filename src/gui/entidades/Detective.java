@@ -9,11 +9,13 @@ import java.io.IOException;
 
 public class Detective extends Jogador { //
 
+
     private Rastreador rastreador;
+    private PainelJogo gp;
 
     public Detective(PainelJogo gp, EventosTeclado eventosTeclado) {
         super(gp, eventosTeclado);
-
+        this.gp=gp;
 
         this.rastreador = new Rastreador("Rastreador", getVida(), getFome(), getSede(), getEnergia(), getSanidade(), null, gp.getBlocosG().getAmbienteAtual().getNomeAmbiente(), 36.5);
         definirImagemJogador();
@@ -22,42 +24,40 @@ public class Detective extends Jogador { //
 
     @Override
     public void definirImagemJogador() {
-        setUp1(setup("/detective/ninja_up_01"));
-        setUp2(setup("/detective/ninja_up_02"));
-        setDown1(setup("/detective/ninja_down_01"));
-        setDown2(setup("/detective/ninja_down_02"));
-        setLeft1(setup("/detective/ninja_left_01"));
-        setLeft2(setup("/detective/ninja_left_02"));
-        setRight1(setup("/detective/ninja_right_01"));
-        setRight2(setup("/detective/ninja_right_02"));
+        setUp1(setup("/detective/ninja_up_01", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
+        setUp2(setup("/detective/ninja_up_02", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
+        setDown1(setup("/detective/ninja_down_01", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
+        setDown2(setup("/detective/ninja_down_02", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
+        setLeft1(setup("/detective/ninja_left_01", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
+        setLeft2(setup("/detective/ninja_left_02", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
+        setRight1(setup("/detective/ninja_right_01", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
+        setRight2(setup("/detective/ninja_right_02", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
     }
 
     @Override
     public void definirImagemAtaque() {
-        
 
         if (getArmaAtual().getTipo() == getTipo_espada()) {
 
-            setAtaqueUp1(setup("/detective/ninja_up_01_ataque"));
-            setAtaqueUp2(setup("/detective/ninja_up_02_ataque"));
-            setAtaqueDown1(setup("/detective/ninja_down_01_ataque"));
-            setAtaqueDown2(setup("/detective/ninja_down_02_ataque"));
-            setAtaqueLeft1(setup("/detective/ninja_left_01_ataque"));
-            setAtaqueLeft2(setup("/detective/ninja_left_02_ataque"));
-            setAtaqueRight1(setup("/detective/ninja_right_01_ataque"));
-            setAtaqueRight2(setup("/detective/ninja_right_02_ataque"));
+            setAtaqueUp1(setup("/detective/ninja_up_01_ataque", gp.getTamanhoBloco(), gp.getTamanhoBloco() * 2));
+            setAtaqueUp2(setup("/detective/ninja_up_02_ataque", gp.getTamanhoBloco(), gp.getTamanhoBloco() * 2));
+            setAtaqueDown1(setup("/detective/ninja_down_01_ataque", gp.getTamanhoBloco(), gp.getTamanhoBloco() * 2));
+            setAtaqueDown2(setup("/detective/ninja_down_02_ataque", gp.getTamanhoBloco(), gp.getTamanhoBloco() * 2));
+            setAtaqueLeft1(setup("/detective/ninja_left_01_ataque", gp.getTamanhoBloco() * 2, gp.getTamanhoBloco()));
+            setAtaqueLeft2(setup("/detective/ninja_left_02_ataque", gp.getTamanhoBloco() * 2, gp.getTamanhoBloco()));
+            setAtaqueRight1(setup("/detective/ninja_right_01_ataque", gp.getTamanhoBloco() * 2, gp.getTamanhoBloco()));
+            setAtaqueRight2(setup("/detective/ninja_right_02_ataque", gp.getTamanhoBloco() * 2, gp.getTamanhoBloco()));
 
-        }
+        } else if (getArmaAtual().getTipo() == getTipo_machado()) {
 
-        else if (getArmaAtual().getTipo() == getTipo_machado()) {
-            setAtaqueUp1(setup("/detective/ninja_up_01_machado"));
-            setAtaqueUp2(setup("/detective/ninja_up_02_machado"));
-            setAtaqueDown1(setup("/detective/ninja_down_01_machado"));
-            setAtaqueDown2(setup("/detective/ninja_down_02_machado"));
-            setAtaqueLeft1(setup("/detective/ninja_left_01_machado"));
-            setAtaqueLeft2(setup("/detective/ninja_left_02_machado"));
-            setAtaqueRight1(setup("/detective/ninja_right_01_machado"));
-            setAtaqueRight2(setup("/detective/ninja_right_02_machado"));
+            setAtaqueUp1(setup("/detective/ninja_up_01_machado", gp.getTamanhoBloco(), gp.getTamanhoBloco() * 2));
+            setAtaqueUp2(setup("/detective/ninja_up_02_machado", gp.getTamanhoBloco(), gp.getTamanhoBloco() * 2));
+            setAtaqueDown1(setup("/detective/ninja_down_01_machado", gp.getTamanhoBloco(), gp.getTamanhoBloco() * 2));
+            setAtaqueDown2(setup("/detective/ninja_down_02_machado", gp.getTamanhoBloco(), gp.getTamanhoBloco() * 2));
+            setAtaqueLeft1(setup("/detective/ninja_left_01_machado", gp.getTamanhoBloco() * 2, gp.getTamanhoBloco()));
+            setAtaqueLeft2(setup("/detective/ninja_left_02_machado", gp.getTamanhoBloco() * 2, gp.getTamanhoBloco()));
+            setAtaqueRight1(setup("/detective/ninja_right_01_machado", gp.getTamanhoBloco() * 2, gp.getTamanhoBloco()));
+            setAtaqueRight2(setup("/detective/ninja_right_02_machado", gp.getTamanhoBloco() * 2, gp.getTamanhoBloco()));
         }
 
 

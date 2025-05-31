@@ -13,8 +13,8 @@ public class OBJ_Vida extends Entidade {
         this.gp = gp;
 
         setNome("Vida");
-        setImagem(setup("/status/vida_cheia"));
-        setImagem2(setup("/status/vida_metade"));
-        setImagem3(setup("/status/vida_vazia"));
+        setImagem(setup("/status/vida_cheia", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
+        setImagem2(setup("/status/vida_metade", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
+        setImagem3(setup("/status/vida_vazia", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
     }
 }

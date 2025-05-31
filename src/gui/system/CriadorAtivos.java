@@ -7,6 +7,7 @@ import gui.itens.ALIMENTO_Fruta;
 import gui.itens.Armas;
 import gui.itens.Ferramentas;
 import gui.tile_interativo.BI_Arvore;
+import gui.tile_interativo.BI_Minerio;
 
 public class CriadorAtivos {
 
@@ -125,7 +126,16 @@ public class CriadorAtivos {
         int i=0;
         int numMapa=0;
 
-        //gp.getBlocoInterativo()[numMapa][i]=new BI_Arvore(gp);
+        gp.getBloco()[numMapa][i]=new BI_Arvore(gp, 38,15);
+        gp.getBloco()[numMapa][1]=new BI_Arvore(gp, 38,17);
+        gp.getBloco()[numMapa][2]=new BI_Arvore(gp, 38,19);
+        gp.getBloco()[numMapa][3]=new BI_Arvore(gp, 38,21);
+        gp.getBloco()[numMapa][4]=new BI_Arvore(gp, 31,24);
+
+
+        gp.getBloco()[4][5]=new BI_Minerio(gp, 26,28);
+
+
 
     }
 

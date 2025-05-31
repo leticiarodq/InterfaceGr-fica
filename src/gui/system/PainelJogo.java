@@ -64,13 +64,12 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
 
     private GerenciadorAmbientacao gerenciadorAmbientacao= new GerenciadorAmbientacao(this);
 
-    private BlocoInterativo blocoInterativo=new BlocoInterativo(this);
     Thread threadJogo; //Essa Thread permitirá que o jogo rode continuamente.
 
     // Mapa do jogo
 
     private final int mapaMax = 10;
-    private int mapaAtual = 0;
+    private int mapaAtual = 4;
 
     // Entidade e objeto
 
@@ -89,7 +88,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
     private Entidade npc[][] = new Entidade[mapaMax][100];
     private Entidade criatura[][] = new Entidade[mapaMax][10];
     private Entidade presa[][] = new Entidade[mapaMax][10];
-    private Entidade bloco[][]=new Entidade[mapaMax][10];
+    private BlocoInterativo bloco[][]=new BlocoInterativo[mapaMax][10];
     private ArrayList<Entidade> entidadeLista = new ArrayList<>();
     private Entidade alimento[][] = new Entidade[mapaMax][10];
 
@@ -168,13 +167,6 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         return som;
     }
 
-    public void setBlocoInterativo(BlocoInterativo blocoInterativo) {
-        this.blocoInterativo = blocoInterativo;
-    }
-
-    public BlocoInterativo getBlocoInterativo() {
-        return blocoInterativo;
-    }
 
     public String getPersonagemSelecionado() {
         return personagemSelecionado;
@@ -196,10 +188,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         return presa;
     }
 
-    public void setBloco(Entidade[][] bloco) {
-        this.bloco = bloco;
-    }
-    public Entidade[][]getBloco(){
+    public BlocoInterativo[][]getBloco(){
         return bloco;
     }
 
@@ -371,6 +360,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         cAtivos.definirNPC();
         cAtivos.definirCriatura();
         cAtivos.definirPresa();
+        cAtivos.definirBlocoInterativo();
 
     }
 
@@ -494,15 +484,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
 
             for (int i = 0; i < bloco[1].length; i++) {
                 if (bloco[mapaAtual][i] != null) {
-                    if(bloco[mapaAtual][i].isVivo()==true && bloco[mapaAtual][i].isMorto()==false){
-                        bloco[mapaAtual][i].update();
-                    }
-                    if(bloco[mapaAtual][i].isVivo()==false){
-                        bloco[mapaAtual][i].checarDrop();
-                        bloco[mapaAtual][i]=null;
-                    }
-
-
+                    bloco[mapaAtual][i].update();
                 }
             }
 
@@ -522,6 +504,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         cAtivos.definirNPC();
         cAtivos.definirCriatura();
         cAtivos.definirPresa();
+        cAtivos.definirBlocoInterativo();
 
        // gerenciadorAmbientacao.setup(); // só aqui, após o jogador estar inicializado
 
@@ -687,6 +670,12 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
             // Desenhar blocos do mapa
             blocosG.draw(g2);
 
+            for (int i = 0; i < bloco[1].length; i++) {
+                if (bloco[mapaAtual][i] != null) {
+                    bloco[mapaAtual][i].desenhar(g2);
+                }
+            }
+
             // Adicionar entidades à lista de desenho
 
 
@@ -716,11 +705,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
                 }
             }
 
-            for (int i = 0; i < bloco[1].length; i++) {
-                if (bloco[mapaAtual][i] != null) {
-                    entidadeLista.add(bloco[mapaAtual][i]);
-                }
-            }
+
 
 
             // Ordenar entidades pelo eixo Y

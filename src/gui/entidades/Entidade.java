@@ -14,6 +14,7 @@ public class Entidade {
 
     // Referência ao jogo
     private final PainelJogo gp;
+    private boolean isDestrutivel;
 
     // Posição e movimento
     private int mundoX, mundoY;
@@ -40,9 +41,9 @@ public class Entidade {
     private final int tipo_picareta=6;
     private final int tipo_escudo=7;
     private final int tipo_presa=8;
-    private final int tipo_dropavel=9;
+    private final int tipo_dropavelConsumivel=9;
     private final int tipo_interativo=10;
-
+    private final int tipo_dropavel=11;
     // Dropar item
 
 
@@ -108,6 +109,15 @@ public class Entidade {
 
     private int valorAtaque;
 
+    private int durabilidade;
+
+    public int getDurabilidade() {
+        return durabilidade;
+    }
+    public void setDurabilidade(int durabilidade){
+        this.durabilidade=durabilidade;
+    }
+
     // Objetos
     private BufferedImage imagem, imagem2, imagem3;
     private String nome;
@@ -149,6 +159,7 @@ public class Entidade {
     public void setSedeMaxima(int sedeMaxima) {
         this.sedeMaxima = sedeMaxima;
     }
+
 
     // Fome
     public int getFome() {
@@ -404,8 +415,17 @@ public class Entidade {
         return tipo_dropavel;
     }
 
+    public int getTipo_dropavelConsumivel() {
+        return tipo_dropavelConsumivel;
+    }
+
+
     public int getTipo_interativo() {
         return tipo_interativo;
+    }
+
+    public void setDestrutivel(boolean destrutivel) {
+        isDestrutivel = destrutivel;
     }
 
     // Ataque
@@ -771,6 +791,7 @@ public class Entidade {
         gp.getcColisoes().checarObjeto(this, false);
         gp.getcColisoes().checarEntidade(this, gp.getNpc());
         gp.getcColisoes().checarEntidade(this, gp.getCriatura());
+        gp.getcColisoes().checarEntidade(this, gp.getBloco());
         boolean contatoJogador = gp.getcColisoes().checarJogador(this);
 
         if (this.getTipo() == 2 && contatoJogador) {
@@ -851,17 +872,29 @@ public class Entidade {
 
             // barra
 
-            if(tipo==tipo_criatura || tipo==tipo_presa){
+            if (tipo == tipo_criatura || tipo == tipo_presa) {
 
-                double umaEscala= (double)gp.getTamanhoBloco()/vidaMaxima;
-                double barraHpValor= umaEscala*vida;
+                int larguraBicho = gp.getTamanhoBloco(); // padrão
 
-                g2.setColor(new Color(35,35,35));
-                g2.fillRect(telaX-1, telaY-21, gp.getTamanhoBloco()+2, 10);
+                // Detecta largura real do bicho (Lobo, por exemplo, é 2 blocos)
+                if (nome.equals("Urso")) {
+                    larguraBicho = gp.getTamanhoBloco() * 2;
+                }
+
+                // Largura fixa da barra (ex: 1 bloco)
+                int larguraBarra = gp.getTamanhoBloco();
+                int posicaoXBarra = telaX + (larguraBicho - larguraBarra) / 2;
+
+                double umaEscala = (double) larguraBarra / vidaMaxima;
+                double barraHpValor = umaEscala * vida;
+
+                g2.setColor(new Color(35, 35, 35));
+                g2.fillRect(posicaoXBarra - 1, telaY - 21, larguraBarra + 2, 10);
+
                 g2.setColor(new Color(255, 0, 30));
-                g2.fillRect(telaX, telaY-20, (int) barraHpValor, 8);
-
+                g2.fillRect(posicaoXBarra, telaY - 20, (int) barraHpValor, 8);
             }
+
 
             if (isInvisibilidade()) {
                 g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
@@ -871,7 +904,15 @@ public class Entidade {
 
             }
 
-            g2.drawImage(imagem, telaX, telaY, gp.getTamanhoBloco(), gp.getTamanhoBloco(), null);
+
+
+            g2.drawImage(imagem, telaX, telaY, imagem.getWidth(), imagem.getHeight(), null);
+
+
+
+
+            //g2.drawImage(imagem, telaX, telaY, gp.getTamanhoBloco(), gp.getTamanhoBloco(), null);
+
 
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
         }
@@ -925,25 +966,20 @@ public class Entidade {
     }
 
 
-    public BufferedImage setup(String imagemPath){
-    FerramentasUteis ferramentasUteis = new FerramentasUteis();
-    BufferedImage imagem = null;
-
-    try
-
-    {
-        imagem = ImageIO.read(getClass().getResourceAsStream(imagemPath + ".png"));
-        imagem = ferramentasUteis.escalar(imagem, gp.getTamanhoBloco(), gp.getTamanhoBloco());
-
-    }catch(
-            IOException e)
-
-    {
-        e.printStackTrace();
-    }return imagem;
-
-
+    public BufferedImage setup(String caminhoImagem, int largura, int altura) {
+        try {
+            BufferedImage imagemOriginal = ImageIO.read(getClass().getResourceAsStream(caminhoImagem + ".png"));
+            BufferedImage imagemEscalada = new BufferedImage(largura, altura, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2 = imagemEscalada.createGraphics();
+            g2.drawImage(imagemOriginal, 0, 0, largura, altura, null);
+            g2.dispose();
+            return imagemEscalada;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
+
 
     public void checarDrop(){
 

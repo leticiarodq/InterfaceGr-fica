@@ -10,27 +10,27 @@ public class ALIMENTO_Carne extends Entidade {
 
         super(gp);
         this.gp = gp;
-        setTipo(getTipo_dropavel());
+        setTipo(getTipo_dropavelConsumivel());
 
         setNome(tipoCarne);
 
         switch (tipoCarne.toLowerCase()) {
             case "carneurso":
                 setNome("Carne de Urso Crua");
-                setDown1(setup("/alimentos/carneurso"));
+                setDown1(setup("/alimentos/carneurso", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
                 setDescricao("[Carne de Urso Crua]\nCarne crua e pesada\nretirada de um urso.");
                 break;
 
             case "carneporco":
                 setNome("Carne de Porco Crua");
-                setDown1(setup("/alimentos/carneporco"));
+                setDown1(setup("/alimentos/carneporco", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
                 setDescricao("[Carne de Porco Crua]\nPedaço cru de carne\nsuína.");
                 break;
 
 
             case "carnegalinha":
                 setNome("Carne de Galinha Crua");
-                setDown1(setup("/alimentos/carnegalinha"));
+                setDown1(setup("/alimentos/carnegalinha", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
                 setDescricao("[Carne de Galinha Cria]\nPedaço cru de carne\nde galinha.");
                 break;
         }

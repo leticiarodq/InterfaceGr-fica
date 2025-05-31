@@ -14,12 +14,14 @@ public class Armas extends Entidade {
         switch (tipoArma.toLowerCase()) {
 
             case "espada":
-                setDown1(setup("/armasFerramentas/espada"));
+                setDown1(setup("/armasFerramentas/espada", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
                 setDescricao("[Espada]\nLeve e afiada,\nfeita para o\ncombate direto.");
                 setValorAtaque(2);
+                setDurabilidade(100);
                 break;
 
 
         }
+
     }
 }

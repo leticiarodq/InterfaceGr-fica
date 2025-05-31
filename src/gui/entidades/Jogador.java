@@ -5,6 +5,7 @@ import gui.itens.Ferramentas;
 import gui.system.CriadorAtivos;
 import gui.system.EventosTeclado;
 import gui.system.PainelJogo;
+import gui.tile_interativo.BlocoInterativo;
 import itens.Arma;
 import personagens.*;
 
@@ -76,9 +77,9 @@ public class Jogador extends Entidade {
     public Jogador(PainelJogo gp, EventosTeclado eventosTeclado) { //Construtor da classe que recebe o painel de jogo e manipulador de teclas
 
         super(gp);
-        setTipo(getTipo_jogador());
 
         this.gp = gp;
+        setTipo(getTipo_jogador());
         this.eventosTeclado = eventosTeclado;
 
         this.personagemLogico = new Personagem(
@@ -104,7 +105,7 @@ public class Jogador extends Entidade {
         areaAtaque.height=48;
 
         setValoresPadrao();
-        definirImagemJogador();
+        //definirImagemJogador();
 
 
         //definirImagemAtaque();
@@ -247,6 +248,9 @@ public class Jogador extends Entidade {
                 int presaIndice = gp.getcColisoes().checarEntidade(this, gp.getPresa());
                 cacar(presaIndice);
 
+                int blocoIndice=gp.getcColisoes().checarEntidade(this, gp.getBloco());
+                interativo(blocoIndice);
+
                 gp.getManipuladorDeEventos().checarEvento();
 
                 if (!isColisaoOn() && eventosTeclado.isEnterPressionado() == false) {
@@ -321,6 +325,7 @@ public class Jogador extends Entidade {
                 areaAtaque.height = 48;
             }
 
+
             // Salva as coordenadas e área original do personagem
             int mundoXatual = getMundoX();
             int mundoYatual = getMundoY();
@@ -354,6 +359,8 @@ public class Jogador extends Entidade {
             int presaIndice = gp.getcColisoes().checarEntidade(this, gp.getPresa());
             cacar(presaIndice);
 
+            int blocoInterativo=gp.getcColisoes().checarEntidade(this, gp.getBloco());
+            interativo(blocoInterativo);
             // Restaura as coordenadas e área original do personagem
             setMundoX(mundoXatual);
             setMundoY(mundoYatual);
@@ -414,6 +421,8 @@ public class Jogador extends Entidade {
 
                 if (!presa.isInvisibilidade()) {
                     presa.setVida(presa.getVida() - 1);
+                    reduzirDurabilidadeArma();
+
                     presa.setInvisibilidade(true);
 
                     if (presa.getVida() <= 0) {
@@ -439,6 +448,7 @@ public class Jogador extends Entidade {
 
             if (!criatura.isInvisibilidade()) {
                 criatura.setVida(criatura.getVida() - 1);
+                reduzirDurabilidadeArma();
                 criatura.setInvisibilidade(true);
 
                 if (criatura.getVida() <= 0) {
@@ -464,16 +474,17 @@ public class Jogador extends Entidade {
 
             if(itemSelecionado.getTipo() == getTipo_espada() || itemSelecionado.getTipo() == getTipo_machado()){
                 setArmaAtual(itemSelecionado);
-                // Chama definirImagemAtaque() APÓS equipar a arma
+
                 definirImagemAtaque();
             }
+
 
             if(itemSelecionado.getTipo() == getTipo_consumivel()){
                 itemSelecionado.usar(this);
                 inventario.remove(itemIndice);
             }
 
-            if(itemSelecionado.getTipo() == getTipo_dropavel()){
+            if(itemSelecionado.getTipo() == getTipo_dropavelConsumivel()){
                 if(gp.jogador.getFome() < gp.jogador.getFomeMaxima()){
                     itemSelecionado.usar(this);
                     inventario.remove(itemIndice);
@@ -482,8 +493,84 @@ public class Jogador extends Entidade {
                     gp.getIu().setDialogoAtual("Você já está satisfeito.\nNão pode comer mais agora.");
                 }
             }
+
+
         }
     }
+
+    public void interativo(int i) {
+        if (i != 999 &&
+                gp.getBloco()[gp.getMapaAtual()][i].isDestrutivel() &&
+                gp.getBloco()[gp.getMapaAtual()][i].itemCorreto(this) && // 'this' é o jogador
+                !gp.getBloco()[gp.getMapaAtual()][i].isInvisibilidade()) {
+
+            // Reduzir a vida DO BLOCO, não do jogador
+            BlocoInterativo bloco = gp.getBloco()[gp.getMapaAtual()][i];
+            bloco.setVida(bloco.getVida() - 1); // Corrigido: usa a vida do bloco
+            reduzirDurabilidadeArma();
+            bloco.setInvisibilidade(true);
+
+
+            // Debug para verificar
+            System.out.println("Árvore atacada! Vida restante: " + bloco.getVida());
+
+            if (bloco.getVida() <= 0) {
+                // Checa se há drop antes de remover
+                bloco.checarDrop();
+                gp.getBloco()[gp.getMapaAtual()][i] = null;
+                System.out.println("Árvore destruída!");
+            }
+        } else {
+            // Debug para entender por que não está funcionando
+            if (i != 999) {
+                BlocoInterativo bloco = gp.getBloco()[gp.getMapaAtual()][i];
+                System.out.println("Falha no ataque:");
+                System.out.println("- Destrutível: " + bloco.isDestrutivel());
+                System.out.println("- Item correto: " + bloco.itemCorreto(this));
+                System.out.println("- Invisível: " + bloco.isInvisibilidade());
+            }
+        }
+    }
+
+
+
+    public void reduzirDurabilidadeArma() {
+        if (getArmaAtual() != null) {
+            int durabilidadeAtual = getArmaAtual().getDurabilidade();
+            getArmaAtual().setDurabilidade(durabilidadeAtual - 10);
+
+            System.out.println("Durabilidade da arma: " + getArmaAtual().getDurabilidade());
+
+            // Se a durabilidade chegou a 0 ou menos, quebra a arma
+            if (getArmaAtual().getDurabilidade() <= 0) {
+                gp.getIu().mostrarMensagem("Sua " + getArmaAtual().getNome() + " quebrou!");
+
+                // Remove a arma do inventário
+                removerArmaQuebrada();
+
+                // Remove a referência da arma atual
+                setArmaAtual(null);
+
+                System.out.println("Arma quebrada e removida do inventário!");
+            }
+        }
+    }
+
+    public void removerArmaQuebrada() {
+        if (getArmaAtual() != null) {
+            Entidade armaQuebrada = getArmaAtual();
+
+            // Remove todas as ocorrências da arma quebrada (caso haja duplicatas)
+            inventario.removeIf(item ->
+                    item == armaQuebrada ||
+                            (item.getNome().equals(armaQuebrada.getNome()) &&
+                                    item.getDurabilidade() <= 0)
+            );
+
+            System.out.println("Arma quebrada removida do inventário");
+        }
+    }
+
 
 
     public void desenhar(Graphics2D g2) { //Este método desenha o jogador na tela

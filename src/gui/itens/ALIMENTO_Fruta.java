@@ -16,37 +16,37 @@ public class ALIMENTO_Fruta extends Entidade {
 
         switch (tipoFruta.toLowerCase()) {
             case "maca":
-                setDown1(setup("/alimentos/maca"));
+                setDown1(setup("/alimentos/maca", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
                 setDescricao("[Maçã]\nMata a fome e é fácil de\nencontrar.\nRica em fibras\ne vitaminas.");
                 break;
 
             case "banana":
-                setDown1(setup("/alimentos/banana"));
+                setDown1(setup("/alimentos/banana", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
                 setDescricao("[Banana]\nRica em potássio e\nenergia rápida.\nÓtima para recuperar\nforças.");
                 break;
 
             case "laranja":
-                setDown1(setup("/alimentos/laranja"));
+                setDown1(setup("/alimentos/laranja", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
                 setDescricao("[Laranja]\nCheia de vitamina C!\nAjuda a fortalecer o\nsistema imunológico.");
                 break;
 
             case "tomate":
-                setDown1(setup("/alimentos/tomate"));
+                setDown1(setup("/alimentos/tomate", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
                 setDescricao("[Tomate]\nFonte de antioxidantes\ne vitamina C.\nBom para a saúde\nda pele.");
                 break;
 
             case "uva roxa":
-                setDown1(setup("/alimentos/uva_roxa"));
+                setDown1(setup("/alimentos/uva_roxa", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
                 setDescricao("[Uva roxa]\nCheia de antioxidantes.\nAjuda na circulação sanguínea.");
                 break;
 
             case "uva verde":
-                setDown1(setup("/alimentos/uva_verde"));
+                setDown1(setup("/alimentos/uva_verde", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
                 setDescricao("[Uva verde]\nRefrescante e nutritiva.\nBoa fonte de vitaminas.");
                 break;
 
             default:
-                setDown1(setup("/alimentos/fruta_padrao"));
+                setDown1(setup("/alimentos/fruta_padrao", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
                 setDescricao("[Fruta]\nFruta misteriosa.\nDescubra seus benefícios!");
                 break;
         }

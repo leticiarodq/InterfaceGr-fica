@@ -26,10 +26,10 @@ public class CRI_Urso extends Entidade {
         setTipo(getTipo_criatura());
         setNome("Urso");
         setVelocidade(1);
-        setVidaMaxima(8);
+        setVidaMaxima(10);
         setVida(getVidaMaxima());
 
-        setAreaSolida(new Rectangle(3, 18, 42, 30));
+        setAreaSolida(new Rectangle(3, 18, 64, 64));
         setAreaSolidaPadraoX(getAreaSolida().x);
         setAreaSolidaPadraoY(getAreaSolida().y);
 
@@ -37,18 +37,16 @@ public class CRI_Urso extends Entidade {
     }
 
     public void carregarImagemUrso() {
-        try {
-            setUp1(ImageIO.read(getClass().getResourceAsStream("/animais/urso_up_01.png")));
-            setUp2(ImageIO.read(getClass().getResourceAsStream("/animais/urso_up_02.png")));
-            setDown1(ImageIO.read(getClass().getResourceAsStream("/animais/urso_down_01.png")));
-            setDown2(ImageIO.read(getClass().getResourceAsStream("/animais/urso_down_02.png")));
-            setLeft1(ImageIO.read(getClass().getResourceAsStream("/animais/urso_left_01.png")));
-            setLeft2(ImageIO.read(getClass().getResourceAsStream("/animais/urso_left_02.png")));
-            setRight1(ImageIO.read(getClass().getResourceAsStream("/animais/urso_right_01.png")));
-            setRight2(ImageIO.read(getClass().getResourceAsStream("/animais/urso_right_02.png")));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        setUp1(setup("/animais/urso_up_01", gp.getTamanhoBloco() * 2, gp.getTamanhoBloco() * 2));
+        setUp2(setup("/animais/urso_up_02", gp.getTamanhoBloco() * 2, gp.getTamanhoBloco() * 2));
+        setDown1(setup("/animais/urso_down_01", gp.getTamanhoBloco() * 2, gp.getTamanhoBloco() * 2));
+        setDown2(setup("/animais/urso_down_02", gp.getTamanhoBloco() * 2, gp.getTamanhoBloco() * 2));
+        setLeft1(setup("/animais/urso_left_01", gp.getTamanhoBloco() * 2, gp.getTamanhoBloco() * 2));
+        setLeft2(setup("/animais/urso_left_02", gp.getTamanhoBloco() * 2, gp.getTamanhoBloco() * 2));
+        setRight1(setup("/animais/urso_right_01", gp.getTamanhoBloco() * 2, gp.getTamanhoBloco() * 2));
+        setRight2(setup("/animais/urso_right_02", gp.getTamanhoBloco() * 2, gp.getTamanhoBloco() * 2));
+
+
     }
 
     public void setAcao() {
