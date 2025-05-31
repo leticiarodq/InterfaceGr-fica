@@ -53,4 +53,16 @@ public class Mechanic extends Jogador {
         }
 
     }
+
+    public void definirImagemMachado() {
+        setMachadoUp1(setup("/mecanica/mecanica_up_01_machado"));
+        setMachadoUp2(setup("/mecanica/mecanica_up_02_machado"));
+        setMachadoDown1(setup("/mecanica/mecanica_down_01_machado"));
+        setMachadoDown2(setup("/mecanica/mecanica_down_02_machado"));
+        setMachadoLeft1(setup("/mecanica/mecanica_left_01_machado"));
+        setMachadoLeft2(setup("/mecanica/mecanica_left_02_machado"));
+        setMachadoRight1(setup("/mecanica/mecanica_right_01_machado"));
+        setMachadoRight2(setup("/mecanica/mecanica_right_02_machado"));
+    }
+
 }

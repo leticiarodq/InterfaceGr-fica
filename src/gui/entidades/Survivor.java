@@ -45,4 +45,16 @@ public class Survivor extends Jogador {
         setAtaqueRight2(setup("/survivor/sobrevivente_right_2_ataque"));
 
     }
+
+    public void definirImagemMachado() {
+        setMachadoUp1(setup("/sobrevivente/sobrevivente_up_01_machado"));
+        setMachadoUp2(setup("/sobrevivente/sobrevivente_up_02_machado"));
+        setMachadoDown1(setup("/sobrevivente/sobrevivente_down_01_machado"));
+        setMachadoDown2(setup("/sobrevivente/sobrevivente_down_02_machado"));
+        setMachadoLeft1(setup("/sobrevivente/sobrevivente_left_01_machado"));
+        setMachadoLeft2(setup("/sobrevivente/sobrevivente_left_02_machado"));
+        setMachadoRight1(setup("/sobrevivente/sobrevivente_right_01_machado"));
+        setMachadoRight2(setup("/sobrevivente/sobrevivente_right_02_machado"));
+    }
+
 }

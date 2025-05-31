@@ -53,8 +53,16 @@ public class EventoDoencaFerimento {
             Random random = new Random();
             int chance = random.nextInt(100); // 0 a 99
 
-            if (chance < 100) { // 30% de chance de infecção
-                gp.jogador.setInfectado(true);
+            if (chance < 100) {
+                String personagem=gp.getPersonagemSelecionado();
+                if("médico".equals(personagem)){
+                    gp.jogador.setVida(gp.jogador.getVida()-1);
+
+                }
+                else{
+                    gp.jogador.setVida(gp.jogador.getVida()-2);
+                }
+
                 gp.getIu().setDialogoAtual("Você bebeu água\ncontaminada\ne foi infectado!");
             } else {
                 gp.getIu().setDialogoAtual("Você bebeu água\ncontaminada,\nmas não ficou infectado.");
@@ -72,40 +80,6 @@ public class EventoDoencaFerimento {
     }
 
 
-
-    public void eventoInfectado() {
-
-        String personagem = gp.getPersonagemSelecionado();
-
-        if (gp.jogador.isInfectado()) {
-
-            if ("médico".equals(personagem)) {
-                // Médico perde vida imediatamente ao estar infectado (ou pode ser outra regra)
-                gp.jogador.setVida(gp.jogador.getVida() - 1);
-
-                gp.setEstadoJogo(gp.getEstadoDialogo());
-                gp.getIu().setDialogoAtual("Você está infectado!\nPerdeu 1 ponto de vida.");
-
-            } else {
-                // Para outros personagens, conta até o intervalo para perder vida
-                contadorInfeccao++;
-                if (contadorInfeccao >= intervaloInfeccao) {
-                    gp.jogador.setVida(gp.jogador.getVida() - 1);
-                    contadorInfeccao = 0;
-
-                    gp.setEstadoJogo(gp.getEstadoDialogo());
-                    gp.getIu().setDialogoAtual("Você está infectado!\nPerdeu 1 ponto de vida.");
-                }
-                // NÃO reseta o contador aqui; ele deve acumular até atingir o intervalo
-            }
-
-        } else {
-            // Se não está infectado, reseta o contador
-            contadorInfeccao = 0;
-        }
-
-
-    }
 
     public void delirio () {
         if (gp.jogador.getSanidade() <= 2 || gp.jogador.isDesidratado()) {

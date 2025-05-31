@@ -64,6 +64,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
 
     private GerenciadorAmbientacao gerenciadorAmbientacao= new GerenciadorAmbientacao(this);
 
+    private BlocoInterativo blocoInterativo=new BlocoInterativo(this);
     Thread threadJogo; //Essa Thread permitirá que o jogo rode continuamente.
 
     // Mapa do jogo
@@ -88,6 +89,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
     private Entidade npc[][] = new Entidade[mapaMax][100];
     private Entidade criatura[][] = new Entidade[mapaMax][10];
     private Entidade presa[][] = new Entidade[mapaMax][10];
+    private Entidade bloco[][]=new Entidade[mapaMax][10];
     private ArrayList<Entidade> entidadeLista = new ArrayList<>();
     private Entidade alimento[][] = new Entidade[mapaMax][10];
 
@@ -112,6 +114,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
     private int estadoTelaLuta = 9;
 
     // Métodos de acesso getters
+
 
     public int getEstadoPersonagem() {
         return estadoPersonagem;
@@ -165,6 +168,14 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         return som;
     }
 
+    public void setBlocoInterativo(BlocoInterativo blocoInterativo) {
+        this.blocoInterativo = blocoInterativo;
+    }
+
+    public BlocoInterativo getBlocoInterativo() {
+        return blocoInterativo;
+    }
+
     public String getPersonagemSelecionado() {
         return personagemSelecionado;
     }
@@ -183,6 +194,13 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
 
     public Entidade[][] getPresa() {
         return presa;
+    }
+
+    public void setBloco(Entidade[][] bloco) {
+        this.bloco = bloco;
+    }
+    public Entidade[][]getBloco(){
+        return bloco;
     }
 
     public boolean isJogoIniciado() {
@@ -334,12 +352,10 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
 
         jogador.posicoesPadrao();
         jogador.restaurarVida();
-        cAtivos.setNPC();
-        cAtivos.setCOELHO();
-        cAtivos.setLobo();
-        cAtivos.setMorcego();
-        cAtivos.setAranha();
-        cAtivos.setUrso();
+        cAtivos.setObjeto();
+        cAtivos.definirNPC();
+        cAtivos.definirCriatura();
+        cAtivos.definirPresa();
 
 
     }
@@ -351,13 +367,10 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         jogador.restaurarVida();
         jogador.definirItens();
         cAtivos.setObjeto();
-        cAtivos.setNPC();
-        cAtivos.setCOELHO();
-        cAtivos.setLobo();
-        cAtivos.setMorcego();
-        cAtivos.setAranha();
-        cAtivos.setUrso();
-
+        cAtivos.setObjeto();
+        cAtivos.definirNPC();
+        cAtivos.definirCriatura();
+        cAtivos.definirPresa();
 
     }
 
@@ -479,6 +492,20 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
                 }
             }
 
+            for (int i = 0; i < bloco[1].length; i++) {
+                if (bloco[mapaAtual][i] != null) {
+                    if(bloco[mapaAtual][i].isVivo()==true && bloco[mapaAtual][i].isMorto()==false){
+                        bloco[mapaAtual][i].update();
+                    }
+                    if(bloco[mapaAtual][i].isVivo()==false){
+                        bloco[mapaAtual][i].checarDrop();
+                        bloco[mapaAtual][i]=null;
+                    }
+
+
+                }
+            }
+
 
         }
         if (estadoJogo == estadoPausa) {
@@ -492,13 +519,9 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
   
         // Agora é seguro configurar o ambiente
         cAtivos.setObjeto();
-        cAtivos.setNPC();
-        cAtivos.setCOELHO();
-        cAtivos.setLobo();
-        cAtivos.setMorcego();
-        cAtivos.setAranha();
-        cAtivos.setUrso();
-        cAtivos.setPorco();
+        cAtivos.definirNPC();
+        cAtivos.definirCriatura();
+        cAtivos.definirPresa();
 
        // gerenciadorAmbientacao.setup(); // só aqui, após o jogador estar inicializado
 
@@ -692,6 +715,13 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
                     entidadeLista.add(presa[mapaAtual][i]);
                 }
             }
+
+            for (int i = 0; i < bloco[1].length; i++) {
+                if (bloco[mapaAtual][i] != null) {
+                    entidadeLista.add(bloco[mapaAtual][i]);
+                }
+            }
+
 
             // Ordenar entidades pelo eixo Y
             Collections.sort(entidadeLista, new Comparator<Entidade>() {

@@ -1,6 +1,5 @@
 package gui.entidades;
 
-import gui.itens.ALIMENTO_Carne;
 import gui.system.FerramentasUteis;
 import gui.system.PainelJogo;
 
@@ -8,8 +7,6 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Random;
 
 public class Entidade {
 
@@ -44,6 +41,7 @@ public class Entidade {
     private final int tipo_escudo=7;
     private final int tipo_presa=8;
     private final int tipo_dropavel=9;
+    private final int tipo_interativo=10;
 
     // Dropar item
 
@@ -57,6 +55,17 @@ public class Entidade {
     // Imagens do personagem
     private BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
     private BufferedImage ataqueUp1, ataqueUp2, ataqueDown1, ataqueDown2, ataqueLeft1, ataqueLeft2, ataqueRight1, ataqueRight2;
+    // Atributos machado
+    private BufferedImage machadoUp1, machadoUp2;
+    private BufferedImage machadoDown1, machadoDown2;
+    private BufferedImage machadoLeft1, machadoLeft2;
+    private BufferedImage machadoRight1, machadoRight2;
+
+    // Atributos picareta
+    private BufferedImage picaretaUp1, picaretaUp2;
+    private BufferedImage picaretaDown1, picaretaDown2;
+    private BufferedImage picaretaLeft1, picaretaLeft2;
+    private BufferedImage picaretaRight1, picaretaRight2;
 
 
 
@@ -87,7 +96,17 @@ public class Entidade {
     private int energiaMaxima;
     private int energia;
 
+    private int atacar;
+
+    private int defender;
+
+    private Entidade armaAtual;
+
+    private Entidade escudoAtual;
+
     private String descricao="";
+
+    private int valorAtaque;
 
     // Objetos
     private BufferedImage imagem, imagem2, imagem3;
@@ -180,6 +199,40 @@ public class Entidade {
 
     public void setEnergiaMaxima(int energiaMaxima) {
         this.energiaMaxima = energiaMaxima;
+    }
+
+    // Ataque e defesa
+
+    public int getAtacar() {
+        return atacar;
+    }
+
+    public int getDefender() {
+        return defender;
+    }
+
+    public void setAtacar(int atacar) {
+        this.atacar = atacar;
+    }
+
+    public void setArmaAtual(Entidade armaAtual) {
+        this.armaAtual = armaAtual;
+    }
+
+    public void setDefender(int defender) {
+        this.defender = defender;
+    }
+
+    public Entidade getArmaAtual(){
+        return armaAtual;
+    }
+
+    public int getValorAtaque() {
+        return valorAtaque;
+    }
+
+    public void setValorAtaque(int valorAtaque) {
+        this.valorAtaque = valorAtaque;
     }
 
     // Inventário
@@ -351,6 +404,10 @@ public class Entidade {
         return tipo_dropavel;
     }
 
+    public int getTipo_interativo() {
+        return tipo_interativo;
+    }
+
     // Ataque
     public boolean isAtaque() {
         return ataque;
@@ -456,6 +513,70 @@ public class Entidade {
         return ataqueUp2;
     }
 
+    public BufferedImage getMachadoUp1() {
+        return machadoUp1;
+    }
+
+    public BufferedImage getMachadoUp2() {
+        return machadoUp2;
+    }
+
+    public BufferedImage getMachadoDown1() {
+        return machadoDown1;
+    }
+
+    public BufferedImage getMachadoDown2() {
+        return machadoDown2;
+    }
+
+    public BufferedImage getMachadoLeft1() {
+        return machadoLeft1;
+    }
+
+    public BufferedImage getMachadoLeft2() {
+        return machadoLeft2;
+    }
+
+    public BufferedImage getMachadoRight1() {
+        return machadoRight1;
+    }
+
+    public BufferedImage getMachadoRight2() {
+        return machadoRight2;
+    }
+    public BufferedImage getPicaretaUp1() {
+        return picaretaUp1;
+    }
+
+    public BufferedImage getPicaretaUp2() {
+        return picaretaUp2;
+    }
+
+    public BufferedImage getPicaretaDown1() {
+        return picaretaDown1;
+    }
+
+    public BufferedImage getPicaretaDown2() {
+        return picaretaDown2;
+    }
+
+    public BufferedImage getPicaretaLeft1() {
+        return picaretaLeft1;
+    }
+
+    public BufferedImage getPicaretaLeft2() {
+        return picaretaLeft2;
+    }
+
+    public BufferedImage getPicaretaRight1() {
+        return picaretaRight1;
+    }
+
+    public BufferedImage getPicaretaRight2() {
+        return picaretaRight2;
+    }
+
+
     // Imagens setters
     public void setUp1(BufferedImage up1) {
         this.up1 = up1;
@@ -520,6 +641,70 @@ public class Entidade {
     public void setAtaqueUp2(BufferedImage ataqueUp2) {
         this.ataqueUp2 = ataqueUp2;
     }
+
+    public void setMachadoUp1(BufferedImage machadoUp1) {
+        this.machadoUp1 = machadoUp1;
+    }
+
+    public void setMachadoUp2(BufferedImage machadoUp2) {
+        this.machadoUp2 = machadoUp2;
+    }
+
+    public void setMachadoDown1(BufferedImage machadoDown1) {
+        this.machadoDown1 = machadoDown1;
+    }
+
+    public void setMachadoDown2(BufferedImage machadoDown2) {
+        this.machadoDown2 = machadoDown2;
+    }
+
+    public void setMachadoLeft1(BufferedImage machadoLeft1) {
+        this.machadoLeft1 = machadoLeft1;
+    }
+
+    public void setMachadoLeft2(BufferedImage machadoLeft2) {
+        this.machadoLeft2 = machadoLeft2;
+    }
+
+    public void setMachadoRight1(BufferedImage machadoRight1) {
+        this.machadoRight1 = machadoRight1;
+    }
+
+    public void setMachadoRight2(BufferedImage machadoRight2) {
+        this.machadoRight2 = machadoRight2;
+    }
+    public void setPicaretaUp1(BufferedImage picaretaUp1) {
+        this.picaretaUp1 = picaretaUp1;
+    }
+
+    public void setPicaretaUp2(BufferedImage picaretaUp2) {
+        this.picaretaUp2 = picaretaUp2;
+    }
+
+    public void setPicaretaDown1(BufferedImage picaretaDown1) {
+        this.picaretaDown1 = picaretaDown1;
+    }
+
+    public void setPicaretaDown2(BufferedImage picaretaDown2) {
+        this.picaretaDown2 = picaretaDown2;
+    }
+
+    public void setPicaretaLeft1(BufferedImage picaretaLeft1) {
+        this.picaretaLeft1 = picaretaLeft1;
+    }
+
+    public void setPicaretaLeft2(BufferedImage picaretaLeft2) {
+        this.picaretaLeft2 = picaretaLeft2;
+    }
+
+    public void setPicaretaRight1(BufferedImage picaretaRight1) {
+        this.picaretaRight1 = picaretaRight1;
+    }
+
+    public void setPicaretaRight2(BufferedImage picaretaRight2) {
+        this.picaretaRight2 = picaretaRight2;
+    }
+
 
     // Objetos getters
 

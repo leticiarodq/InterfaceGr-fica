@@ -21,12 +21,17 @@ public class ALIMENTO_Carne extends Entidade {
                 setDescricao("[Carne de Urso Crua]\nCarne crua e pesada\nretirada de um urso.");
                 break;
 
-
-
             case "carneporco":
                 setNome("Carne de Porco Crua");
                 setDown1(setup("/alimentos/carneporco"));
-                setDescricao("[Carne de orco Crua]\nPedaço cru de carne\nsuína.");
+                setDescricao("[Carne de Porco Crua]\nPedaço cru de carne\nsuína.");
+                break;
+
+
+            case "carnegalinha":
+                setNome("Carne de Galinha Crua");
+                setDown1(setup("/alimentos/carnegalinha"));
+                setDescricao("[Carne de Galinha Cria]\nPedaço cru de carne\nde galinha.");
                 break;
         }
 

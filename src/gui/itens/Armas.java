@@ -16,6 +16,7 @@ public class Armas extends Entidade {
             case "espada":
                 setDown1(setup("/armasFerramentas/espada"));
                 setDescricao("[Espada]\nLeve e afiada,\nfeita para o\ncombate direto.");
+                setValorAtaque(2);
                 break;
 
 

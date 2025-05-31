@@ -4,6 +4,9 @@ import gui.criaturas.*;
 import gui.entidades.Entidade;
 import gui.entidades.NPC_Explorador;
 import gui.itens.ALIMENTO_Fruta;
+import gui.itens.Armas;
+import gui.itens.Ferramentas;
+import gui.tile_interativo.BI_Arvore;
 
 public class CriadorAtivos {
 
@@ -30,9 +33,9 @@ public class CriadorAtivos {
 
     public void setObjeto() {
 
-          /* int i=0;
-           int numMapa=0;
-
+          int i=0;
+          int numMapa=0;
+/*
            gp.getObj()[numMapa][i] = new ALIMENTO_Fruta(gp, "banana");
            gp.getObj()[numMapa][i].setMundoX(21 * gp.getTamanhoBloco());
            gp.getObj()[numMapa][i].setMundoY(34 * gp.getTamanhoBloco());
@@ -41,22 +44,37 @@ public class CriadorAtivos {
 
 
            */
+        gp.getObj()[numMapa][i] = new Armas(gp, "espada");
+        gp.getObj()[numMapa][i].setMundoX(21 * gp.getTamanhoBloco());
+        gp.getObj()[numMapa][i].setMundoY(33 * gp.getTamanhoBloco());
+
+        i=1;
+
+        gp.getObj()[numMapa][i] = new Ferramentas(gp, "machado");
+        gp.getObj()[numMapa][i].setMundoX(21 * gp.getTamanhoBloco());
+        gp.getObj()[numMapa][i].setMundoY(34 * gp.getTamanhoBloco());
+
+
     }
 
-    public void setPorco() {
+    public void definirPresa() {
         int i = 0;
         int numMapa = 0;
 
         CRI_Porco porco = new CRI_Porco(gp);
         gp.getPresa()[numMapa][i] = porco;
 
-        // Passa a entidade e a posição desejada (em blocos, não em pixels!)
         posicionarEntidadeLimitada(porco, 25, 33);
+
+        i=1;
+        CRI_Galinha galinha=new CRI_Galinha(gp);
+        gp.getPresa()[numMapa][i] = galinha;
+        posicionarEntidadeLimitada(galinha, 23, 25);
     }
 
 
 
-    public void setNPC() {
+    public void definirNPC() {
 
         int i=0;
         int numMapa=0;
@@ -65,76 +83,52 @@ public class CriadorAtivos {
         gp.getNpc()[numMapa][i] = explorador;
         posicionarEntidadeLimitada(explorador, 37, 27);
 
-    }
-
-    public void setCOELHO() {
-        int i = 1;
-        int numMapa = 0;
-
+        i=1;
         NPC_Coelho coelho = new NPC_Coelho(gp);
         gp.getNpc()[numMapa][i] = coelho;
 
-        // Define a posição dentro da área 40x40 blocos
         posicionarEntidadeLimitada(coelho, 21, 26);
-        i++;
+
     }
 
 
-
-    public void setLobo() {
-        int i = 1;
+    public void definirCriatura() {
+        int i = 0;
         int numMapa = 0;
 
         CRI_Lobo lobo = new CRI_Lobo(gp);
         gp.getCriatura()[numMapa][i] = lobo;
-
-        // Define a posição dentro da área 40x40 blocos
         posicionarEntidadeLimitada(lobo, 11, 17);
-        i++;
-    }
 
+        i=1;
 
-    public void setMorcego(){
-        int i=0;
-        int numMapa=4;
+        CRI_Urso urso=new CRI_Urso(gp);
+        gp.getCriatura()[numMapa][i] = urso;
+        posicionarEntidadeLimitada(urso, 30, 30);
 
-        gp.getCriatura()[numMapa][i]=new CRI_Morcego(gp);
-        gp.getCriatura()[numMapa][i].setMundoX(25 * gp.getTamanhoBloco());
-        gp.getCriatura()[numMapa][i].setMundoY(25 * gp.getTamanhoBloco());
+        numMapa=4;
+        i=2;
+        CRI_Morcego morcego=new CRI_Morcego(gp);
+        gp.getCriatura()[numMapa][i] = morcego;
+        posicionarEntidadeLimitada(morcego, 25, 25);
 
-        gp.getCriatura()[numMapa][1]=new CRI_Morcego(gp);
-        gp.getCriatura()[numMapa][1].setMundoX(30 * gp.getTamanhoBloco());
-        gp.getCriatura()[numMapa][1].setMundoY(21 * gp.getTamanhoBloco());
-        i++;
-
-        gp.getCriatura()[numMapa][2]=new CRI_Morcego(gp);
-        gp.getCriatura()[numMapa][2].setMundoX(16 * gp.getTamanhoBloco());
-        gp.getCriatura()[numMapa][2].setMundoY(13 * gp.getTamanhoBloco());
-        i++;
+        numMapa=4;
+        i=3;
+        CRI_Aranha aranha=new CRI_Aranha(gp);
+        gp.getCriatura()[numMapa][i] = aranha;
+        posicionarEntidadeLimitada(aranha, 23, 21);
 
     }
 
-    public void setAranha(){
-        int i=0;
-        int numMapa=4;
+    public void definirBlocoInterativo(){
 
-        gp.getCriatura()[numMapa][i]=new CRI_Aranha(gp);
-        gp.getCriatura()[numMapa][i].setMundoX(23 * gp.getTamanhoBloco());
-        gp.getCriatura()[numMapa][i].setMundoY(21 * gp.getTamanhoBloco());
-        i++;
-
-    }
-
-    public void setUrso(){
         int i=0;
         int numMapa=0;
 
-        gp.getCriatura()[numMapa][i]=new CRI_Urso(gp);
-        gp.getCriatura()[numMapa][i].setMundoX(20 * gp.getTamanhoBloco());
-        gp.getCriatura()[numMapa][i].setMundoY(20 * gp.getTamanhoBloco());
-        i++;
+        //gp.getBlocoInterativo()[numMapa][i]=new BI_Arvore(gp);
 
     }
+
 
 
 

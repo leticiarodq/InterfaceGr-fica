@@ -152,7 +152,6 @@ public class ManipuladorDeEventos {
 
             baixarEnergia();
             eventoDoencaFerimento.eventoDesidratacao();
-            eventoDoencaFerimento.eventoInfectado();
 
         }
 

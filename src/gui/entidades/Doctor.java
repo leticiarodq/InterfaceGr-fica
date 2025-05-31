@@ -50,4 +50,18 @@ public class Doctor extends Jogador {
 
     }
 
+
+    @Override
+    public void definirImagemMachado() {
+        setMachadoUp1(setup("/doctor/curandeiro_up_01_machado"));
+        setMachadoUp2(setup("/doctor/curandeiro_up_02_machado"));
+        setMachadoDown1(setup("/doctor/curandeiro_down_01_machado"));
+        setMachadoDown2(setup("/doctor/curandeiro_down_02_machado"));
+        setMachadoLeft1(setup("/doctor/curandeiro_left_01_machado"));
+        setMachadoLeft2(setup("/doctor/curandeiro_left_02_machado"));
+        setMachadoRight1(setup("/doctor/curandeiro_right_01_machado"));
+        setMachadoRight2(setup("/doctor/curandeiro_right_02_machado"));
+    }
+
+
 }

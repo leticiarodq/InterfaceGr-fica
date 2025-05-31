@@ -1,6 +1,7 @@
 package gui.entidades;
 
 import gui.itens.Armas;
+import gui.itens.Ferramentas;
 import gui.system.CriadorAtivos;
 import gui.system.EventosTeclado;
 import gui.system.PainelJogo;
@@ -24,6 +25,7 @@ public class Jogador extends Entidade {
     // Condições de doença
     private boolean desidratado = false;
     private boolean infectado = false;
+
 
     // Inventário
     private ArrayList<Entidade> inventario = new ArrayList<>();
@@ -101,9 +103,9 @@ public class Jogador extends Entidade {
         areaAtaque.width=48;
         areaAtaque.height=48;
 
-        setValoresPadrao(); //Chama o método que vai configurar valores padrão para o jogador
-        definirImagemJogador(); //Aqui garantimos que as imagens do jogador sejam carregadas
-
+        setValoresPadrao();
+        definirImagemJogador();
+        definirImagemAtaque();
         definirItens();
     }
 
@@ -146,7 +148,8 @@ public class Jogador extends Entidade {
         setSanidadeMaxima(6);
         setEnergiaMaxima(6);
 
-
+        setArmaAtual(new Ferramentas(gp, "machado"));
+        setAtacar(definirAtaque());
 
     }
 
@@ -165,7 +168,7 @@ public class Jogador extends Entidade {
 
     public void definirItens() {
 
-        inventario.clear();
+        //inventario.clear();
     }
 
     public void definirImagemJogador() {
@@ -190,7 +193,7 @@ public class Jogador extends Entidade {
                 eventosTeclado.setEnterPressionado(false);
             } else if (!isAtaque()) {
                 setAtaque(true);
-                setContadorSprite(0); // Reinicia a animação de ataque
+                setContadorSprite(0);
                 eventosTeclado.setEnterPressionado(false);
             }
         }
@@ -342,34 +345,22 @@ public class Jogador extends Entidade {
     }
 
     public void pegarObjeto(int i) {
-
         if (i != 999) {
-
-            if(gp.getObj()[gp.getMapaAtual()][i].getTipo()==getTipo_dropavel()){
-
+            if (gp.getObj()[gp.getMapaAtual()][i].getTipo() == getTipo_dropavel()) {
                 gp.getObj()[gp.getMapaAtual()][i].coletar(this);
                 gp.getObj()[gp.getMapaAtual()][i] = null;
-
-            }
-
-            else{
+            } else {
                 String texto;
-
                 if (inventario.size() != tamanhoMaxInventario) {
-
                     inventario.add(gp.getObj()[gp.getMapaAtual()][i]);
                     texto = "Pegou " + gp.getObj()[gp.getMapaAtual()][i].getNome() + "!";
-
-                    gp.getObj()[gp.getMapaAtual()][i] = null;  // corrigido aqui
-
+                    gp.getObj()[gp.getMapaAtual()][i] = null; // Remove apenas uma vez
                 } else {
                     texto = "Você atingiu o limite máximo no inventário!";
+                    // NÃO remove o objeto se o inventário estiver cheio
                 }
                 gp.getIu().mostrarMensagem(texto);
-
-
             }
-
         }
     }
 
@@ -405,13 +396,34 @@ public class Jogador extends Entidade {
 
                     if (presa.getVida() <= 0) {
                         gp.getPresa()[gp.getMapaAtual()][i].setMorto(true);
+
+                        String personagem=gp.getPersonagemSelecionado();
+
+                            if("sobrevivente".equals(personagem)){
+                                setEnergia(getEnergia());
+                            }
+                            else{
+                                setEnergia(getEnergia()-1);
+                            }
+                        }
                     }
                 }
 
         }
 
-        }
+        
     }
+
+    public int definirAtaque() {
+
+        areaAtaque = getArmaAtual().areaAtaque;
+        setAtacar(getArmaAtual().getValorAtaque());
+
+        return getAtacar();
+    }
+
+
+
 
     public void madeirar(){
 
@@ -432,6 +444,15 @@ public class Jogador extends Entidade {
 
                 if (criatura.getVida() <= 0) {
                     gp.getCriatura()[gp.getMapaAtual()][i].setMorto(true);
+                    String personagem=gp.getPersonagemSelecionado();
+
+                    if("sobrevivente".equals(personagem)){
+                        gp.jogador.setEnergia(getEnergia()-1);
+                    }
+
+                    else{
+                        gp.jogador.setEnergia(getEnergia()-2);
+                    }
                 }
             }
         }
@@ -443,15 +464,17 @@ public class Jogador extends Entidade {
     public void selecaoItem(){
 
         int itemIndice= gp.getIu().pegarItemSlot();
+
         if(itemIndice<inventario.size()){
             Entidade itemSelecionado=inventario.get(itemIndice);
 
-           /* if(itemSelecionado.getTipo()==getTipo_espada() || itemSelecionado.getTipo()==getTipo_machado() || selecaoItem.getTipo()==getTipo_picareta()){
-                armaAtual=itemSelecionado;
-                ataque=pegarImagemAtaque();
+            if(itemSelecionado.getTipo()==getTipo_espada() || itemSelecionado.getTipo()==getTipo_machado()){
+                setArmaAtual(itemSelecionado);
+                //setAtacar(definirAtaque());
+                definirImagemAtaque();
             }
 
-            */
+
             if(itemSelecionado.getTipo()==getTipo_consumivel()){
                     itemSelecionado.usar(this);
                     inventario.remove(itemIndice);

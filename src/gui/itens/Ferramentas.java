@@ -8,6 +8,9 @@ public class Ferramentas extends Entidade {
     public Ferramentas(PainelJogo gp, String tipoFerramenta) {
         super(gp);
 
+        areaAtaque.width=32;
+        areaAtaque.height=32;
+
         setNome(tipoFerramenta);
 
         switch (tipoFerramenta.toLowerCase()) {
@@ -15,6 +18,7 @@ public class Ferramentas extends Entidade {
                 setDown1(setup("/armasFerramentas/machado"));
                 setDescricao("[Machado]\nFerramenta pesada,\nútil em combate e\ncoleta.");
                 setTipo(getTipo_machado());
+                setValorAtaque(1);
 
                 break;
 

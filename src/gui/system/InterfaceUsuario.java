@@ -419,6 +419,12 @@ public class InterfaceUsuario {
 
         for (int i = 0; i < gp.jogador.getInventario().size(); i++) {
 
+            if(gp.jogador.getInventario().get(i)==gp.jogador.getArmaAtual()){
+
+                g2.setColor(new Color(240,190,90));
+                g2.fillRoundRect(slotX, slotY, gp.getTamanhoBloco(), gp.getTamanhoBloco(), 10, 10);
+            }
+
             g2.drawImage(gp.jogador.getInventario().get(i).getDown1(), slotX, slotY, null);
 
             slotX += gp.getTamanhoBloco();
