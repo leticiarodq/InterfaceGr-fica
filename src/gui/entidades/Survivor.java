@@ -14,14 +14,14 @@ public class Survivor extends Jogador {
 
     public Survivor(PainelJogo gp, EventosTeclado eventosTeclado) {
         super(gp, eventosTeclado);
+
         this.sobreviventeNato = new SobreviventeNato("Elfa", 100, 100, 100, 100, 100, null, "Floresta", 36.5);
-        getImagemJogador();
-        pegarImagemAtaque();
-        setVelocidade(4);
-        sobreviventeNato.exibirStatus();
+        definirImagemJogador();
+        definirImagemAtaque();
+
     }
     @Override
-    public void getImagemJogador() {
+    public void definirImagemJogador() {
         setUp1(setup("/survivor/sobrevivente_up_1"));
         setUp2(setup("/survivor/sobrevivente_up_2"));
         setDown1(setup("/survivor/sobrevivente_down_1"));
@@ -33,7 +33,7 @@ public class Survivor extends Jogador {
 
     }
     @Override
-    public void pegarImagemAtaque(){
+    public void definirImagemAtaque(){
 
         setAtaqueUp1(setup("/survivor/sobrevivente_up_1_ataque"));
         setAtaqueUp2(setup("/survivor/sobrevivente_up_2_ataque"));

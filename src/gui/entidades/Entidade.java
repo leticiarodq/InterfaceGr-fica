@@ -13,7 +13,6 @@ import java.util.Random;
 
 public class Entidade {
 
-
     public boolean tocou=false;
 
     // Referência ao jogo
@@ -23,15 +22,18 @@ public class Entidade {
     private int mundoX, mundoY;
     private int velocidade;
     private String direcao = "down";
-    private int contadorSprite = 0;
     private int numSprite = 1;
 
     // Invisibilidade
-    private int contadorInvisibilidade;
     private boolean invisibilidade=false;
 
     // Ataque
-    private int tipo; //0=player, 1=npc, 2=criatura
+    private boolean ataque=false;
+    private boolean vivo=true;
+    private boolean morto=false;
+
+    // Tipo
+    private int tipo;
     private final int tipo_jogador=0;
     private final int tipo_npc=1;
     private final int tipo_criatura=2;
@@ -40,31 +42,29 @@ public class Entidade {
     private final int tipo_machado=5;
     private final int tipo_picareta=6;
     private final int tipo_escudo=7;
+    private final int tipo_presa=8;
+    private final int tipo_dropavel=9;
 
     // Dropar item
 
 
-
-
-
-    private boolean ataque=false;
-    private boolean vivo=true;
-    private boolean morto=false;
+    // Contadores
+    private int contadorSprite = 0;
+    private int contadorInvisibilidade;
     private int contadorMorto=0;
+    private int contadorDeBloqueioDeAcao = 0;
 
     // Imagens do personagem
     private BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
     private BufferedImage ataqueUp1, ataqueUp2, ataqueDown1, ataqueDown2, ataqueLeft1, ataqueLeft2, ataqueRight1, ataqueRight2;
+
+
 
     // Colisão
     private Rectangle areaSolida = new Rectangle(0, 0, 64, 64);
     private int areaSolidaPadraoX, areaSolidaPadraoY;
     private boolean colisaoOn = false;
     public Rectangle areaAtaque=new Rectangle(0,0,0,0);
-
-    // Controle de ações
-    private int contadorDeBloqueioDeAcao = 0;
-
 
 
     // Diálogos
@@ -90,7 +90,6 @@ public class Entidade {
     private String descricao="";
 
     // Objetos
-
     private BufferedImage imagem, imagem2, imagem3;
     private String nome;
     private boolean colisao = false;
@@ -302,6 +301,8 @@ public class Entidade {
         return contadorInvisibilidade;
     }
 
+
+    // Tipos
     public int getTipo() {
         return tipo;
     }
@@ -338,6 +339,19 @@ public class Entidade {
         return tipo_npc;
     }
 
+    public void setTipo(int tipo) {
+        this.tipo = tipo;
+    }
+
+    public int getTipo_presa() {
+        return tipo_presa;
+    }
+
+    public int getTipo_dropavel() {
+        return tipo_dropavel;
+    }
+
+    // Ataque
     public boolean isAtaque() {
         return ataque;
     }
@@ -350,21 +364,11 @@ public class Entidade {
         return vivo;
     }
 
-    public void setTipo(int tipo) {
-        this.tipo = tipo;
-    }
-
-    public boolean isTocou() {
-        return tocou;
-    }
 
     public void setMorto(boolean morto) {
         this.morto = morto;
     }
 
-    public void setTocou(boolean tocou) {
-        this.tocou = tocou;
-    }
 
     public void setAtaque(boolean ataque) {
         this.ataque = ataque;
@@ -516,6 +520,7 @@ public class Entidade {
     public void setAtaqueUp2(BufferedImage ataqueUp2) {
         this.ataqueUp2 = ataqueUp2;
     }
+
     // Objetos getters
 
     public BufferedImage getImagem() {
@@ -560,6 +565,7 @@ public class Entidade {
     public void setImagem3(BufferedImage imagem3) {
         this.imagem3 = imagem3;
     }
+
 
     public Entidade(PainelJogo gp) {
         this.gp = gp;
@@ -634,6 +640,7 @@ public class Entidade {
     public void desenhar(Graphics2D g2) {
         BufferedImage imagem = null;
 
+
         int telaX = mundoX - gp.jogador.getMundoX() + gp.jogador.getTelaX();
         int telaY = mundoY - gp.jogador.getMundoY() + gp.jogador.getTelaY();
 
@@ -659,7 +666,7 @@ public class Entidade {
 
             // barra
 
-            if(tipo==2){
+            if(tipo==tipo_criatura || tipo==tipo_presa){
 
                 double umaEscala= (double)gp.getTamanhoBloco()/vidaMaxima;
                 double barraHpValor= umaEscala*vida;
@@ -670,8 +677,6 @@ public class Entidade {
                 g2.fillRect(telaX, telaY-20, (int) barraHpValor, 8);
 
             }
-
-
 
             if (isInvisibilidade()) {
                 g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
@@ -757,8 +762,6 @@ public class Entidade {
 
     public void checarDrop(){
 
-
-
     }
 
     public void droparItem(Entidade itemDropado){
@@ -768,9 +771,6 @@ public class Entidade {
                 gp.getObj()[gp.getMapaAtual()][i]=itemDropado;
                 gp.getObj()[gp.getMapaAtual()][i].setMundoX(getMundoX());
                 gp.getObj()[gp.getMapaAtual()][i].setMundoY(getMundoY());
-                System.out.println("Dropado em: " + getMundoX() + ", " + getMundoY());
-
-
 
                 break;
 

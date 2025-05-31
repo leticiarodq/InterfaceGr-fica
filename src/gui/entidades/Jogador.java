@@ -13,28 +13,31 @@ import java.util.ArrayList;
 
 public class Jogador extends Entidade {
 
-    PainelJogo gp; //gp é uma referência para o painel de jogo onde o jogador será desenhado e onde o jogo será atualizado.
-    EventosTeclado eventosTeclado; //keyH é uma referência para o manipulador de teclas, que controla as teclas pressionadas para movimentação.
+    private PainelJogo gp; //gp é uma referência para o painel de jogo onde o jogador será desenhado e onde o jogo será atualizado.
+    private EventosTeclado eventosTeclado; //keyH é uma referência para o manipulador de teclas, que controla as teclas pressionadas para movimentação.
+
+    // Tela
 
     private final int telaX;
     private final int telaY;
-    private Personagem personagemLogico;
 
-    public final int getTelaX() {
-        return telaX;
-    }
-
-    public final int getTelaY() {
-        return telaY;
-    }
-
+    // Condições de doença
     private boolean desidratado = false;
     private boolean infectado = false;
 
+    // Inventário
     private ArrayList<Entidade> inventario = new ArrayList<>();
     private final int tamanhoMaxInventario = 20;
 
-    // Inventário
+    private Personagem personagemLogico;
+
+    // Contador
+    private int counter2 = 0;
+
+    private CriadorAtivos criadorDeAtivos;
+
+    // Métodos de acesso
+
     public final int getTamanhoMaxInventario() {
         return tamanhoMaxInventario;
     }
@@ -42,7 +45,6 @@ public class Jogador extends Entidade {
     public ArrayList<Entidade> getInventario() {
         return inventario;
     }
-
 
     public boolean isDesidratado() {
         return desidratado;
@@ -52,7 +54,6 @@ public class Jogador extends Entidade {
         this.desidratado = desidratado;
     }
 
-
     public boolean isInfectado() {
         return infectado;
     }
@@ -61,9 +62,14 @@ public class Jogador extends Entidade {
         this.infectado = infectado;
     }
 
-    private int counter2 = 0;
+    public final int getTelaX() {
+        return telaX;
+    }
 
-    CriadorAtivos criadorDeAtivos;
+    public final int getTelaY() {
+        return telaY;
+    }
+
 
     public Jogador(PainelJogo gp, EventosTeclado eventosTeclado) { //Construtor da classe que recebe o painel de jogo e manipulador de teclas
 
@@ -72,7 +78,6 @@ public class Jogador extends Entidade {
 
         this.gp = gp;
         this.eventosTeclado = eventosTeclado;
-
 
         this.personagemLogico = new Personagem(
                 "Jogador",
@@ -86,7 +91,6 @@ public class Jogador extends Entidade {
                 36.5
         );
 
-
         telaX = gp.getTelaLargura() / 2 - (gp.getTamanhoBloco() / 2);
         telaY = gp.getTelaAltura() / 2 - (gp.getTamanhoBloco() / 2);
 
@@ -97,9 +101,8 @@ public class Jogador extends Entidade {
         areaAtaque.width=48;
         areaAtaque.height=48;
 
-
         setValoresPadrao(); //Chama o método que vai configurar valores padrão para o jogador
-        getImagemJogador(); //Aqui garantimos que as imagens do jogador sejam carregadas
+        definirImagemJogador(); //Aqui garantimos que as imagens do jogador sejam carregadas
 
         definirItens();
     }
@@ -107,8 +110,6 @@ public class Jogador extends Entidade {
     public void setValoresPadrao() {
         // Define valores iniciais para a posição do jogador, velocidade e direção
 
-        //setMundoX(gp.getTamanhoBloco() * 26);
-        //setMundoY(gp.getTamanhoBloco() * 9);
         setMundoX(gp.getTamanhoBloco() * 21);
         setMundoY(gp.getTamanhoBloco() * 10);
         setVelocidade(4);
@@ -116,7 +117,7 @@ public class Jogador extends Entidade {
 
         // Status do jogador
 
-        setVidaMaxima(6);
+        /*setVidaMaxima(6);
         setVida(getVidaMaxima());
 
         setSedeMaxima(8);
@@ -131,9 +132,9 @@ public class Jogador extends Entidade {
         setEnergiaMaxima(6);
         setEnergia(getEnergiaMaxima());
 
+         */
 
-
-        /*setVida(personagemLogico.getVida());
+        setVida(personagemLogico.getVida());
         setSede(personagemLogico.getSede());
         setFome(personagemLogico.getFome());
         setSanidade(personagemLogico.getSanidade());
@@ -146,7 +147,7 @@ public class Jogador extends Entidade {
         setEnergiaMaxima(6);
 
 
-         */
+
     }
 
     public void posicoesPadrao(){
@@ -161,19 +162,22 @@ public class Jogador extends Entidade {
         setVida(getVidaMaxima());
         setInvisibilidade(false);
     }
+
     public void definirItens() {
 
         inventario.clear();
-
     }
 
-    public void getImagemJogador() {
-
+    public void definirImagemJogador() {
     }
 
-    public void pegarImagemAtaque() {
+    public void definirImagemAtaque() {
+    }
 
+    public void definirImagemMachado(){
+    }
 
+    public void definirImagemPicareta(){
     }
 
     public void update() {
@@ -193,12 +197,8 @@ public class Jogador extends Entidade {
 
         if (isAtaque()) {
             ataque();
-            //int criaturaIndice = gp.getcColisoes().checarEntidade(this, gp.getCriatura());
-            //damageCriatura(criaturaIndice);
+
         } else {
-            // Se não está atacando, verifica dano ao jogador por contato com criatura
-            //int criaturaIndice = gp.getcColisoes().checarEntidade(this, gp.getCriatura());
-            //contatoCriatura(criaturaIndice);
 
             // Verifica movimentação apenas se alguma tecla de direção estiver pressionada
             if (eventosTeclado.isCimaPressionado() || eventosTeclado.isBaixoPressionado() ||
@@ -227,6 +227,9 @@ public class Jogador extends Entidade {
 
                 int criaturaIndice = gp.getcColisoes().checarEntidade(this, gp.getCriatura());
                 contatoCriatura(criaturaIndice);
+
+                int presaIndice=gp.getcColisoes().checarEntidade(this, gp.getPresa());
+                cacar(presaIndice);
 
                 gp.getManipuladorDeEventos().checarEvento();
 
@@ -282,7 +285,6 @@ public class Jogador extends Entidade {
         }
     }
 
-
     public void ataque() {
         setContadorSprite(getContadorSprite() + 1);
 
@@ -320,7 +322,10 @@ public class Jogador extends Entidade {
 
             // Verifica colisão com criaturas usando a nova área
             int indiceCriatura = gp.getcColisoes().checarEntidade(this, gp.getCriatura());
-            damageCriatura(indiceCriatura);
+            danoCriatura(indiceCriatura);
+
+            int presaIndice=gp.getcColisoes().checarEntidade(this, gp.getPresa());
+            cacar(presaIndice);
 
             // Restaura as coordenadas e área original do personagem
             setMundoX(mundoXatual);
@@ -340,8 +345,7 @@ public class Jogador extends Entidade {
 
         if (i != 999) {
 
-            if(gp.getObj()[gp.getMapaAtual()][i].getTipo()==getTipo_consumivel()){
-
+            if(gp.getObj()[gp.getMapaAtual()][i].getTipo()==getTipo_dropavel()){
 
                 gp.getObj()[gp.getMapaAtual()][i].coletar(this);
                 gp.getObj()[gp.getMapaAtual()][i] = null;
@@ -366,9 +370,7 @@ public class Jogador extends Entidade {
 
             }
 
-
         }
-
     }
 
 
@@ -391,9 +393,36 @@ public class Jogador extends Entidade {
         }
     }
 
+    public void cacar(int i) {
+
+        if(isAtaque()){
+            if (i != 999) {
+                Entidade presa = gp.getPresa()[gp.getMapaAtual()][i];
+
+                if (!presa.isInvisibilidade()) {
+                    presa.setVida(presa.getVida() - 1); // Corrigido aqui
+                    presa.setInvisibilidade(true);
+
+                    if (presa.getVida() <= 0) {
+                        gp.getPresa()[gp.getMapaAtual()][i].setMorto(true);
+                    }
+                }
+
+        }
+
+        }
+    }
+
+    public void madeirar(){
+
+    }
+
+    public void minerar(){
+
+    }
 
 
-    public void damageCriatura(int i) {
+    public void danoCriatura(int i) {
         if (i != 999) {
             Entidade criatura = gp.getCriatura()[gp.getMapaAtual()][i];
 
@@ -410,6 +439,7 @@ public class Jogador extends Entidade {
 
 
 
+
     public void selecaoItem(){
 
         int itemIndice= gp.getIu().pegarItemSlot();
@@ -423,8 +453,22 @@ public class Jogador extends Entidade {
 
             */
             if(itemSelecionado.getTipo()==getTipo_consumivel()){
-                itemSelecionado.usar(this);
-                inventario.remove(itemIndice);
+                    itemSelecionado.usar(this);
+                    inventario.remove(itemIndice);
+            }
+
+            if(itemSelecionado.getTipo()==getTipo_dropavel()){
+
+                if(gp.jogador.getFome()<gp.jogador.getFomeMaxima()){
+                    itemSelecionado.usar(this);
+
+                    inventario.remove(itemIndice);
+
+                }else{
+                    gp.setEstadoJogo(gp.getEstadoDialogo());
+                    gp.getIu().setDialogoAtual("Você já está satisfeito.\nNão pode comer mais agora.");
+                }
+
 
             }
         }

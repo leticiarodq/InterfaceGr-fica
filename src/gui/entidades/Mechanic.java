@@ -16,15 +16,14 @@ public class Mechanic extends Jogador {
 
     public Mechanic(PainelJogo gp, EventosTeclado eventosTeclado) {
         super(gp, eventosTeclado);
-        this.mecanico = new Mecanico("Mecanico", 100, 100, 100, 100, 100, null, gp.getBlocosG().getAmbienteAtual().getNomeAmbiente(), 36.5);
-        getImagemJogador();
-        pegarImagemAtaque();
-        setVelocidade(4);
-        mecanico.exibirStatus();
+
+        this.mecanico = new Mecanico("Mecânica", 100, 100, 100, 100, 100, null, gp.getBlocosG().getAmbienteAtual().getNomeAmbiente(), 36.5);
+        definirImagemJogador();
+        definirImagemAtaque();
     }
 
     @Override
-    public void getImagemJogador() {
+    public void definirImagemJogador() {
         try {
             setUp1(ImageIO.read(getClass().getResourceAsStream("/mechanic/mecanica_up_01.png")));
             setUp2(ImageIO.read(getClass().getResourceAsStream("/mechanic/mecanica_up_02.png")));
@@ -39,7 +38,7 @@ public class Mechanic extends Jogador {
         }
     }
 
-    public void pegarImagemAtaque(){
+    public void definirImagemAtaque(){
         try {
             setAtaqueUp1(ImageIO.read(getClass().getResourceAsStream("/mechanic/mecanica_up_01_ataque.png")));
             setAtaqueUp2(ImageIO.read(getClass().getResourceAsStream("/mechanic/mecanica_up_02_ataque.png")));

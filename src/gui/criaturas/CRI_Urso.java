@@ -77,7 +77,7 @@ public class CRI_Urso extends Entidade {
 
     public void checarDrop() {
 
-        droparItem(new ALIMENTO_Carne(gp, "carnecrua"));
+        droparItem(new ALIMENTO_Carne(gp, "carneurso"));
 
     }
 

@@ -18,17 +18,15 @@ public class Doctor extends Jogador {
 
     public Doctor(PainelJogo gp, EventosTeclado eventosTeclado) {
         super(gp, eventosTeclado);
-        this.medico = new Medico("Dr. Eduardo",100, 100, 100, 100, 100, null, gp.getBlocosG().getAmbienteAtual().getNomeAmbiente(), 36.5);
-        getImagemJogador();
-        pegarImagemAtaque();
-        setVelocidade(4);
 
-        medico.exibirStatus();
+        this.medico = new Medico("Dr. Eduardo",100, 100, 100, 100, 100, null, gp.getBlocosG().getAmbienteAtual().getNomeAmbiente(), 36.5);
+        definirImagemJogador();
+        definirImagemAtaque();
     }
 
 
     @Override
-    public void getImagemJogador() {
+    public void definirImagemJogador() {
             setUp1(setup("/doctor/curandeiro_up_01"));
             setUp2(setup("/doctor/curandeiro_up_02"));
             setDown1(setup("/doctor/curandeiro_down_01"));
@@ -40,7 +38,7 @@ public class Doctor extends Jogador {
 
     }
     @Override
-    public void pegarImagemAtaque(){
+    public void definirImagemAtaque(){
             setAtaqueUp1(setup("/doctor/curandeiro_up_01_ataque"));
             setAtaqueUp2(setup("/doctor/curandeiro_up_02_ataque"));
             setAtaqueDown1(setup("/doctor/curandeiro_down_01_ataque"));

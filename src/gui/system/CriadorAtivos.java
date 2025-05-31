@@ -1,6 +1,7 @@
 package gui.system;
 
 import gui.criaturas.*;
+import gui.entidades.Entidade;
 import gui.entidades.NPC_Explorador;
 import gui.itens.ALIMENTO_Fruta;
 
@@ -13,6 +14,19 @@ public class CriadorAtivos {
         this.gp = gp;
         //this.random = new Random();
     }
+
+    public void posicionarEntidadeLimitada(Entidade entidade, int blocoX, int blocoY) {
+        int limite = 40;
+
+        // Garante que a entidade não seja colocada fora dos limites 0–39
+        if (blocoX >= 0 && blocoX < limite && blocoY >= 0 && blocoY < limite) {
+            entidade.setMundoX(blocoX * gp.getTamanhoBloco());
+            entidade.setMundoY(blocoY * gp.getTamanhoBloco());
+        } else {
+            System.out.println("Tentativa de posicionar fora da área 40x40: (" + blocoX + ", " + blocoY + ")");
+        }
+    }
+
 
     public void setObjeto() {
 
@@ -29,6 +43,17 @@ public class CriadorAtivos {
            */
     }
 
+    public void setPorco() {
+        int i = 0;
+        int numMapa = 0;
+
+        CRI_Porco porco = new CRI_Porco(gp);
+        gp.getPresa()[numMapa][i] = porco;
+
+        // Passa a entidade e a posição desejada (em blocos, não em pixels!)
+        posicionarEntidadeLimitada(porco, 25, 33);
+    }
+
 
 
     public void setNPC() {
@@ -36,40 +61,38 @@ public class CriadorAtivos {
         int i=0;
         int numMapa=0;
 
-        gp.getNpc()[numMapa][i] = new NPC_Explorador(gp);
-        gp.getNpc()[numMapa][i].setMundoX(36 * gp.getTamanhoBloco());
-        gp.getNpc()[numMapa][i].setMundoY(28 * gp.getTamanhoBloco());
+        NPC_Explorador explorador=new NPC_Explorador(gp);
+        gp.getNpc()[numMapa][i] = explorador;
+        posicionarEntidadeLimitada(explorador, 37, 27);
 
-        i++;
     }
 
     public void setCOELHO() {
+        int i = 1;
+        int numMapa = 0;
 
-        int i=0;
-        int numMapa=0;
+        NPC_Coelho coelho = new NPC_Coelho(gp);
+        gp.getNpc()[numMapa][i] = coelho;
 
-        gp.getCriatura()[numMapa][i] = new NPC_Coelho(gp);
-        gp.getCriatura()[numMapa][i].setMundoX(21 * gp.getTamanhoBloco());
-        gp.getCriatura()[numMapa][i].setMundoY(26 * gp.getTamanhoBloco());
+        // Define a posição dentro da área 40x40 blocos
+        posicionarEntidadeLimitada(coelho, 21, 26);
         i++;
-
-
     }
 
 
 
-  public void setLobo(){
+    public void setLobo() {
+        int i = 1;
+        int numMapa = 0;
 
-          int i=0;
-          int numMapa=0;
+        CRI_Lobo lobo = new CRI_Lobo(gp);
+        gp.getCriatura()[numMapa][i] = lobo;
 
-          gp.getCriatura()[numMapa][i]=new CRI_Lobo(gp);
-          gp.getCriatura()[numMapa][i].setMundoX(21 * gp.getTamanhoBloco());
-          gp.getCriatura()[numMapa][i].setMundoY(25 * gp.getTamanhoBloco());
-          i++;
-
-
+        // Define a posição dentro da área 40x40 blocos
+        posicionarEntidadeLimitada(lobo, 11, 17);
+        i++;
     }
+
 
     public void setMorcego(){
         int i=0;

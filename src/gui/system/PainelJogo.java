@@ -87,6 +87,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
     private Entidade obj[][] = new Entidade[mapaMax][100];
     private Entidade npc[][] = new Entidade[mapaMax][100];
     private Entidade criatura[][] = new Entidade[mapaMax][10];
+    private Entidade presa[][] = new Entidade[mapaMax][10];
     private ArrayList<Entidade> entidadeLista = new ArrayList<>();
     private Entidade alimento[][] = new Entidade[mapaMax][10];
 
@@ -178,6 +179,10 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
 
     public Entidade[][] getObj() {
         return obj;
+    }
+
+    public Entidade[][] getPresa() {
+        return presa;
     }
 
     public boolean isJogoIniciado() {
@@ -336,6 +341,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         cAtivos.setAranha();
         cAtivos.setUrso();
 
+
     }
 
     public void restart(){
@@ -434,8 +440,6 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
             }
             jogador.update();
 
-            System.out.println("Velocidade atual do jogador: " + jogador.getVelocidade());
-
 
             //NPC
 
@@ -461,6 +465,20 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
                 }
             }
 
+            for (int i = 0; i < presa[1].length; i++) {
+                if (presa[mapaAtual][i] != null) {
+                    if(presa[mapaAtual][i].isVivo()==true && presa[mapaAtual][i].isMorto()==false){
+                        presa[mapaAtual][i].update();
+                    }
+                    if(presa[mapaAtual][i].isVivo()==false){
+                        presa[mapaAtual][i].checarDrop();
+                        presa[mapaAtual][i]=null;
+                    }
+
+
+                }
+            }
+
 
         }
         if (estadoJogo == estadoPausa) {
@@ -480,6 +498,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         cAtivos.setMorcego();
         cAtivos.setAranha();
         cAtivos.setUrso();
+        cAtivos.setPorco();
 
        // gerenciadorAmbientacao.setup(); // só aqui, após o jogador estar inicializado
 
@@ -487,10 +506,6 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
 
         estadoJogo = estadoTitulo;
     }
-
-
-
-
 
 
     // Tela de clima
@@ -669,6 +684,12 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
            for (int i = 0; i < criatura[1].length; i++) {
                 if (criatura[mapaAtual][i] != null) {
                     entidadeLista.add(criatura[mapaAtual][i]);
+                }
+            }
+
+            for (int i = 0; i < presa[1].length; i++) {
+                if (presa[mapaAtual][i] != null) {
+                    entidadeLista.add(presa[mapaAtual][i]);
                 }
             }
 

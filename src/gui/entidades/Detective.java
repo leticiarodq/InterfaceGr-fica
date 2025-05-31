@@ -13,16 +13,15 @@ public class Detective extends Jogador { //
 
     public Detective(PainelJogo gp, EventosTeclado eventosTeclado) {
         super(gp, eventosTeclado);
-        this.rastreador = new Rastreador("Rastreador",getVida(), getFome(), getSede(), getEnergia(), getSanidade(), null, gp.getBlocosG().getAmbienteAtual().getNomeAmbiente(), 36.5);
-        getImagemJogador();
-        pegarImagemAtaque();
-        setVelocidade(4);
 
-        rastreador.exibirStatus();
+
+        this.rastreador = new Rastreador("Rastreador",getVida(), getFome(), getSede(), getEnergia(), getSanidade(), null, gp.getBlocosG().getAmbienteAtual().getNomeAmbiente(), 36.5);
+        definirImagemJogador();
+        definirImagemAtaque();
     }
 
     @Override
-    public void getImagemJogador() {
+    public void definirImagemJogador() {
             setUp1(setup("/detective/ninja_up_01"));
             setUp2(setup("/detective/ninja_up_02"));
             setDown1(setup("/detective/ninja_down_01"));
@@ -33,7 +32,7 @@ public class Detective extends Jogador { //
             setRight2(setup("/detective/ninja_right_02"));
     }
     @Override
-    public void pegarImagemAtaque(){
+    public void definirImagemAtaque(){
             setAtaqueUp1(setup("/detective/ninja_up_01_ataque"));
             setAtaqueUp2(setup("/detective/ninja_up_02_ataque"));
             setAtaqueDown1(setup("/detective/ninja_down_01_ataque"));
