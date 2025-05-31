@@ -69,7 +69,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
     // Mapa do jogo
 
     private final int mapaMax = 10;
-    private int mapaAtual = 4;
+    private int mapaAtual = 0;
 
     // Entidade e objeto
 

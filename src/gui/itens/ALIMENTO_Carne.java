@@ -33,6 +33,12 @@ public class ALIMENTO_Carne extends Entidade {
                 setDown1(setup("/alimentos/carnegalinha", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
                 setDescricao("[Carne de Galinha Cria]\nPedaço cru de carne\nde galinha.");
                 break;
+
+            case "carnelobo":
+                setNome("Carne de Lobo Crua");
+                setDown1(setup("/alimentos/carnelobo", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
+                setDescricao("[Carne de Lobo Crua]\nPedaço cru de carne\nde lobo.");
+                break;
         }
 
     }

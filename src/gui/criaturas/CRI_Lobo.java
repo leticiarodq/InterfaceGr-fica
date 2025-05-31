@@ -2,6 +2,7 @@ package gui.criaturas;
 
 import eventos.EventoCriatura;
 import gui.entidades.Entidade;
+import gui.itens.ALIMENTO_Carne;
 import gui.system.PainelJogo;
 
 import javax.imageio.ImageIO;
@@ -73,6 +74,14 @@ public class CRI_Lobo extends Entidade {
 
         }
 
+
+
+    }
+
+
+    public void checarDrop() {
+
+        droparItem(new ALIMENTO_Carne(gp, "carnelobo"));
 
     }
 }
