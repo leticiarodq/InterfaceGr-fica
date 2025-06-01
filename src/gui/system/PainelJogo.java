@@ -101,7 +101,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
     private BlocoInterativo bloco[][]=new BlocoInterativo[mapaMax][10];
     private ArrayList<Entidade> entidadeLista = new ArrayList<>();
     private Entidade alimento[][] = new Entidade[mapaMax][10];
-
+    public Entidade fogueira[][]=new Entidade[mapaMax][10];
 
     // public BlocoInterativo blocoInterativo[][]=new BlocoInterativo[mapaMax][50];
 
@@ -120,6 +120,8 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
     private int estadoJogoFinalizado = 6;
     private int estadoJogoDescricao = 7;
     private int estadoOpcoes = 8;
+    private int estadoAssarAlimento=9;
+    private int estadoTransicao=10;
 
 
     // Métodos de acesso getters
@@ -185,7 +187,6 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         return som;
     }
 
-
     public String getPersonagemSelecionado() {
         return personagemSelecionado;
     }
@@ -242,6 +243,14 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         return estadoJogoDescricao;
     }
 
+    public int getEstadoAssarAlimento() {
+        return estadoAssarAlimento;
+    }
+
+    public void setEstadoAssarAlimento(int estadoAssarAlimento) {
+        this.estadoAssarAlimento = estadoAssarAlimento;
+    }
+
     public Entidade[][] getNpc() {
         return npc;
     }
@@ -278,8 +287,8 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         return mapaAtual;
     }
 
-    public GerenciadorAmbientacao getGerenciadorAmbientacao() {
-        return gerenciadorAmbientacao;
+    public int getEstadoTransicao() {
+        return estadoTransicao;
     }
 
     // Métodos setters
@@ -334,25 +343,17 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         this.setFocusable(true); //Permite que o painel capture eventos de teclado
         this.requestFocus(); //Garante que o painel receba o foco do teclado:
 
-
     }
 
-
     public void iniciarThreadJogo() {
-
 
         threadJogo = new Thread(this);
         threadJogo.start();
 
     }
 
-
-
-
-
-
+    // Tentar novamente
     public void retry(){
-
         jogador.posicoesPadrao();
         jogador.restaurarVida();
         cAtivos.setObjeto();
@@ -360,22 +361,25 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         cAtivos.definirCriatura();
         cAtivos.definirPresa();
 
-
     }
 
+    // Sair do jogo
     public void restart(){
+        jogador = null;
 
-        jogador.setValoresPadrao();
-        jogador.posicoesPadrao();
-        jogador.restaurarVida();
-        jogador.definirItens();
-        cAtivos.setObjeto();
+        setPersonagemSelecionado(null); //
+
         cAtivos.setObjeto();
         cAtivos.definirNPC();
         cAtivos.definirCriatura();
         cAtivos.definirPresa();
         cAtivos.definirBlocoInterativo();
-
+        if (iu != null) {
+            iu.setPersonagemSelecionado(null);
+            iu.setTelaMenu(0); //
+            iu.setComandoNum(0);
+        }
+        System.out.println("Jogo reiniciado - personagem resetado para nova seleção");
     }
 
     @Override
@@ -406,7 +410,6 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
             }
 
 
-
             try {
                 Thread.sleep(1); // Pequena pausa para reduzir o uso da CPU
             } catch (InterruptedException e) {
@@ -420,11 +423,10 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
             cronometro = 0;
         }
 
-
     }
 
     public void criarJogadorConformeEscolha() {
-        String personagemKey = getPersonagemSelecionado(); // "rastreador", "medico", etc.
+        String personagemKey = getPersonagemSelecionado();
 
         switch (personagemKey) {
             case "rastreador":
@@ -441,35 +443,44 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
                 jogador = new Survivor(this, eventosTeclado);
                 break;
             default:
-                jogador = new Jogador(this, eventosTeclado); // fallback caso não tenha seleção
+                jogador = new Jogador(this, eventosTeclado);
                 break;
         }
 
 
     }
 
-
     public void update() {
-
         if (estadoJogo == estadoPlay) {
-
+            // Só criar o jogador se ele for null E se tivermos uma seleção válida
             if (jogador == null) {
-                criarJogadorConformeEscolha();
-                jogador.setVelocidade(4);
+                String personagemSelecionado = getPersonagemSelecionado();
+                if (personagemSelecionado != null && !personagemSelecionado.isEmpty()) {
+                    criarJogadorConformeEscolha();
+                    jogador.setVelocidade(4);
+                    jogador.setValoresPadrao();
+                    jogador.posicoesPadrao();
+                    jogador.restaurarVida();
+                    jogador.definirItens();
+                } else {
+                    // Se não há personagem selecionado, volta para a tela de título
+                    estadoJogo = estadoTitulo;
+                    return;
+                }
             }
-            jogador.update();
 
+            if (jogador != null) {
+                jogador.update();
+            }
 
-            //NPC
-
+            // NPC
             for (int i = 0; i < npc[1].length; i++) {
                 if (npc[mapaAtual][i] != null) {
                     npc[mapaAtual][i].update();
                 }
             }
 
-            // CRIATURA
-
+            // Criatura
             for (int i = 0; i < criatura[1].length; i++) {
                 if (criatura[mapaAtual][i] != null) {
                     if(criatura[mapaAtual][i].isVivo()==true && criatura[mapaAtual][i].isMorto()==false){
@@ -479,10 +490,10 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
                         criatura[mapaAtual][i].checarDrop();
                         criatura[mapaAtual][i]=null;
                     }
-
-
                 }
             }
+
+            // Presa
 
             for (int i = 0; i < presa[1].length; i++) {
                 if (presa[mapaAtual][i] != null) {
@@ -493,36 +504,31 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
                         presa[mapaAtual][i].checarDrop();
                         presa[mapaAtual][i]=null;
                     }
-
-
                 }
             }
 
+            // Tile interativo
             for (int i = 0; i < bloco[1].length; i++) {
                 if (bloco[mapaAtual][i] != null) {
                     bloco[mapaAtual][i].update();
                 }
             }
-
-
         }
+
         if (estadoJogo == estadoPausa) {
-            // nada
+
         }
     }
 
-
     public void setupJogo() {
-        // Cria o jogador com base na seleção
-  
-        // Agora é seguro configurar o ambiente
+
         cAtivos.setObjeto();
         cAtivos.definirNPC();
         cAtivos.definirCriatura();
         cAtivos.definirPresa();
         cAtivos.definirBlocoInterativo();
 
-       // gerenciadorAmbientacao.setup(); // só aqui, após o jogador estar inicializado
+       // gerenciadorAmbientacao.setup();
 
         playMusica(0);
 
@@ -531,7 +537,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         tempoTela=new BufferedImage(telaLargura, telaAltura, BufferedImage.TYPE_INT_ARGB);
         g2=(Graphics2D) tempoTela.getGraphics();
 
-        definirTelaCheia();
+       //definirTelaCheia();
 
     }
     
@@ -733,8 +739,6 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
             }
 
 
-
-
             // Ordenar entidades pelo eixo Y
             Collections.sort(entidadeLista, new Comparator<Entidade>() {
                 @Override
@@ -766,9 +770,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
             // gerenciadorAmbientacao.desenhar(g2);
             iu.desenhar(g2);
 
-
         }
-
 
         if (eventosTeclado.isMostrarTextoDebug()) {
             long desenhoFinal=System.nanoTime();
@@ -785,8 +787,6 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
             g2.drawString("Coluna: " + (jogador.getMundoX() + jogador.getAreaSolida().x)/tamanhoBloco, x, y); y+=linhaLargura;
             g2.drawString("Linha: " + (jogador.getMundoY() + jogador.getAreaSolida().y)/tamanhoBloco, x, y); y+=linhaLargura;
 
-
-
             g2.drawString("Draw time: "+ passou, 10,480);
             System.out.println("Draw time: "+ passou);
         }
@@ -795,130 +795,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         long passado= desenhoFinal-desenhoComeco;
 
 
-
     }
-
-    /*@Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D) g;
-
-        long desenhoComeco = 0;
-        if(eventosTeclado.isChecarDesenhoTempo()==true){
-            desenhoComeco=System.nanoTime();
-        }
-
-        // TELA DE TÍTULO
-        if (estadoJogo == estadoTitulo) {
-            iu.desenhar(g2);
-        } else {
-
-            // Desenhar blocos do mapa
-            blocosG.draw(g2);
-
-            for (int i = 0; i < bloco[1].length; i++) {
-                if (bloco[mapaAtual][i] != null) {
-                    bloco[mapaAtual][i].desenhar(g2);
-                }
-            }
-
-            // Adicionar entidades à lista de desenho
-
-
-            entidadeLista.add(jogador);
-
-            for (int i = 0; i < npc[1].length; i++) {
-                if (npc[mapaAtual][i] != null) {
-                    entidadeLista.add(npc[mapaAtual][i]);
-                }
-            }
-
-            for (int i = 0; i < obj[1].length; i++) {
-                if (obj[mapaAtual][i] != null) {
-                    entidadeLista.add(obj[mapaAtual][i]);
-                }
-            }
-
-           for (int i = 0; i < criatura[1].length; i++) {
-                if (criatura[mapaAtual][i] != null) {
-                    entidadeLista.add(criatura[mapaAtual][i]);
-                }
-            }
-
-            for (int i = 0; i < presa[1].length; i++) {
-                if (presa[mapaAtual][i] != null) {
-                    entidadeLista.add(presa[mapaAtual][i]);
-                }
-            }
-
-
-
-
-            // Ordenar entidades pelo eixo Y
-            Collections.sort(entidadeLista, new Comparator<Entidade>() {
-                @Override
-                public int compare(Entidade e1, Entidade e2) {
-                    int resultado=Integer.compare(e1.getMundoY(), e2.getMundoY());
-                    return resultado;
-                }
-            });
-
-            // Desenhar todas as entidades na ordem correta
-            for(int i=0; i<entidadeLista.size(); i++){
-                entidadeLista.get(i).desenhar(g2);
-            }
-            entidadeLista.clear();
-
-
-            // Efeitos visuais
-            if (mostrarEfeitoConfusao) {
-                desenharEfeitoConfusao(g2);
-            }
-
-            if (mostrarChuva) {
-                desenharChuva(g2);
-            }
-            if (mostrarNevasca) {
-                desenharNevasca(g2);
-            }
-            // IU (Interface do Usuário)
-           // gerenciadorAmbientacao.desenhar(g2);
-            iu.desenhar(g2);
-
-
-        }
-
-
-        if (eventosTeclado.isMostrarTextoDebug()) {
-            long desenhoFinal=System.nanoTime();
-            long passou=desenhoFinal-desenhoComeco;
-
-            g2.setFont(new Font("Arial", Font.PLAIN, 20));
-            g2.setColor(Color.white);
-            int x=10;
-            int y=400;
-            int linhaLargura=20;
-
-            g2.drawString("Mundo X: " + jogador.getMundoX(), x, y); y+=linhaLargura;
-            g2.drawString("Mundo Y: " + jogador.getMundoY(), x, y); y+=linhaLargura;
-            g2.drawString("Coluna: " + (jogador.getMundoX() + jogador.getAreaSolida().x)/tamanhoBloco, x, y); y+=linhaLargura;
-            g2.drawString("Linha: " + (jogador.getMundoY() + jogador.getAreaSolida().y)/tamanhoBloco, x, y); y+=linhaLargura;
-
-
-
-            g2.drawString("Draw time: "+ passou, 10,480);
-            System.out.println("Draw time: "+ passou);
-        }
-
-        long desenhoFinal=System.nanoTime();
-        long passado= desenhoFinal-desenhoComeco;
-
-
-
-        g2.dispose();
-    }
-
-     */
 
     public void desenharTela(){
         Graphics g=getGraphics();
@@ -926,15 +803,12 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         g.dispose();
     }
 
-
     public void playMusica(int i){
-
         som.pegarArquivo(i);
         som.play();
         som.loop();
 
     }
-
     public void pararMusica(int i){
 
         som.pegarArquivo(i);

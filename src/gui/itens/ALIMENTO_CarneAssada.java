@@ -3,18 +3,18 @@ package gui.itens;
 import gui.entidades.Entidade;
 import gui.system.PainelJogo;
 
-public class ALIMENTO_Carne extends Entidade {
-    PainelJogo gp;
-    int valor=1;
-    public ALIMENTO_Carne(PainelJogo gp, String tipoCarne) {
+public class ALIMENTO_CarneAssada extends Entidade {
+
+    private PainelJogo gp;
+    public ALIMENTO_CarneAssada(PainelJogo gp, String tipoCarneAssada) {
 
         super(gp);
         this.gp = gp;
-        setTipo(getTipo_dropavelConsumivel());
+        setTipo(getTipo_consumivel());
 
-        setNome(tipoCarne);
+        setNome(tipoCarneAssada);
 
-        switch (tipoCarne.toLowerCase()) {
+        switch (tipoCarneAssada.toLowerCase()) {
             case "carneurso":
                 setNome("Carne de Urso Crua");
                 setDown1(setup("/alimentos/carneurso", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
@@ -42,20 +42,4 @@ public class ALIMENTO_Carne extends Entidade {
         }
 
     }
-
-    public void usar(Entidade entidade) {
-
-           entidade.setFome(entidade.getFome() + valor);
-
-    }
-
-    public void coletar(Entidade entidade) {
-
-        int i = 0;
-        gp.jogador.getInventario().add(gp.getObj()[gp.getMapaAtual()][i]);
-        gp.getIu().mostrarMensagem("Coletou "+getNome()+"!");
-
-
-    }
-
 }

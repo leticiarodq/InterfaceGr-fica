@@ -19,7 +19,7 @@ public class Detective extends Jogador { //
 
         this.rastreador = new Rastreador("Rastreador", getVida(), getFome(), getSede(), getEnergia(), getSanidade(), null, gp.getBlocosG().getAmbienteAtual().getNomeAmbiente(), 36.5);
         definirImagemJogador();
-        //definirImagemAtaque();
+
     }
 
     @Override

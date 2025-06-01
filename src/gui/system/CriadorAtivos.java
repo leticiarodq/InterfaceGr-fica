@@ -6,6 +6,7 @@ import gui.entidades.NPC_Explorador;
 import gui.itens.ALIMENTO_Fruta;
 import gui.itens.Armas;
 import gui.itens.Ferramentas;
+import gui.itens.Fogueira;
 import gui.tile_interativo.BI_Arvore;
 import gui.tile_interativo.BI_Minerio;
 
@@ -54,6 +55,10 @@ public class CriadorAtivos {
         gp.getObj()[numMapa][i] = new Ferramentas(gp, "machado");
         gp.getObj()[numMapa][i].setMundoX(21 * gp.getTamanhoBloco());
         gp.getObj()[numMapa][i].setMundoY(34 * gp.getTamanhoBloco());
+
+        gp.getObj()[numMapa][2]=new Fogueira((gp));
+        gp.getObj()[numMapa][2].setMundoX(25 * gp.getTamanhoBloco());
+        gp.getObj()[numMapa][2].setMundoY(24 * gp.getTamanhoBloco());
 
 
     }

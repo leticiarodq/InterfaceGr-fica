@@ -12,7 +12,6 @@ import java.util.ArrayList;
 
 public class InterfaceUsuario {
 
-
     private PainelJogo gp;
     private Font Font05, Font03;
     private Graphics2D g2;
@@ -37,7 +36,7 @@ public class InterfaceUsuario {
     private boolean mensagemOn = false;
     private int contadorMensagem = 0;
 
-    int subEstado=0;
+    int subEstado = 0;
     //private Personagem personagem;
 
     // Métodos de acesso
@@ -109,8 +108,8 @@ public class InterfaceUsuario {
 
         try {
             fundo2 = ImageIO.read(getClass().getResourceAsStream("/fundo/fundo02.png"));
-            fundoHistoria=ImageIO.read(getClass().getResourceAsStream("/fundo/fundoHistoria.png"));
-            fundodialogo=ImageIO.read(getClass().getResourceAsStream("/fundo/fundodialogo.png"));
+            fundoHistoria = ImageIO.read(getClass().getResourceAsStream("/fundo/fundoHistoria.png"));
+            fundodialogo = ImageIO.read(getClass().getResourceAsStream("/fundo/fundodialogo.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -120,10 +119,7 @@ public class InterfaceUsuario {
         vida_metade = vida.getImagem2();
         vida_vazia = vida.getImagem3();
 
-
     }
-
-
 
     public void desenhar(Graphics2D g2) {
         this.g2 = g2;
@@ -149,20 +145,22 @@ public class InterfaceUsuario {
         } else if (gp.getEstadoJogo() == gp.getEstadoJogoFinalizado()) {
             desenharTelaJogoFinalizado();
 
-        } else if(gp.getEstadoJogo()==gp.getEstadoJogoDescricao()){
+        } else if (gp.getEstadoJogo() == gp.getEstadoJogoDescricao()) {
             desenharTelaDescricao();
-        }else if(gp.getEstadoJogo()==gp.getEstadoOpcoes()) {
+        } else if (gp.getEstadoJogo() == gp.getEstadoOpcoes()) {
             desenharOpcoesMenu();
+        } else if (gp.getEstadoJogo() == gp.getEstadoAssarAlimento()) {
+            desenharTelaAssar();
         }
 
         desenharNomeMapa(g2);
 
-        if(mensagemOn == true) {
+        if (mensagemOn == true) {
             g2.setColor(Color.BLACK);
-            g2.setFont(Font05.deriveFont(25f));
+            g2.setFont(Font05.deriveFont(20f));
             g2.drawString(mensagem, (gp.getTamanhoBloco() / 2) + 3, 300 + 2);
 
-            g2.setFont(Font05.deriveFont(25f));
+            g2.setFont(Font05.deriveFont(20f));
             g2.setColor(Color.white);
             g2.drawString(mensagem, gp.getTamanhoBloco() / 2, 300);
             g2.drawString(mensagem, gp.getTamanhoBloco() / 2, 300);
@@ -173,61 +171,150 @@ public class InterfaceUsuario {
 
                 contadorMensagem = 0;
                 mensagemOn = false;
-
             }
-
 
         }
 
-
-
     }
-
     // Variáveis que você pode declarar na sua classe PainelJogo ou onde desenha:
     private int alphaMensagem = 0;
     private int contadorFade = 0;
     private boolean mostrandoMensagem = false;
     private String textoMapaAtual = "";
-    private int ultimoMapa = -1;  // <- novo
-    // Tempo total: 60 + 180 + 60 = 300 frames (~5 segundos se 60 fps)
+    private int ultimoMapa = -1;
 
-    public void assarComida(int frameX, int frameY){
 
+    public void desenharTelaAssar() {
+        g2.setColor(Color.white);
+
+        int frameX = gp.getTamanhoBloco() * 6;
+        int frameY = gp.getTamanhoBloco();
+        int frameLargura = gp.getTamanhoBloco() * 8;
+        int frameAltura = gp.getTamanhoBloco() * 8;
+
+        desenharJanela(frameX, frameY, frameLargura, frameAltura);
+
+        assarComida(frameX, frameY);
+    }
+
+
+    public void assarComida(int frameX, int frameY) {
         int textoX = frameX + gp.getTamanhoBloco();
-        int textoY = frameY + gp.getTamanhoBloco() * 3;
+        int textoY = frameY + gp.getTamanhoBloco() * 2;
 
-        // Mensagem de confirmação
-        dialogoAtual = "Desejar assar o alimento?";
-        g2.setFont(Font03.deriveFont(30f)); // Garanta o tamanho da fonte
+        // Mensagem
+        dialogoAtual = "A carne está crua.\nDeseja assar a carne?";
+        g2.setFont(Font03.deriveFont(30f));
 
         for (String linha : dialogoAtual.split("\n")) {
             g2.drawString(linha, textoX, textoY);
-            textoY += gp.getTamanhoBloco();  // altura entre as linhas
+            textoY += gp.getTamanhoBloco();
         }
 
-        // Espaço abaixo do texto
-        textoY += gp.getTamanhoBloco(); // Adiciona espaço entre o texto e as opções
+        textoY += gp.getTamanhoBloco();
 
-        // Opção "Sim"
-        String texto = "Sim";
-        textoX = obterXCentralizarTexto(texto); // Centraliza o texto
+        String texto = "Assar a carne";
+        textoX = obterXCentralizarTexto(texto);
+
+        int itemIndice = gp.getIu().pegarItemSlot();
+
         g2.drawString(texto, textoX, textoY);
         if (comandoNum == 0) {
             g2.drawString(">", textoX - 25, textoY);
             if (gp.getEventosTeclado().isEnterPressionado()) {
 
+                boolean temFogueira = false;
+
+                for (Entidade item : gp.jogador.getInventario()) {
+                    if (item.getTipo() == gp.jogador.tipo_fogueira) {
+                        temFogueira = true;
+                        break;
+                    }
+                }
+
+                if (temFogueira) {
+
+                    if (gp.jogador.getInventario().isEmpty()) {
+                        gp.getIu().mostrarMensagem("Inventário vazio!");
+                        gp.setEstadoJogo(gp.getEstadoPlay());
+                        gp.getEventosTeclado().setEnterPressionado(false);
+                        return;
+                    }
+
+                    if (itemIndice < 0 || itemIndice >= gp.jogador.getInventario().size()) {
+                        gp.getIu().mostrarMensagem("Nenhum item selecionado!");
+                        gp.setEstadoJogo(gp.getEstadoPlay());
+                        gp.getEventosTeclado().setEnterPressionado(false);
+                        return;
+                    }
+
+                    Entidade itemSelecionado = gp.jogador.getInventario().get(itemIndice);
+                    if (itemSelecionado != null && itemSelecionado.getNome() != null) {
+                        System.out.println("Item selecionado: " + itemSelecionado.getNome()); // Debug
+
+                        if (itemSelecionado.getNome().equals("Carne Crua") ||
+                                itemSelecionado.getNome().toLowerCase().contains("carne") &&
+                                        itemSelecionado.getNome().toLowerCase().contains("crua")) {
+
+                            // Remove carne crua
+                            gp.jogador.getInventario().remove(itemIndice);
+
+                            // Adiciona carne assada
+                            gp.jogador.getInventario().add(new ALIMENTO_CarneAssada(gp, "carneurso"));
+
+                            gp.getIu().mostrarMensagem("Carne assada com sucesso!");
+                            gp.setEstadoJogo(gp.getEstadoPlay());
+                        } else {
+                            gp.getIu().mostrarMensagem("Item selecionado: " + itemSelecionado.getNome() + " - Selecione uma carne crua!");
+                            // NÃO sai da tela para o jogador poder selecionar outro item
+                        }
+                    } else {
+                        gp.getIu().mostrarMensagem("Item inválido selecionado!");
+                    }
+                } else {
+                    gp.getIu().mostrarMensagem("Você precisa de uma fogueira no inventário para assar!");
+                    gp.setEstadoJogo(gp.getEstadoPlay());
+                }
+
+                gp.getEventosTeclado().setEnterPressionado(false);
             }
         }
 
-        // Opção "Não"
-        textoY += gp.getTamanhoBloco(); // Espaço para a próxima opção
-        texto = "Não";
-        textoX = obterXCentralizarTexto(texto); // Centraliza novamente
+        textoY += gp.getTamanhoBloco();
+        texto = "Comer crua";
+        textoX = obterXCentralizarTexto(texto);
         g2.drawString(texto, textoX, textoY);
+
         if (comandoNum == 1) {
             g2.drawString(">", textoX - 25, textoY);
             if (gp.getEventosTeclado().isEnterPressionado()) {
 
+                itemIndice = gp.getIu().pegarItemSlot();
+
+                if (itemIndice >= 0 && itemIndice < gp.jogador.getInventario().size()) {
+                    Entidade itemSelecionado = gp.jogador.getInventario().get(itemIndice);
+
+                    if (itemSelecionado.getTipo() == gp.jogador.getTipo_dropavelConsumivel()) {
+                        if (gp.jogador.getFome() < gp.jogador.getFomeMaxima()) {
+                            itemSelecionado.usar(gp.jogador);
+                            gp.jogador.getInventario().remove(itemIndice);
+                            gp.getIu().mostrarMensagem("Você comeu a carne crua...");
+                            gp.setEstadoJogo(gp.getEstadoPlay());
+                        } else {
+                            gp.setEstadoJogo(gp.getEstadoDialogo());
+                            gp.getIu().setDialogoAtual("Você já está satisfeito.\nNão pode comer mais agora.");
+
+                        }
+                    } else {
+                        gp.getIu().mostrarMensagem("Isso não pode ser comido cru.");
+                        gp.setEstadoJogo(gp.getEstadoDialogo());
+                    }
+                } else {
+                    gp.getIu().mostrarMensagem("Nenhum item selecionado!");
+                    gp.setEstadoJogo(gp.getEstadoPlay());
+                }
+
+                gp.getEventosTeclado().setEnterPressionado(false);
             }
         }
     }
@@ -315,11 +402,13 @@ public class InterfaceUsuario {
 
         textoY+=gp.getTamanhoBloco()*2;
         g2.drawString("Voltar", textoX, textoY);
-        if(comandoNum==5){
-            g2.drawString(">", textoX-25, textoY);
-
+        if (comandoNum == 5) {
+            g2.drawString(">", textoX - 25, textoY);
+            if (gp.getEventosTeclado().isEnterPressionado()) {
+                gp.setEstadoJogo(gp.getEstadoPlay()); // ou outro estado que represente o jogo ativo
+                gp.getEventosTeclado().setEnterPressionado(false); // importante resetar o ENTER
+            }
         }
-
 
         textoX= frameX+(int)(gp.getTamanhoBloco()*4.5);
         textoY=frameY+gp.getTamanhoBloco()*2+24;
@@ -336,9 +425,6 @@ public class InterfaceUsuario {
 
         textoY+=gp.getTamanhoBloco();
         g2.drawRect(textoX,textoY,120,24);
-
-
-
 
     }
 
@@ -407,7 +493,6 @@ public class InterfaceUsuario {
             textoY += gp.getTamanhoBloco();
         }
 
-        // Botão Voltar
         textoY += gp.getTamanhoBloco();
         g2.drawString("Voltar", textoX, textoY);
         if (comandoNum == 0) {
@@ -424,7 +509,7 @@ public class InterfaceUsuario {
         int textoY = frameY + gp.getTamanhoBloco() * 3;
 
         // Mensagem de confirmação
-        dialogoAtual = "Sair do jogo e retornar\n para a tela inicial?";
+        dialogoAtual = "Sair do jogo e retornar\npara a tela inicial?";
         g2.setFont(Font03.deriveFont(30f)); // Garanta o tamanho da fonte
 
         for (String linha : dialogoAtual.split("\n")) {
@@ -432,10 +517,8 @@ public class InterfaceUsuario {
             textoY += gp.getTamanhoBloco();  // altura entre as linhas
         }
 
-        // Espaço abaixo do texto
         textoY += gp.getTamanhoBloco(); // Adiciona espaço entre o texto e as opções
 
-        // Opção "Sim"
         String texto = "Sim";
         textoX = obterXCentralizarTexto(texto); // Centraliza o texto
         g2.drawString(texto, textoX, textoY);
@@ -443,7 +526,11 @@ public class InterfaceUsuario {
             g2.drawString(">", textoX - 25, textoY);
             if (gp.getEventosTeclado().isEnterPressionado()) {
                 subEstado = 0;
-                gp.setEstadoJogo(gp.getIu().telaMenu=0); // Volta para a tela de título
+                gp.setEstadoJogo(gp.getEstadoTitulo());
+                gp.getIu().setTelaMenu(0);
+                gp.getIu().setComandoNum(0);
+                gp.restart();
+
             }
         }
 
@@ -526,9 +613,6 @@ public class InterfaceUsuario {
             }
         }
     }
-
-
-
 
     public void setDialogos(String[] dialogos) {
         this.dialogos = dialogos;
@@ -620,10 +704,7 @@ public class InterfaceUsuario {
         desenharTextoSombra(texto,x,y);
         if (comandoNum == 1) g2.drawString(">", x - 40, y);
 
-
     }
-
-
 
     public void desenharStatusPersonagem() {
 
@@ -709,7 +790,6 @@ public class InterfaceUsuario {
 
         }
 
-
         // Cursor
 
         int cursorX = slotXstart + (gp.getTamanhoBloco() * slotCol);
@@ -745,9 +825,7 @@ public class InterfaceUsuario {
 
             }
 
-
         }
-
 
     }
 
@@ -756,7 +834,6 @@ public class InterfaceUsuario {
         int itemIndice= slotCol+(slotLinha*5);
         return itemIndice;
     }
-
 
     public void desenharVidaJogador() {
         int x = gp.getTamanhoBloco() / 2;
@@ -1254,7 +1331,5 @@ public class InterfaceUsuario {
         g2.setColor(Color.WHITE);
         g2.drawString(texto, x, y);
     }
-
-
 
 }

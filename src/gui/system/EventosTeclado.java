@@ -98,6 +98,8 @@ public class EventosTeclado implements KeyListener {
             estadoJogoFinalizado(code);
         } else if(gp.getEstadoJogo()==gp.getEstadoOpcoes()){
             estadoOpcoes(code);
+        } else if(gp.getEstadoJogo()==gp.getEstadoAssarAlimento()){
+            estadoAssarAlimento(code);
         }
     }
 
@@ -114,9 +116,7 @@ public class EventosTeclado implements KeyListener {
 
 
     public void estadoTitulo(int code) {
-
         System.out.println("TelaMenu: " + gp.getIu().getTelaMenu() + ", ComandoNum: " + gp.getIu().getComandoNum() + ", code: " + code);
-
         int tela = gp.getIu().getTelaMenu();
         int comando = gp.getIu().getComandoNum();
 
@@ -125,53 +125,50 @@ public class EventosTeclado implements KeyListener {
                 comando--;
                 if (comando < 0) comando = 2;
                 gp.getIu().setComandoNum(comando);
-
             } else if (code == KeyEvent.VK_S) {
                 comando++;
                 if (comando > 2) comando = 0;
                 gp.getIu().setComandoNum(comando);
-
             } else if (code == KeyEvent.VK_ENTER) {
                 if (comando == 0) {
+                    // IMPORTANTE: Limpar seleção anterior antes de ir para seleção
+                    gp.setPersonagemSelecionado(null);
+                    gp.getIu().setPersonagemSelecionado(null);
                     gp.getIu().setTelaMenu(1);
-
+                    gp.getIu().setComandoNum(0); // Resetar comando
                 } else if (comando == 1) {
                     // Implementar outra opção do menu se houver
                 } else if (comando == 2) {
                     System.exit(0);
                 }
             }
-        } else if (tela == 1) { // Tela intermediária (exemplo)
+        } else if (tela == 1) { // Tela intermediária
             if (code == KeyEvent.VK_ENTER) {
                 gp.getIu().setTelaMenu(2);
-
+                gp.getIu().setComandoNum(0); // Resetar para primeira opção
             } else if (code == KeyEvent.VK_ESCAPE) {
                 gp.getIu().setTelaMenu(0);
+                gp.getIu().setComandoNum(0);
                 gp.getIu().reiniciarEfeitoDigitacao();
-
             }
         } else if (tela == 2) { // Tela seleção de personagem
             if (code == KeyEvent.VK_W) {
                 comando--;
                 if (comando < 0) comando = 4;
                 gp.getIu().setComandoNum(comando);
-
             } else if (code == KeyEvent.VK_S) {
                 comando++;
                 if (comando > 4) comando = 0;
                 gp.getIu().setComandoNum(comando);
-
             } else if (code == KeyEvent.VK_ENTER) {
                 switch (comando) {
                     case 0:
                         gp.getIu().setPersonagemSelecionado("O RASTREADOR");
                         gp.getIu().setTelaMenu(3);
-
                         break;
                     case 1:
                         gp.getIu().setPersonagemSelecionado("O MÉDICO");
                         gp.getIu().setTelaMenu(3);
-
                         break;
                     case 2:
                         gp.getIu().setPersonagemSelecionado("A MECÂNICA");
@@ -183,48 +180,45 @@ public class EventosTeclado implements KeyListener {
                         break;
                     case 4:
                         gp.getIu().setTelaMenu(0);
+                        gp.getIu().setComandoNum(0);
                         break;
                 }
-
+            } else if (code == KeyEvent.VK_ESCAPE) {
+                gp.getIu().setTelaMenu(1);
+                gp.getIu().setComandoNum(0);
             }
         } else if (tela == 3) { // Tela de confirmação do personagem
             if (code == KeyEvent.VK_ENTER) {
                 String personagem = gp.getIu().getPersonagemSelecionado();
                 String personagemKey = "";
-
                 switch (personagem) {
                     case "O RASTREADOR":
                         personagemKey = "rastreador";
-
                         break;
                     case "O MÉDICO":
                         personagemKey = "medico";
-
                         break;
                     case "A MECÂNICA":
                         personagemKey = "mecanica";
-
                         break;
                     case "A SOBREVIVENTE":
                         personagemKey = "sobrevivente";
-
-
                         break;
                 }
 
+                // Definir o personagem selecionado no jogo
                 gp.setPersonagemSelecionado(personagemKey);
 
-                gp.setEstadoJogo(gp.getEstadoPlay());//gp.setEstadoJogo(gp.getEstadoPlay());
+                // Agora ir para o jogo
+                gp.setEstadoJogo(gp.getEstadoPlay());
 
-
+                System.out.println("Personagem selecionado: " + personagemKey);
 
             } else if (code == KeyEvent.VK_ESCAPE) {
                 gp.getIu().setTelaMenu(2);
+                gp.getIu().setComandoNum(0);
             }
-
-
-    }
-
+        }
 
 
         /*(code==KeyEvent.VK_W){
@@ -322,6 +316,10 @@ public class EventosTeclado implements KeyListener {
 
         }
 
+        if (code == KeyEvent.VK_L) {
+            gp.setEstadoJogo(gp.getEstadoAssarAlimento());
+        }
+
 
 
 
@@ -350,6 +348,7 @@ public class EventosTeclado implements KeyListener {
                 gp.setEstadoJogo(gp.getEstadoPlay());
                 gp.retry();
             } else if(gp.getIu().getComandoNum()==1){
+
                 gp.setEstadoJogo(gp.getEstadoTitulo());
                 gp.getIu().setTelaMenu(0);
                 gp.getIu().setComandoNum(0);
@@ -444,6 +443,30 @@ public class EventosTeclado implements KeyListener {
             }
         }
     }
+
+    public void estadoAssarAlimento(int code) {
+        if (code == KeyEvent.VK_L) {
+            gp.setEstadoJogo(gp.getEstadoAssarAlimento());
+        }
+
+        if (code == KeyEvent.VK_ENTER) {
+            setEnterPressionado(true);
+        }
+
+        int numMaxComando = 1; // porque temos 2 opções: 0 ("Sim") e 1 ("Não")
+
+        if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
+            gp.getIu().setComandoNum(gp.getIu().getComandoNum()-1);
+            if (gp.getIu().getComandoNum() < 0) gp.getIu().setComandoNum(numMaxComando);
+        }
+
+        if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
+            gp.getIu().setComandoNum(gp.getIu().getComandoNum()+1);
+            if (gp.getIu().getComandoNum() > numMaxComando) gp.getIu().setComandoNum(0);
+        }
+    }
+
+
 
     @Override
     public void keyReleased(KeyEvent e) {

@@ -15,10 +15,10 @@ public class Survivor extends Jogador {
 
     public Survivor(PainelJogo gp, EventosTeclado eventosTeclado) {
         super(gp, eventosTeclado);
-
+        this.gp=gp;
         this.sobreviventeNato = new SobreviventeNato("Elfa", 100, 100, 100, 100, 100, null, "Floresta", 36.5);
         definirImagemJogador();
-        definirImagemAtaque();
+
 
     }
 

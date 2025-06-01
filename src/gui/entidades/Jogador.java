@@ -361,6 +361,7 @@ public class Jogador extends Entidade {
 
             int blocoInterativo=gp.getcColisoes().checarEntidade(this, gp.getBloco());
             interativo(blocoInterativo);
+
             // Restaura as coordenadas e área original do personagem
             setMundoX(mundoXatual);
             setMundoY(mundoYatual);
@@ -406,6 +407,16 @@ public class Jogador extends Entidade {
         }
     }
 
+   /* public void assarAlimento(int i){
+        if (gp.getEventosTeclado().isEnterPressionado()) {
+            if (i != 999 && itemAtual.getTipo() == getTipo_dropavelConsumivel()) {
+                System.out.println("Contato com criatura de índice " + i);
+            }
+
+        }
+    }
+
+    */
     public void contatoCriatura(int i) {
         if (i != 999 && !isInvisibilidade() && !isAtaque()) {
             System.out.println("Contato com criatura de índice " + i);
@@ -465,6 +476,9 @@ public class Jogador extends Entidade {
         }
     }
 
+    public void setInventario(ArrayList<Entidade> inventario) {
+        this.inventario = inventario;
+    }
 
     public void selecaoItem(){
         int itemIndice = gp.getIu().pegarItemSlot();
@@ -480,18 +494,19 @@ public class Jogador extends Entidade {
 
 
             if(itemSelecionado.getTipo() == getTipo_consumivel()){
-                itemSelecionado.usar(this);
-                inventario.remove(itemIndice);
-            }
-
-            if(itemSelecionado.getTipo() == getTipo_dropavelConsumivel()){
-                if(gp.jogador.getFome() < gp.jogador.getFomeMaxima()){
+               if(gp.jogador.getFome() < gp.jogador.getFomeMaxima()){
                     itemSelecionado.usar(this);
                     inventario.remove(itemIndice);
                 } else {
                     gp.setEstadoJogo(gp.getEstadoDialogo());
                     gp.getIu().setDialogoAtual("Você já está satisfeito.\nNão pode comer mais agora.");
                 }
+            }
+
+            if(itemSelecionado.getTipo() == getTipo_dropavelConsumivel()){
+
+                gp.setEstadoJogo(gp.getEstadoAssarAlimento());
+
             }
 
 

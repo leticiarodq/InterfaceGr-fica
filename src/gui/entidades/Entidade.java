@@ -44,6 +44,8 @@ public class Entidade {
     private final int tipo_dropavelConsumivel=9;
     private final int tipo_interativo=10;
     private final int tipo_dropavel=11;
+
+    public final int tipo_fogueira=12;
     // Dropar item
 
 
@@ -102,6 +104,8 @@ public class Entidade {
     private int defender;
 
     private Entidade armaAtual;
+
+    public Entidade itemAtual;
 
     private Entidade escudoAtual;
 
@@ -904,15 +908,10 @@ public class Entidade {
 
             }
 
-
-
             g2.drawImage(imagem, telaX, telaY, imagem.getWidth(), imagem.getHeight(), null);
 
 
-
-
             //g2.drawImage(imagem, telaX, telaY, gp.getTamanhoBloco(), gp.getTamanhoBloco(), null);
-
 
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
         }
