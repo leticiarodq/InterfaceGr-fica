@@ -25,7 +25,7 @@ public class CRI_Urso extends Entidade {
         this.gp = gp;
         setTipo(getTipo_criatura());
         setNome("Urso");
-        setVelocidade(1);
+        setVelocidade(2);
         setVidaMaxima(10);
         setVida(getVidaMaxima());
 

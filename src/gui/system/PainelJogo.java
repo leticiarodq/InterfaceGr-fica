@@ -12,6 +12,7 @@ import gui.tile_interativo.BlocoInterativo;
 import itens.Alimento;
 import personagens.Mecanico;
 import personagens.Medico;
+import sistema.Main;
 
 import javax.swing.*;
 import javax.swing.Timer;
@@ -32,7 +33,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
     private final int escala = 3; //O tamanho do bloco será escalada em 3 vezes, ficando com 48 pixels
 
     private final int tamanhoBloco = tamanhoOriginalBloco * escala;
-    private final int tamanhoColuna = 20; //O jogo terá 16 colunas
+    private final int tamanhoColuna = 21; //O jogo terá 16 colunas
     private final int tamanhoLinha = 12; //O jogo terá 12 linhas
     private final int telaLargura = tamanhoBloco * tamanhoColuna;
     private final int telaAltura = tamanhoBloco * tamanhoLinha;
@@ -46,8 +47,8 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
     private boolean jogoIniciado = false;
 
     // Tela cheia
-    private final int telaLargura2 = telaLargura;
-    private final int telaAltura2 = telaAltura;
+    private int telaLargura2 = telaLargura;
+    private int telaAltura2 = telaAltura;
     private BufferedImage tempoTela;
     private Graphics2D g2;
 
@@ -527,7 +528,18 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         tempoTela=new BufferedImage(telaLargura, telaAltura, BufferedImage.TYPE_INT_ARGB);
         g2=(Graphics2D) tempoTela.getGraphics();
 
+        definirTelaCheia();
 
+    }
+    
+    public void definirTelaCheia(){
+        
+        GraphicsEnvironment ge=GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice gd=ge.getDefaultScreenDevice();
+        gd.setFullScreenWindow(Main.window);
+        
+        telaLargura2=Main.window.getWidth();
+        telaAltura2=Main.window.getHeight();
     }
 
 
