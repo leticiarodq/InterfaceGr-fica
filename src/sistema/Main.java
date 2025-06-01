@@ -16,7 +16,7 @@ public class Main { // Define a classe Main, que contém o método principal do 
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Faz com que o programa termine completamente quando a janela for fechada.
         window.setResizable(false); // Impede que o usuário redimensione a janela.
         window.setTitle("Última Fronteira"); // Define título da janela
-        //window.setUndecorated(true);
+        window.setUndecorated(true);
 
         // Criação do painel do jogo
         PainelJogo painelJogo = new PainelJogo();

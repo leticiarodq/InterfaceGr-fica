@@ -33,7 +33,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
     private final int escala = 3; //O tamanho do bloco será escalada em 3 vezes, ficando com 48 pixels
 
     private final int tamanhoBloco = tamanhoOriginalBloco * escala;
-    private final int tamanhoColuna = 21; //O jogo terá 16 colunas
+    private final int tamanhoColuna = 20; //O jogo terá 16 colunas
     private final int tamanhoLinha = 12; //O jogo terá 12 linhas
     private final int telaLargura = tamanhoBloco * tamanhoColuna;
     private final int telaAltura = tamanhoBloco * tamanhoLinha;
@@ -51,8 +51,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
     private int telaAltura2 = telaAltura;
     private BufferedImage tempoTela;
     private Graphics2D g2;
-
-
+    private boolean telaCheiaOn=false;
     private int FPS = 90;
 
 
@@ -120,8 +119,8 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
     private int estadoPersonagem = 5;
     private int estadoJogoFinalizado = 6;
     private int estadoJogoDescricao = 7;
-    private int estadoTelaCombate = 8;
-    private int estadoTelaLuta = 9;
+    private int estadoOpcoes = 8;
+
 
     // Métodos de acesso getters
 
@@ -152,6 +151,14 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
 
     public final int getLinhaMundoMax() {
         return linhaMundoMax;
+    }
+
+    public boolean isTelaCheiaOn() {
+        return telaCheiaOn;
+    }
+
+    public void setTelaCheiaOn(boolean telaCheiaOn) {
+        this.telaCheiaOn = telaCheiaOn;
     }
 
     public final int getColMundoMax() {
@@ -215,16 +222,12 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         return estadoJogoFinalizado;
     }
 
-    public int getEstadoTelaCombate() {
-        return estadoTelaCombate;
+    public int getEstadoOpcoes() {
+        return estadoOpcoes;
     }
 
-    public int getEstadoTelaLuta() {
-        return estadoTelaLuta;
-    }
-
-    public void setEstadoTelaLuta(int estadoTelaLuta) {
-        this.estadoTelaLuta = estadoTelaLuta;
+    public void setEstadoOpcoes(int estadoOpcoes) {
+        this.estadoOpcoes = estadoOpcoes;
     }
 
     public final int getEstadoPlay() {

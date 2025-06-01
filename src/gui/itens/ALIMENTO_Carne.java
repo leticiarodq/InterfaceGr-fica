@@ -45,10 +45,12 @@ public class ALIMENTO_Carne extends Entidade {
 
     public void usar(Entidade entidade) {
 
-            gp.setEstadoJogo(gp.getEstadoDialogo());
+            /*gp.setEstadoJogo(gp.getEstadoDialogo());
             gp.getIu().setDialogoAtual("Você comeu" + getNome()+"!");
             entidade.setFome(entidade.getFome() + valor);
 
+             */
+        
 
 
     }

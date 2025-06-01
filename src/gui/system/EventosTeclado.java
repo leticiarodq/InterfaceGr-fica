@@ -96,6 +96,8 @@ public class EventosTeclado implements KeyListener {
             estadoJogoDescricao(code);
         } else if (gp.getEstadoJogo() == gp.getEstadoJogoFinalizado()) {
             estadoJogoFinalizado(code);
+        } else if(gp.getEstadoJogo()==gp.getEstadoOpcoes()){
+            estadoOpcoes(code);
         }
     }
 
@@ -296,6 +298,10 @@ public class EventosTeclado implements KeyListener {
             enterPressionado = true;
         }
 
+        if(code==KeyEvent.VK_ESCAPE){
+            gp.setEstadoJogo(gp.getEstadoOpcoes());
+        }
+
         if (code == KeyEvent.VK_T) {
             if (mostrarTextoDebug == false) {
                 mostrarTextoDebug = true;
@@ -303,8 +309,6 @@ public class EventosTeclado implements KeyListener {
                 setChecarDesenhoTempo(false);
             }
         }
-
-
 
 
         if(code==KeyEvent.VK_R){
@@ -317,6 +321,8 @@ public class EventosTeclado implements KeyListener {
             }
 
         }
+
+
 
 
 
@@ -408,6 +414,34 @@ public class EventosTeclado implements KeyListener {
 
         if(code==KeyEvent.VK_ENTER){
             gp.jogador.selecaoItem();
+        }
+    }
+
+    public void estadoOpcoes(int code){
+        if(code==KeyEvent.VK_ESCAPE){
+            gp.setEstadoJogo(gp.getEstadoPlay());
+        }
+        if(code==KeyEvent.VK_ENTER){
+            setEnterPressionado(true);
+        }
+
+        int numMaxComando=0;
+        switch(gp.getIu().subEstado){
+            case 0: numMaxComando=5; break;
+            case 3: numMaxComando=1; break;
+
+        }
+
+        if(code==KeyEvent.VK_W){
+            gp.getIu().setComandoNum(gp.getIu().getComandoNum()-1);
+            if(gp.getIu().getComandoNum()<0){
+                gp.getIu().setComandoNum(numMaxComando);
+            }
+        } if(code==KeyEvent.VK_S){
+            gp.getIu().setComandoNum(gp.getIu().getComandoNum()+1);
+            if(gp.getIu().getComandoNum()>numMaxComando){
+                gp.getIu().setComandoNum(0);
+            }
         }
     }
 

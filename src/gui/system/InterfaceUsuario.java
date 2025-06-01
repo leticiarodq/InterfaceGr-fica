@@ -37,6 +37,7 @@ public class InterfaceUsuario {
     private boolean mensagemOn = false;
     private int contadorMensagem = 0;
 
+    int subEstado=0;
     //private Personagem personagem;
 
     // Métodos de acesso
@@ -150,6 +151,8 @@ public class InterfaceUsuario {
 
         } else if(gp.getEstadoJogo()==gp.getEstadoJogoDescricao()){
             desenharTelaDescricao();
+        }else if(gp.getEstadoJogo()==gp.getEstadoOpcoes()) {
+            desenharOpcoesMenu();
         }
 
         desenharNomeMapa(g2);
@@ -187,6 +190,276 @@ public class InterfaceUsuario {
     private String textoMapaAtual = "";
     private int ultimoMapa = -1;  // <- novo
     // Tempo total: 60 + 180 + 60 = 300 frames (~5 segundos se 60 fps)
+
+    public void assarComida(int frameX, int frameY){
+
+        int textoX = frameX + gp.getTamanhoBloco();
+        int textoY = frameY + gp.getTamanhoBloco() * 3;
+
+        // Mensagem de confirmação
+        dialogoAtual = "Desejar assar o alimento?";
+        g2.setFont(Font03.deriveFont(30f)); // Garanta o tamanho da fonte
+
+        for (String linha : dialogoAtual.split("\n")) {
+            g2.drawString(linha, textoX, textoY);
+            textoY += gp.getTamanhoBloco();  // altura entre as linhas
+        }
+
+        // Espaço abaixo do texto
+        textoY += gp.getTamanhoBloco(); // Adiciona espaço entre o texto e as opções
+
+        // Opção "Sim"
+        String texto = "Sim";
+        textoX = obterXCentralizarTexto(texto); // Centraliza o texto
+        g2.drawString(texto, textoX, textoY);
+        if (comandoNum == 0) {
+            g2.drawString(">", textoX - 25, textoY);
+            if (gp.getEventosTeclado().isEnterPressionado()) {
+
+            }
+        }
+
+        // Opção "Não"
+        textoY += gp.getTamanhoBloco(); // Espaço para a próxima opção
+        texto = "Não";
+        textoX = obterXCentralizarTexto(texto); // Centraliza novamente
+        g2.drawString(texto, textoX, textoY);
+        if (comandoNum == 1) {
+            g2.drawString(">", textoX - 25, textoY);
+            if (gp.getEventosTeclado().isEnterPressionado()) {
+
+            }
+        }
+    }
+
+    public void desenharOpcoesMenu(){
+
+        g2.setColor(Color.white);
+
+        int frameX = gp.getTamanhoBloco() * 6;
+        int frameY = gp.getTamanhoBloco();
+        int frameLargura = gp.getTamanhoBloco() * 10;
+        int frameAltura = gp.getTamanhoBloco() * 8;
+
+        desenharJanela(frameX, frameY, frameLargura, frameAltura);
+
+        switch(subEstado){
+            case 0: opcoes_topo(frameX, frameY);break;
+            case 1: opcoes_TelaCheiaNotificacao(frameX, frameY); break;
+            case 2: opcoes_controle(frameX, frameY); break;
+            case 3: opcoes_confirmacaoFimDeJogo(frameX,frameY);break;
+        }
+
+
+        gp.getEventosTeclado().setEnterPressionado(false);
+
+    }
+
+    public void opcoes_topo(int frameX, int frameY){
+
+        int textoX;
+        int textoY;
+
+        String texto="Menu";
+        textoX=obterXCentralizarTexto(texto);
+        textoY=frameY+gp.getTamanhoBloco();
+        g2.setColor(Color.WHITE);
+        g2.setFont(Font03.deriveFont(30f));
+        g2.drawString(texto, textoX, textoY);
+
+        textoX=frameX+gp.getTamanhoBloco();
+        textoY+=gp.getTamanhoBloco()*2;
+        g2.drawString("Tela cheia", textoX, textoY);
+        if(comandoNum==0){
+            g2.drawString(">", textoX-25, textoY);
+            if(gp.getEventosTeclado().isEnterPressionado()){
+                if(!gp.isTelaCheiaOn()){
+                    gp.setTelaCheiaOn(true);
+                } else if(gp.isTelaCheiaOn()){
+                    gp.setTelaCheiaOn(false);
+                }
+                subEstado=1;
+            }
+
+        }
+
+        textoY+=gp.getTamanhoBloco();
+        g2.drawString("Música", textoX, textoY);
+        if(comandoNum==1){
+            g2.drawString(">", textoX-25, textoY);
+        }
+        textoY+=gp.getTamanhoBloco();
+        g2.drawString("Efeito Sonoro", textoX, textoY);
+        if(comandoNum==2){
+            g2.drawString(">", textoX-25, textoY);
+        }
+        textoY+=gp.getTamanhoBloco();
+        g2.drawString("Controles", textoX, textoY);
+        if(comandoNum==3){
+            g2.drawString(">", textoX-25, textoY);
+            if(gp.getEventosTeclado().isEnterPressionado()){
+                subEstado=2;
+                comandoNum=0;
+            }
+        }
+        textoY+=gp.getTamanhoBloco();
+        g2.drawString("Sair do jogo", textoX, textoY);
+        if(comandoNum==4){
+            g2.drawString(">", textoX-25, textoY);
+            if(gp.getEventosTeclado().isEnterPressionado()){
+                subEstado=3;
+                comandoNum=0; // Começa com a opção "Sim" selecionada
+            }
+        }
+
+
+        textoY+=gp.getTamanhoBloco()*2;
+        g2.drawString("Voltar", textoX, textoY);
+        if(comandoNum==5){
+            g2.drawString(">", textoX-25, textoY);
+
+        }
+
+
+        textoX= frameX+(int)(gp.getTamanhoBloco()*4.5);
+        textoY=frameY+gp.getTamanhoBloco()*2+24;
+        g2.setStroke(new BasicStroke(3));
+        g2.drawRect(textoX,textoY,24,24);
+        if(gp.isTelaCheiaOn()){
+            g2.fillRect(textoX,textoY,24,24);
+        }
+
+
+
+        textoY+=gp.getTamanhoBloco();
+        g2.drawRect(textoX,textoY,120,24);
+
+        textoY+=gp.getTamanhoBloco();
+        g2.drawRect(textoX,textoY,120,24);
+
+
+
+
+    }
+
+    public void opcoes_TelaCheiaNotificacao(int frameX, int frameY){
+
+        int textoX=frameX+gp.getTamanhoBloco();
+        int textoY=frameY+gp.getTamanhoBloco()*3;
+
+        dialogoAtual="A mudança fará efeito\napós reiniciar o jogo.";
+        g2.setFont(Font03.deriveFont(32f));
+        for(String linha:dialogoAtual.split("\n")){
+            g2.drawString(linha, textoX, textoY);
+            textoY+=40;
+        }
+
+        g2.setFont(Font03.deriveFont(30f));
+
+        textoY+=(int)(gp.getTamanhoBloco()*4.34);
+        g2.drawString("Voltar", textoX, textoY);
+        if(comandoNum==0){
+            g2.drawString(">", textoX-25, textoY);
+            if(gp.getEventosTeclado().isEnterPressionado()){
+                subEstado=0;
+            }
+        }
+
+    }
+
+    public void opcoes_controle(int frameX, int frameY) {
+        int textoX, textoY;
+
+        // Título "Controles"
+        String titulo = "Controles";
+        textoX = obterXCentralizarTexto(titulo);
+        textoY = frameY + gp.getTamanhoBloco();
+        g2.setFont(Font03.deriveFont(30f));
+        g2.drawString(titulo, textoX, textoY);
+
+        // Configurações iniciais
+        g2.setFont(Font03.deriveFont(30f));
+        textoX = frameX + gp.getTamanhoBloco();
+        textoY += gp.getTamanhoBloco();
+
+        // Lista de ações e teclas
+        String[] acoes = {
+                "Movimentar",
+                "Confirmar / Atacar",
+                "Pausar",
+                "Menu",
+                "Descrição do mapa",
+                "Inventário / Status"
+        };
+
+        String[] teclas = {
+                "WASD",
+                "ENTER",
+                "P",
+                "ESC",
+                "M",
+                "C"
+        };
+
+        for (int i = 0; i < acoes.length; i++) {
+            g2.drawString(acoes[i], textoX, textoY);
+            g2.drawString(teclas[i], textoX + (int)(gp.getTamanhoBloco() * 4.8), textoY);
+            textoY += gp.getTamanhoBloco();
+        }
+
+        // Botão Voltar
+        textoY += gp.getTamanhoBloco();
+        g2.drawString("Voltar", textoX, textoY);
+        if (comandoNum == 0) {
+            g2.drawString(">", textoX - 25, textoY);
+            if (gp.getEventosTeclado().isEnterPressionado()) {
+                subEstado = 0;
+            }
+        }
+    }
+
+    public void opcoes_confirmacaoFimDeJogo(int frameX, int frameY){
+
+        int textoX = frameX + gp.getTamanhoBloco();
+        int textoY = frameY + gp.getTamanhoBloco() * 3;
+
+        // Mensagem de confirmação
+        dialogoAtual = "Sair do jogo e retornar\n para a tela inicial?";
+        g2.setFont(Font03.deriveFont(30f)); // Garanta o tamanho da fonte
+
+        for (String linha : dialogoAtual.split("\n")) {
+            g2.drawString(linha, textoX, textoY);
+            textoY += gp.getTamanhoBloco();  // altura entre as linhas
+        }
+
+        // Espaço abaixo do texto
+        textoY += gp.getTamanhoBloco(); // Adiciona espaço entre o texto e as opções
+
+        // Opção "Sim"
+        String texto = "Sim";
+        textoX = obterXCentralizarTexto(texto); // Centraliza o texto
+        g2.drawString(texto, textoX, textoY);
+        if (comandoNum == 0) {
+            g2.drawString(">", textoX - 25, textoY);
+            if (gp.getEventosTeclado().isEnterPressionado()) {
+                subEstado = 0;
+                gp.setEstadoJogo(gp.getIu().telaMenu=0); // Volta para a tela de título
+            }
+        }
+
+        // Opção "Não"
+        textoY += gp.getTamanhoBloco(); // Espaço para a próxima opção
+        texto = "Não";
+        textoX = obterXCentralizarTexto(texto); // Centraliza novamente
+        g2.drawString(texto, textoX, textoY);
+        if (comandoNum == 1) {
+            g2.drawString(">", textoX - 25, textoY);
+            if (gp.getEventosTeclado().isEnterPressionado()) {
+                subEstado = 0;
+                comandoNum = 4; // Volta para a opção "Sair do jogo"
+            }
+        }
+    }
 
 
     public void desenharNomeMapa(Graphics2D g2) {
