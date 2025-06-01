@@ -17,7 +17,7 @@ public class InterfaceUsuario {
     private Font Font05, Font03;
     private Graphics2D g2;
 
-    private BufferedImage fundo2, fundoHistoria, vida_cheia, vida_vazia, vida_metade;
+    private BufferedImage fundo2, fundodialogo, fundoHistoria, vida_cheia, vida_vazia, vida_metade;
 
     //private boolean jogoFinalizado = true;
 
@@ -109,7 +109,7 @@ public class InterfaceUsuario {
         try {
             fundo2 = ImageIO.read(getClass().getResourceAsStream("/fundo/fundo02.png"));
             fundoHistoria=ImageIO.read(getClass().getResourceAsStream("/fundo/fundoHistoria.png"));
-
+            fundodialogo=ImageIO.read(getClass().getResourceAsStream("/fundo/fundodialogo.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -402,7 +402,7 @@ public class InterfaceUsuario {
     public void desenharInventario() {
 
         // Frame
-        int frameX = gp.getTamanhoBloco() * 9;
+        int frameX = gp.getTamanhoBloco() * 12;
         int frameY = gp.getTamanhoBloco();
         int frameLargura = gp.getTamanhoBloco() * 6;
         int frameAltura = gp.getTamanhoBloco() * 5;
@@ -520,12 +520,10 @@ public class InterfaceUsuario {
 
 
     public void desenharTelaDialogo() {
-
         int x = gp.getTamanhoBloco() / 2;
         int y = gp.getTamanhoBloco() / 2;
         int altura = gp.getTamanhoBloco() * 8;
         int largura = gp.getTamanhoBloco() * 4;
-
 
         desenharJanela(x, y, largura, altura);
 
@@ -533,13 +531,15 @@ public class InterfaceUsuario {
         x += gp.getTamanhoBloco() / 2;
         y += gp.getTamanhoBloco();
 
-        for (String linha : getDialogoAtual().split("\n")) {
-            g2.drawString(linha, x, y);
-            y += 30; // Ajuste a distância entre as linhas
+        String dialogo = getDialogoAtual();
+        if (dialogo != null) {
+            for (String linha : dialogo.split("\n")) {
+                g2.drawString(linha, x, y);
+                y += 30; // Ajuste a distância entre as linhas
+            }
         }
-
-
     }
+
 
     public void desenharJanela(int x, int y, int altura, int largura) {
         {

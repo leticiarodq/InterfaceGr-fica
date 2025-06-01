@@ -16,6 +16,7 @@ import personagens.Medico;
 import javax.swing.*;
 import javax.swing.Timer;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.*;
 
 
@@ -31,7 +32,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
     private final int escala = 3; //O tamanho do bloco será escalada em 3 vezes, ficando com 48 pixels
 
     private final int tamanhoBloco = tamanhoOriginalBloco * escala;
-    private final int tamanhoColuna = 16; //O jogo terá 16 colunas
+    private final int tamanhoColuna = 20; //O jogo terá 16 colunas
     private final int tamanhoLinha = 12; //O jogo terá 12 linhas
     private final int telaLargura = tamanhoBloco * tamanhoColuna;
     private final int telaAltura = tamanhoBloco * tamanhoLinha;
@@ -44,7 +45,16 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
     private String personagemSelecionado;
     private boolean jogoIniciado = false;
 
+    // Tela cheia
+    private final int telaLargura2 = telaLargura;
+    private final int telaAltura2 = telaAltura;
+    private BufferedImage tempoTela;
+    private Graphics2D g2;
+
+
     private int FPS = 90;
+
+
 
     // Sistema
 
@@ -384,7 +394,9 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
 
             if (delta >= 1) { // Só atualiza o jogo quando delta ≥ 1
                 update();    // Atualiza a lógica do jogo
-                repaint();      // Requisição para redesenhar a tela
+                //repaint();      // Requisição para redesenhar a tela
+                desenharTempoTela();
+                desenharTela();
                 delta--;        // Evita múltiplas atualizações por quadro
                 contadorQuadros++;
             }
@@ -511,6 +523,11 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         playMusica(0);
 
         estadoJogo = estadoTitulo;
+
+        tempoTela=new BufferedImage(telaLargura, telaAltura, BufferedImage.TYPE_INT_ARGB);
+        g2=(Graphics2D) tempoTela.getGraphics();
+
+
     }
 
 
@@ -650,9 +667,123 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         g2.rotate(angulo * 1.5, largura / 2, altura / 2);
     }
 
+    public void desenharTempoTela(){
+
+        long desenhoComeco = 0;
+        if(eventosTeclado.isChecarDesenhoTempo()==true){
+            desenhoComeco=System.nanoTime();
+        }
+
+        // TELA DE TÍTULO
+        if (estadoJogo == estadoTitulo) {
+            iu.desenhar(g2);
+        } else {
+
+            // Desenhar blocos do mapa
+            blocosG.draw(g2);
+
+            for (int i = 0; i < bloco[1].length; i++) {
+                if (bloco[mapaAtual][i] != null) {
+                    bloco[mapaAtual][i].desenhar(g2);
+                }
+            }
+
+            // Adicionar entidades à lista de desenho
 
 
-    @Override
+            entidadeLista.add(jogador);
+
+            for (int i = 0; i < npc[1].length; i++) {
+                if (npc[mapaAtual][i] != null) {
+                    entidadeLista.add(npc[mapaAtual][i]);
+                }
+            }
+
+            for (int i = 0; i < obj[1].length; i++) {
+                if (obj[mapaAtual][i] != null) {
+                    entidadeLista.add(obj[mapaAtual][i]);
+                }
+            }
+
+            for (int i = 0; i < criatura[1].length; i++) {
+                if (criatura[mapaAtual][i] != null) {
+                    entidadeLista.add(criatura[mapaAtual][i]);
+                }
+            }
+
+            for (int i = 0; i < presa[1].length; i++) {
+                if (presa[mapaAtual][i] != null) {
+                    entidadeLista.add(presa[mapaAtual][i]);
+                }
+            }
+
+
+
+
+            // Ordenar entidades pelo eixo Y
+            Collections.sort(entidadeLista, new Comparator<Entidade>() {
+                @Override
+                public int compare(Entidade e1, Entidade e2) {
+                    int resultado=Integer.compare(e1.getMundoY(), e2.getMundoY());
+                    return resultado;
+                }
+            });
+
+            // Desenhar todas as entidades na ordem correta
+            for(int i=0; i<entidadeLista.size(); i++){
+                entidadeLista.get(i).desenhar(g2);
+            }
+            entidadeLista.clear();
+
+
+            // Efeitos visuais
+            if (mostrarEfeitoConfusao) {
+                desenharEfeitoConfusao(g2);
+            }
+
+            if (mostrarChuva) {
+                desenharChuva(g2);
+            }
+            if (mostrarNevasca) {
+                desenharNevasca(g2);
+            }
+            // IU (Interface do Usuário)
+            // gerenciadorAmbientacao.desenhar(g2);
+            iu.desenhar(g2);
+
+
+        }
+
+
+        if (eventosTeclado.isMostrarTextoDebug()) {
+            long desenhoFinal=System.nanoTime();
+            long passou=desenhoFinal-desenhoComeco;
+
+            g2.setFont(new Font("Arial", Font.PLAIN, 20));
+            g2.setColor(Color.white);
+            int x=10;
+            int y=400;
+            int linhaLargura=20;
+
+            g2.drawString("Mundo X: " + jogador.getMundoX(), x, y); y+=linhaLargura;
+            g2.drawString("Mundo Y: " + jogador.getMundoY(), x, y); y+=linhaLargura;
+            g2.drawString("Coluna: " + (jogador.getMundoX() + jogador.getAreaSolida().x)/tamanhoBloco, x, y); y+=linhaLargura;
+            g2.drawString("Linha: " + (jogador.getMundoY() + jogador.getAreaSolida().y)/tamanhoBloco, x, y); y+=linhaLargura;
+
+
+
+            g2.drawString("Draw time: "+ passou, 10,480);
+            System.out.println("Draw time: "+ passou);
+        }
+
+        long desenhoFinal=System.nanoTime();
+        long passado= desenhoFinal-desenhoComeco;
+
+
+
+    }
+
+    /*@Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
@@ -724,10 +855,6 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
             entidadeLista.clear();
 
 
-            // IU (Interface do Usuário)
-           // gerenciadorAmbientacao.desenhar(g2);
-            iu.desenhar(g2);
-
             // Efeitos visuais
             if (mostrarEfeitoConfusao) {
                 desenharEfeitoConfusao(g2);
@@ -735,17 +862,16 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
 
             if (mostrarChuva) {
                 desenharChuva(g2);
-
-
             }
-
             if (mostrarNevasca) {
                 desenharNevasca(g2);
             }
+            // IU (Interface do Usuário)
+           // gerenciadorAmbientacao.desenhar(g2);
+            iu.desenhar(g2);
+
+
         }
-
-
-
 
 
         if (eventosTeclado.isMostrarTextoDebug()) {
@@ -776,6 +902,15 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
 
         g2.dispose();
     }
+
+     */
+
+    public void desenharTela(){
+        Graphics g=getGraphics();
+        g.drawImage(tempoTela,0,0,telaLargura2, telaAltura2, null);
+        g.dispose();
+    }
+
 
     public void playMusica(int i){
 
