@@ -1015,10 +1015,10 @@ public class InterfaceUsuario {
             }
         } else if (telaMenu == 1) { // Tela da história do jogo
 
-            g2.drawImage(fundo, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null); // Fundo
+            g2.drawImage(fundoHistoria, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null); // Fundo
 
-            g2.setColor(Color.WHITE);
-            g2.setFont(Font03.deriveFont(32f));
+            g2.setColor(Color.black);
+            g2.setFont(Font05.deriveFont(32f));
 
             String historia =
                     "Num mundo devastado, onde a natureza resiste\n" +
@@ -1048,11 +1048,12 @@ public class InterfaceUsuario {
             for (String linha : linhas) {
                 int x = obterXCentralizarTexto(linha);
                 g2.drawString(linha, x, y);
-                desenharTextoSombra(linha, x, y);
+                //desenharTextoSombra(linha, x, y);
                 y += 40;
             }}else if (telaMenu == 2) {
 
             g2.drawImage(fundo, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null); // Ajusta a imagem de fundo à tela
+
 
             g2.setColor(Color.WHITE);
             g2.setFont(Font03.deriveFont(40f));

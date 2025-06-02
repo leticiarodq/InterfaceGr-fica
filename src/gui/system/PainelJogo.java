@@ -5,6 +5,7 @@ package gui.system;
 //java.swing
 
 import gui.ambientacao.GerenciadorAmbientacao;
+import gui.ambientacao.Iluminacao;
 import gui.blocos.GerenciadorBlocos;
 import gui.entidades.*;
 import gui.eventos.ManipuladorDeEventos;
@@ -360,6 +361,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
 
     }
 
+
     // Sair do jogo
     public void restart(){
         jogador = null;
@@ -461,8 +463,13 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
                     jogador.posicoesPadrao();
                     jogador.restaurarVida();
                     jogador.definirItens();
+
+                    // Atualiza a iluminação para seguir o jogador
+                    int tamanhoCirculo = 200; // ou outro valor adequado
+                    int centroX = jogador.getTelaX() + (getTamanhoBloco() / 2);
+                    int centroY = jogador.getTelaY() + (getTamanhoBloco() / 2);
+                    gerenciadorAmbientacao.setup(tamanhoCirculo, centroX, centroY);
                 } else {
-                    // Se não há personagem selecionado, volta para a tela de título
                     estadoJogo = estadoTitulo;
                     return;
                 }
@@ -526,6 +533,8 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
                     bloco[mapaAtual][i].update();
                 }
             }
+
+            gerenciadorAmbientacao.update();
         }
 
         if (estadoJogo == estadoPausa) {
@@ -534,28 +543,28 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
     }
 
     public void setupJogo() {
-
         cAtivos.setObjeto();
         cAtivos.definirNPC();
         cAtivos.definirCriatura();
         cAtivos.definirPresa();
         cAtivos.definirBlocoInterativo();
-        //cAtivos.craft();
         cAtivos.definirAquatico();
 
-       // gerenciadorAmbientacao.setup();
+        // Configura a iluminação inicial (centro da tela)
+        int tamanhoCirculo = 200; // ou outro valor adequado
+        int centroX = getTelaLargura() / 2;
+        int centroY = getTelaAltura() / 2;
+        gerenciadorAmbientacao.setup(tamanhoCirculo, centroX, centroY);
 
         playMusica(0);
-
         estadoJogo = estadoTitulo;
 
-        tempoTela=new BufferedImage(telaLargura, telaAltura, BufferedImage.TYPE_INT_ARGB);
-        g2=(Graphics2D) tempoTela.getGraphics();
+        tempoTela = new BufferedImage(telaLargura, telaAltura, BufferedImage.TYPE_INT_ARGB);
+        g2 = (Graphics2D) tempoTela.getGraphics();
 
-       definirTelaCheia();
-
+        definirTelaCheia();
     }
-    
+
     public void definirTelaCheia(){
         
         GraphicsEnvironment ge=GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -796,7 +805,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
                 desenharNevasca(g2);
             }
             // IU (Interface do Usuário)
-            // gerenciadorAmbientacao.desenhar(g2);
+            gerenciadorAmbientacao.desenhar(g2);
             iu.desenhar(g2);
 
         }
