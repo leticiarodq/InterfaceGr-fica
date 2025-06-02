@@ -16,7 +16,7 @@ public class InterfaceUsuario {
     private Font Font05, Font03;
     private Graphics2D g2;
 
-    private BufferedImage fundo, fundo2, fundodialogo, fundoHistoria, vida_cheia, vida_vazia, vida_metade;
+    private BufferedImage fundo, fundo2, fundodialogo, fundoHistoria, vida_cheia, vida_vazia, vida_metade, craft;
 
     //private boolean jogoFinalizado = true;
 
@@ -129,6 +129,9 @@ public class InterfaceUsuario {
         vida_cheia = vida.getImagem();
         vida_metade = vida.getImagem2();
         vida_vazia = vida.getImagem3();
+
+
+
 
     }
 
@@ -281,22 +284,39 @@ public class InterfaceUsuario {
                     if (itemSelecionado != null && itemSelecionado.getNome() != null) {
                         System.out.println("Item selecionado: " + itemSelecionado.getNome()); // Debug
 
-                        if (itemSelecionado.getNome().equals("Carne Crua") ||
-                                itemSelecionado.getNome().toLowerCase().contains("carne") &&
-                                        itemSelecionado.getNome().toLowerCase().contains("crua")) {
+                        if (itemSelecionado != null && itemSelecionado.getNome() != null) {
+                            String nome = itemSelecionado.getNome().toLowerCase();
 
-                            // Remove carne crua
-                            gp.jogador.getInventario().remove(itemIndice);
+                            if (nome.contains("carne") && nome.contains("crua")) {
+                                // Detecta o tipo de carne crua (urso, porco, etc.)
+                                String tipo = "";
 
-                            // Adiciona carne assada
-                            gp.jogador.getInventario().add(new ALIMENTO_CarneAssada(gp, "carneurso"));
+                                if (nome.contains("urso")) {
+                                    tipo = "carneurso";
+                                } else if (nome.contains("porco")) {
+                                    tipo = "carneporco";
+                                } else if (nome.contains("galinha")) {
+                                    tipo = "carnegalinha";
+                                } else if (nome.contains("lobo")) {
+                                    tipo = "carnelobo";
+                                } else {
+                                    gp.getIu().mostrarMensagem("Tipo de carne desconhecido!");
+                                    return;
+                                }
 
-                            gp.getIu().mostrarMensagem("Carne assada com sucesso!");
-                            gp.setEstadoJogo(gp.getEstadoPlay());
-                        } else {
-                            gp.getIu().mostrarMensagem("Item selecionado: " + itemSelecionado.getNome() + " - Selecione uma carne crua!");
-                            // NÃO sai da tela para o jogador poder selecionar outro item
+                                // Remove carne crua
+                                gp.jogador.getInventario().remove(itemIndice);
+
+                                // Adiciona carne assada correspondente
+                                gp.jogador.getInventario().add(new ALIMENTO_CarneAssada(gp, tipo));
+
+                                gp.getIu().mostrarMensagem("Carne assada com sucesso!");
+                                gp.setEstadoJogo(gp.getEstadoPlay());
+                            } else {
+                                gp.getIu().mostrarMensagem("Item selecionado: " + itemSelecionado.getNome() + " - Selecione uma carne crua!");
+                            }
                         }
+
                     } else {
                         gp.getIu().mostrarMensagem("Item inválido selecionado!");
                     }
@@ -894,6 +914,7 @@ public class InterfaceUsuario {
             i++;
             x += gp.getTamanhoBloco();
         }
+
 
     }
 

@@ -252,6 +252,10 @@ public class Jogador extends Entidade {
                 int blocoIndice=gp.getcColisoes().checarEntidade(this, gp.getBloco());
                 interativo(blocoIndice);
 
+                int craftIndice=gp.getcColisoes().checarEntidade(this, gp.getCraft());
+                craftar(craftIndice);
+
+
                 gp.getManipuladorDeEventos().checarEvento();
 
                 if (!isColisaoOn() && eventosTeclado.isEnterPressionado() == false) {
@@ -305,6 +309,14 @@ public class Jogador extends Entidade {
             gp.setEstadoJogo(gp.getEstadoJogoFinalizado());
         }
     }
+
+    public void craftar(int i){
+
+        if (i != 999) {
+        }
+
+
+        }
 
     public void ataque() {
         setContadorSprite(getContadorSprite() + 1);

@@ -1,6 +1,7 @@
 package gui.system;
 
 import gui.criaturas.*;
+import gui.entidades.Craft;
 import gui.entidades.Entidade;
 import gui.entidades.NPC_Explorador;
 import gui.itens.ALIMENTO_Fruta;
@@ -9,6 +10,7 @@ import gui.itens.Ferramentas;
 import gui.itens.Fogueira;
 import gui.tile_interativo.BI_Arvore;
 import gui.tile_interativo.BI_Minerio;
+import gui.tile_interativo.BI_Peixe;
 
 public class CriadorAtivos {
 
@@ -56,13 +58,32 @@ public class CriadorAtivos {
         gp.getObj()[numMapa][i].setMundoX(21 * gp.getTamanhoBloco());
         gp.getObj()[numMapa][i].setMundoY(34 * gp.getTamanhoBloco());
 
-        gp.getObj()[numMapa][2]=new Fogueira((gp));
+        gp.getObj()[numMapa][2]=new Fogueira(gp);
         gp.getObj()[numMapa][2].setMundoX(25 * gp.getTamanhoBloco());
         gp.getObj()[numMapa][2].setMundoY(24 * gp.getTamanhoBloco());
 
-
     }
 
+    public void craft(){
+
+        /*int numMapa = 0;
+        int i=0;
+        gp.getCraft()[numMapa][i]=new Craft(gp);
+        gp.getCraft()[numMapa][i].setMundoX(22 * gp.getTamanhoBloco());
+        gp.getCraft()[numMapa][i].setMundoY(24 * gp.getTamanhoBloco());
+
+        i++;
+
+         */
+    }
+
+    public void definirAquatico(){
+
+        BI_Peixe peixe = new BI_Peixe(gp);
+        gp.getPresa()[1][0] = peixe;
+        posicionarEntidadeLimitada(peixe, 29, 28);
+
+    }
     public void definirPresa() {
         int i = 0;
         int numMapa = 0;
@@ -72,15 +93,23 @@ public class CriadorAtivos {
 
         posicionarEntidadeLimitada(porco, 25, 33);
 
-        i=1;
-        CRI_Galinha galinha=new CRI_Galinha(gp);
+        i = 1;
+        CRI_Galinha galinha = new CRI_Galinha(gp);
         gp.getPresa()[numMapa][i] = galinha;
         posicionarEntidadeLimitada(galinha, 23, 25);
+
+       /* i=2;
+        BI_Peixe peixe = new BI_Peixe(gp);
+        gp.getPresa()[1][i] = peixe;
+        posicionarEntidadeLimitada(peixe, 29, 28);
+
+
+        */
+
+
     }
 
-
-
-    public void definirNPC() {
+        public void definirNPC() {
 
         int i=0;
         int numMapa=0;
@@ -138,7 +167,6 @@ public class CriadorAtivos {
         gp.getBloco()[numMapa][4]=new BI_Arvore(gp, 31,24);
 
 
-        gp.getBloco()[4][5]=new BI_Minerio(gp, 26,28);
 
 
 

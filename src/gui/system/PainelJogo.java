@@ -94,6 +94,8 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
     private ArrayList<Entidade> entidadeLista = new ArrayList<>();
     private Entidade alimento[][] = new Entidade[mapaMax][10];
     public Entidade fogueira[][]=new Entidade[mapaMax][10];
+    public Entidade craft[][]=new Entidade[mapaMax][10];
+    public Entidade aquatico[][]= new Entidade[mapaMax][10];
 
 
     // Estado do jogo
@@ -116,6 +118,10 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
 
     // Métodos de acesso getters
 
+
+    public Entidade[][] getCraft() {
+        return craft;
+    }
 
     public int getEstadoPersonagem() {
         return estadoPersonagem;
@@ -351,6 +357,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         cAtivos.definirCriatura();
         cAtivos.definirPresa();
 
+
     }
 
     // Sair do jogo
@@ -465,10 +472,24 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
                 jogador.update();
             }
 
+
+            for (int i = 0; i < aquatico[1].length; i++) {
+                if (aquatico[mapaAtual][i] != null) {
+                    aquatico[mapaAtual][i].update();
+                }
+            }
+
             // NPC
+
             for (int i = 0; i < npc[1].length; i++) {
                 if (npc[mapaAtual][i] != null) {
                     npc[mapaAtual][i].update();
+                }
+            }
+
+            for (int i = 0; i < craft[1].length; i++) {
+                if (craft[mapaAtual][i] != null) {
+                    craft[mapaAtual][i].update();
                 }
             }
 
@@ -519,6 +540,8 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         cAtivos.definirCriatura();
         cAtivos.definirPresa();
         cAtivos.definirBlocoInterativo();
+        //cAtivos.craft();
+        cAtivos.definirAquatico();
 
        // gerenciadorAmbientacao.setup();
 
@@ -701,6 +724,12 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
                 }
             }
 
+            for (int i = 0; i < craft[1].length; i++) {
+                if (craft[mapaAtual][i] != null) {
+                    entidadeLista.add(craft[mapaAtual][i]);
+                }
+            }
+
             // Adicionar entidades à lista de desenho
 
 
@@ -729,6 +758,14 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
                     entidadeLista.add(presa[mapaAtual][i]);
                 }
             }
+
+            for (int i = 0; i < aquatico[1].length; i++) {
+                if (aquatico[mapaAtual][i] != null) {
+                    entidadeLista.add(aquatico[mapaAtual][i]);
+                }
+            }
+
+
 
 
             // Ordenar entidades pelo eixo Y

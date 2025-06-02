@@ -7,6 +7,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Entidade {
 
@@ -48,6 +49,9 @@ public class Entidade {
     public final int tipo_fogueira=12;
     // Dropar item
 
+
+    private ArrayList<Entidade> inventario = new ArrayList<>();
+    private final int tamanhoMaxInventario = 20;
 
     // Contadores
     private int contadorSprite = 0;
@@ -123,12 +127,25 @@ public class Entidade {
     }
 
     // Objetos
-    private BufferedImage imagem, imagem2, imagem3;
+    private BufferedImage imagem, imagem2, imagem3, imagem4;
     private String nome;
     private boolean colisao = false;
 
 
     // Métodos de acesso
+
+
+    public BufferedImage getImagem4() {
+        return imagem4;
+    }
+
+    public void setInventario(ArrayList<Entidade> inventario) {
+        this.inventario = inventario;
+    }
+
+    public ArrayList<Entidade> getInventario() {
+        return inventario;
+    }
 
     // Vida
     public int getVida() {
@@ -786,6 +803,25 @@ public class Entidade {
     public void falar() {
     }
 
+    // Na classe Entidade, adicione:
+    private int[] tilesIgnorados = null;
+
+    public int[] getTilesIgnorados() {
+        return tilesIgnorados;
+    }
+
+    public void setTilesIgnorados(int[] tilesIgnorados) {
+        this.tilesIgnorados = tilesIgnorados;
+    }
+
+    public boolean podeIgnorarTile(int tileId) {
+        if (tilesIgnorados == null) return false;
+        for (int tile : tilesIgnorados) {
+            if (tile == tileId) return true;
+        }
+        return false;
+    }
+
     public void update() {
 
         setAcao();
@@ -908,7 +944,9 @@ public class Entidade {
 
             }
 
-            g2.drawImage(imagem, telaX, telaY, imagem.getWidth(), imagem.getHeight(), null);
+            if (imagem != null) {
+                g2.drawImage(imagem, telaX, telaY, imagem.getWidth(), imagem.getHeight(), null);
+            }
 
 
             //g2.drawImage(imagem, telaX, telaY, gp.getTamanhoBloco(), gp.getTamanhoBloco(), null);
