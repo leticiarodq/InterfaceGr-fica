@@ -14,10 +14,39 @@ public class ManipuladorDeEventos {
     private int eventoAnteriorX;
     private int eventoAnteriorY;
     private boolean eventoPodeTocar=true;
+    private int mapaTemp, colunaTemp, linhaTemp;
+
 
     private EventoClima eventoClima;
     private EventoDoencaFerimento eventoDoencaFerimento;
 
+    public int getMapaTemp() {
+        return mapaTemp;
+    }
+
+    public int getColunaTemp() {
+        return colunaTemp;
+    }
+
+    public int getLinhaTemp() {
+        return linhaTemp;
+    }
+
+    public int getEventoAnteriorX() {
+        return eventoAnteriorX;
+    }
+
+    public void setEventoAnteriorX(int eventoAnteriorX) {
+        this.eventoAnteriorX = eventoAnteriorX;
+    }
+
+    public int getEventoAnteriorY() {
+        return eventoAnteriorY;
+    }
+
+    public void setEventoAnteriorY(int eventoAnteriorY) {
+        this.eventoAnteriorY = eventoAnteriorY;
+    }
 
     public ManipuladorDeEventos(PainelJogo gp) {
         this.gp = gp;
@@ -93,31 +122,31 @@ public class ManipuladorDeEventos {
                 teleporte(0, 16,49);
 
             }
-            else if(acertar(1, 44,0, "up")){
-                teleporte(2, 25, 0);
+            else if(acertar(1, 49,3, "right")){
+                teleporte(2, 0, 2);
 
             }
-            else if(acertar(2, 25, 0, "up")){
-                teleporte(1, 44,0);
-
-            }
-
-            else if(acertar(2, 35, 35, "up")){
-                teleporte(3, 23,0);
-
-            }
-            else if(acertar(3, 23,0, "up")){
-                teleporte(2, 35, 35);
+            else if(acertar(2, 0, 2, "left")){
+                teleporte(1, 49,3);
 
             }
 
-            else if(acertar(3, 33,37, "up")){
-                teleporte(4, 25, 7);
+            else if(acertar(2, 49, 21, "right")){
+                teleporte(3, 0,1);
+
+            }
+            else if(acertar(3, 0,1, "left")){
+                teleporte(2, 49, 21);
 
             }
 
-            else if(acertar(4, 25, 7, "up")){
-                teleporte(3, 33,37);
+            else if(acertar(3, 30,45, "up")){
+                teleporte(4, 25, 8);
+
+            }
+
+            else if(acertar(4, 25, 8, "up")){
+                teleporte(3, 30,45);
 
             }
 
@@ -204,11 +233,15 @@ public class ManipuladorDeEventos {
 
     public void teleporte(int mapa, int coluna, int linha){
 
-        gp.setMapaAtual(mapa);
-        gp.jogador.setMundoX(gp.getTamanhoBloco() * coluna);
-        gp.jogador.setMundoY(gp.getTamanhoBloco() * linha);
-        eventoAnteriorX=gp.jogador.getMundoX();
-        eventoAnteriorY=gp.jogador.getMundoY();
+        gp.setEstadoJogo(gp.getEstadoTransicao());
+        mapaTemp=mapa;
+        colunaTemp=coluna;
+        linhaTemp=linha;
+        //gp.setMapaAtual(mapa);
+        //gp.jogador.setMundoX(gp.getTamanhoBloco() * coluna);
+        //gp.jogador.setMundoY(gp.getTamanhoBloco() * linha);
+        //eventoAnteriorX=gp.jogador.getMundoX();
+        //eventoAnteriorY=gp.jogador.getMundoY();
         eventoPodeTocar=false;
 
 

@@ -16,7 +16,7 @@ public class InterfaceUsuario {
     private Font Font05, Font03;
     private Graphics2D g2;
 
-    private BufferedImage fundo2, fundodialogo, fundoHistoria, vida_cheia, vida_vazia, vida_metade;
+    private BufferedImage fundo, fundo2, fundodialogo, fundoHistoria, vida_cheia, vida_vazia, vida_metade;
 
     //private boolean jogoFinalizado = true;
 
@@ -32,12 +32,22 @@ public class InterfaceUsuario {
     private String[] dialogos;
     private int indiceDialogo = 0;
 
+    private int contador=0;
+
     private String mensagem = "";
     private boolean mensagemOn = false;
     private int contadorMensagem = 0;
 
     int subEstado = 0;
     //private Personagem personagem;
+
+    private int alphaMensagem = 0;
+    private int contadorFade = 0;
+    private boolean mostrandoMensagem = false;
+    private String textoMapaAtual = "";
+    private int ultimoMapa = -1;
+
+
 
     // Métodos de acesso
 
@@ -108,6 +118,7 @@ public class InterfaceUsuario {
 
         try {
             fundo2 = ImageIO.read(getClass().getResourceAsStream("/fundo/fundo02.png"));
+            fundo = ImageIO.read(getClass().getResourceAsStream("/fundo/fundo.png"));
             fundoHistoria = ImageIO.read(getClass().getResourceAsStream("/fundo/fundoHistoria.png"));
             fundodialogo = ImageIO.read(getClass().getResourceAsStream("/fundo/fundodialogo.png"));
         } catch (Exception e) {
@@ -151,6 +162,8 @@ public class InterfaceUsuario {
             desenharOpcoesMenu();
         } else if (gp.getEstadoJogo() == gp.getEstadoAssarAlimento()) {
             desenharTelaAssar();
+        } else if(gp.getEstadoJogo()==gp.getEstadoTransicao()){
+            desenharTransicao();
         }
 
         desenharNomeMapa(g2);
@@ -176,12 +189,28 @@ public class InterfaceUsuario {
         }
 
     }
-    // Variáveis que você pode declarar na sua classe PainelJogo ou onde desenha:
-    private int alphaMensagem = 0;
-    private int contadorFade = 0;
-    private boolean mostrandoMensagem = false;
-    private String textoMapaAtual = "";
-    private int ultimoMapa = -1;
+
+    public void desenharTransicao(){
+
+        contador++;
+        g2.setColor(new Color(0,0,0, contador*5));
+        g2.fillRect(0,0,gp.getTelaLargura(), gp.getTelaAltura());
+
+        if(contador==50){
+            contador=0;
+            gp.setEstadoJogo(gp.getEstadoPlay());
+            gp.setMapaAtual(gp.getManipuladorDeEventos().getMapaTemp());
+            gp.jogador.setMundoX(gp.getTamanhoBloco()*gp.getManipuladorDeEventos().getColunaTemp());
+            gp.jogador.setMundoY(gp.getTamanhoBloco()*gp.getManipuladorDeEventos().getLinhaTemp());
+            gp.getManipuladorDeEventos().setEventoAnteriorX(gp.jogador.getMundoX());
+            gp.getManipuladorDeEventos().setEventoAnteriorY(gp.jogador.getMundoY());
+
+
+        }
+
+
+
+    }
 
 
     public void desenharTelaAssar() {
@@ -928,7 +957,7 @@ public class InterfaceUsuario {
         if (telaMenu == 0) {
 
             // Desenha o fundo na tela
-            g2.drawImage(fundo2, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null); // Ajusta a imagem de fundo à tela
+            g2.drawImage(fundo, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null); // Ajusta a imagem de fundo à tela
 
             // Título
             g2.setColor(Color.BLACK);
@@ -965,7 +994,7 @@ public class InterfaceUsuario {
             }
         } else if (telaMenu == 1) { // Tela da história do jogo
 
-            g2.drawImage(fundoHistoria, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null); // Fundo
+            g2.drawImage(fundo, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null); // Fundo
 
             g2.setColor(Color.WHITE);
             g2.setFont(Font03.deriveFont(32f));
@@ -1002,7 +1031,7 @@ public class InterfaceUsuario {
                 y += 40;
             }}else if (telaMenu == 2) {
 
-            g2.drawImage(fundo2, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null); // Ajusta a imagem de fundo à tela
+            g2.drawImage(fundo, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null); // Ajusta a imagem de fundo à tela
 
             g2.setColor(Color.WHITE);
             g2.setFont(Font03.deriveFont(40f));
@@ -1083,7 +1112,7 @@ public class InterfaceUsuario {
 
         } else if (telaMenu == 3) { // Tela de Descrição do Personagem
 
-            g2.drawImage(fundo2, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null); // Ajusta a imagem de fundo à tela
+            g2.drawImage(fundo, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null); // Ajusta a imagem de fundo à tela
 
 
             // Definindo a cor e a fonte do texto
@@ -1098,19 +1127,19 @@ public class InterfaceUsuario {
                 descricao = "Kael Thorn é um rastreador experiente, conhecido por seu instinto quase sobrenatural para encontrar comida e água em qualquer ambiente. Seus olhos atentos e seu faro aguçado o tornam essencial para qualquer expedição perigosa. Ágil, silencioso e resiliente, Kael aprendeu a ler os menores sinais da natureza para sobreviver onde poucos conseguiriam."
                 ;
                 nome = "O RASTREADOR";
-                g2.drawImage(fundo2, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null);
+                g2.drawImage(fundo, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null);
             } else if (personagemSelecionado.equals("O MÉDICO")) {
                 descricao = "Lysander Curavita é um médico habilidoso, capaz de curar ferimentos com os recursos que a natureza oferece. Sua experiência o torna capaz de restaurar a saúde mesmo sem o uso de itens raros. Astuto e compassivo, ele transforma o comum em remédio, sendo uma fonte de esperança em tempos de necessidade.";
                 nome = "O MÉDICO";
-                g2.drawImage(fundo2, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null); // Ajusta a imagem de fundo à tela
+                g2.drawImage(fundo, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null); // Ajusta a imagem de fundo à tela
             } else if (personagemSelecionado.equals("A MECÂNICA")) {
                 descricao = "Kaela Forjaterra é uma mecânica determinada, com o dom de reparar ferramentas danificadas e criar novas armas a partir do que tiver em mãos. Com poucas peças e muita engenhosidade, Kaela garante que os equipamentos estejam sempre prontos para o próximo desafio.";
                 nome = "A MECÂNICA";
-                g2.drawImage(fundo2, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null); // Ajusta a imagem de fundo à tela
+                g2.drawImage(fundo, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null); // Ajusta a imagem de fundo à tela
             } else if (personagemSelecionado.equals("A SOBREVIVENTE")) {
                 descricao = "Elyra Sylvanis é uma elfa sobrevivente , cuja conexão com a natureza a torna menos vulnerável às necessidades de comida e água. Sua resistência a esses elementos lhe permite explorar os ambientes mais áridos e selvagens sem sofrer tanto com a escassez. Elyra navega pelos terrenos mais hostis com graça e eficácia, sempre atenta ao que o ambiente tem a oferecer.";
                 nome = "A SOBREVIVENTE";
-                g2.drawImage(fundo2, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null); // Ajusta a imagem de fundo à tela
+                g2.drawImage(fundo, 0, 0, gp.getTelaLargura(), gp.getTelaAltura(), null); // Ajusta a imagem de fundo à tela
             }
 
 

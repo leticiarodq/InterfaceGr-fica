@@ -83,15 +83,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
 
     // Entidade e objeto
 
-
-
    // public Jogador jogador = new Jogador(this, eventosTeclado);
-
-
-
-    private boolean personagemCriado = false;
-
-
 
     private Som som = new Som();
     private Entidade obj[][] = new Entidade[mapaMax][100];
@@ -102,8 +94,6 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
     private ArrayList<Entidade> entidadeLista = new ArrayList<>();
     private Entidade alimento[][] = new Entidade[mapaMax][10];
     public Entidade fogueira[][]=new Entidade[mapaMax][10];
-
-    // public BlocoInterativo blocoInterativo[][]=new BlocoInterativo[mapaMax][50];
 
 
     // Estado do jogo
@@ -227,10 +217,6 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         return estadoOpcoes;
     }
 
-    public void setEstadoOpcoes(int estadoOpcoes) {
-        this.estadoOpcoes = estadoOpcoes;
-    }
-
     public final int getEstadoPlay() {
         return estadoPlay;
     }
@@ -247,9 +233,6 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         return estadoAssarAlimento;
     }
 
-    public void setEstadoAssarAlimento(int estadoAssarAlimento) {
-        this.estadoAssarAlimento = estadoAssarAlimento;
-    }
 
     public Entidade[][] getNpc() {
         return npc;
@@ -333,6 +316,13 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         this.entidadeLista = entidadeLista;
     }
 
+    public void setEstadoOpcoes(int estadoOpcoes) {
+        this.estadoOpcoes = estadoOpcoes;
+    }
+    public void setEstadoAssarAlimento(int estadoAssarAlimento) {
+        this.estadoAssarAlimento = estadoAssarAlimento;
+    }
+
 
     public PainelJogo() {
 
@@ -379,6 +369,8 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
             iu.setTelaMenu(0); //
             iu.setComandoNum(0);
         }
+        mapaAtual=0;
+
         System.out.println("Jogo reiniciado - personagem resetado para nova seleção");
     }
 
@@ -537,7 +529,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         tempoTela=new BufferedImage(telaLargura, telaAltura, BufferedImage.TYPE_INT_ARGB);
         g2=(Graphics2D) tempoTela.getGraphics();
 
-       //definirTelaCheia();
+       definirTelaCheia();
 
     }
     

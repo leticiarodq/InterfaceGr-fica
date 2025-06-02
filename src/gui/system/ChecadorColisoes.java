@@ -293,8 +293,4 @@ public class ChecadorColisoes {
         return contatoJogador;
     }
 
-
-
-
-
 }

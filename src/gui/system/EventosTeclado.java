@@ -8,11 +8,14 @@ import java.awt.event.KeyListener;
 
 public class EventosTeclado implements KeyListener {
 
-    PainelJogo gp;
+    private PainelJogo gp;
 
     private boolean cimaPressionado, baixoPressionado, esquerdaPressionado, direitaPressionado, enterPressionado;
 
     private boolean mostrarTextoDebug = false;
+
+
+    // Métodos de acesso
 
     public boolean isChecarDesenhoTempo() {
         return mostrarTextoDebug;
@@ -124,8 +127,10 @@ public class EventosTeclado implements KeyListener {
             if (code == KeyEvent.VK_W) {
                 comando--;
                 if (comando < 0) comando = 2;
+                gp.playSE(1);
                 gp.getIu().setComandoNum(comando);
             } else if (code == KeyEvent.VK_S) {
+                gp.playSE(1);
                 comando++;
                 if (comando > 2) comando = 0;
                 gp.getIu().setComandoNum(comando);
@@ -153,10 +158,13 @@ public class EventosTeclado implements KeyListener {
             }
         } else if (tela == 2) { // Tela seleção de personagem
             if (code == KeyEvent.VK_W) {
+                gp.playSE(1);
+
                 comando--;
                 if (comando < 0) comando = 4;
                 gp.getIu().setComandoNum(comando);
             } else if (code == KeyEvent.VK_S) {
+                gp.playSE(1);
                 comando++;
                 if (comando > 4) comando = 0;
                 gp.getIu().setComandoNum(comando);
@@ -316,11 +324,6 @@ public class EventosTeclado implements KeyListener {
 
         }
 
-        if (code == KeyEvent.VK_L) {
-            gp.setEstadoJogo(gp.getEstadoAssarAlimento());
-        }
-
-
 
 
 
@@ -329,6 +332,7 @@ public class EventosTeclado implements KeyListener {
     public void estadoJogoFinalizado(int code){
 
         if(code==KeyEvent.VK_W){
+            gp.playSE(1);
             gp.getIu().setComandoNum(gp.getIu().getComandoNum()-1);
             if(gp.getIu().getComandoNum()<0){
                 gp.getIu().setComandoNum(1);
@@ -336,6 +340,7 @@ public class EventosTeclado implements KeyListener {
         }
 
         if(code==KeyEvent.VK_S){
+            gp.playSE(1);
             gp.getIu().setComandoNum(gp.getIu().getComandoNum()+1);
             if(gp.getIu().getComandoNum()>1){
                 gp.getIu().setComandoNum(0);
@@ -387,6 +392,7 @@ public class EventosTeclado implements KeyListener {
         }
 
         if (code == KeyEvent.VK_W) {
+            gp.playSE(1);
 
             if (gp.getIu().getSlotLinha() != 0) {
                 gp.getIu().setSlotLinha(gp.getIu().getSlotLinha() - 1); // Cima
@@ -394,18 +400,24 @@ public class EventosTeclado implements KeyListener {
         }
 
         if (code == KeyEvent.VK_S) {
+            gp.playSE(1);
+
             if (gp.getIu().getSlotLinha() != 3) {
                 gp.getIu().setSlotLinha(gp.getIu().getSlotLinha() + 1); // Baixo
             }
         }
 
         if (code == KeyEvent.VK_A) {
+            gp.playSE(1);
+
             if (gp.getIu().getSlotCol() != 0) {
                 gp.getIu().setSlotCol(gp.getIu().getSlotCol() - 1); // Esquerda
             }
         }
 
         if (code == KeyEvent.VK_D) {
+            gp.playSE(1);
+
             if (gp.getIu().getSlotCol() != 4) {
                 gp.getIu().setSlotCol(gp.getIu().getSlotCol() + 1); // Direita
             }
@@ -432,11 +444,15 @@ public class EventosTeclado implements KeyListener {
         }
 
         if(code==KeyEvent.VK_W){
+            gp.playSE(1);
+
             gp.getIu().setComandoNum(gp.getIu().getComandoNum()-1);
             if(gp.getIu().getComandoNum()<0){
                 gp.getIu().setComandoNum(numMaxComando);
             }
         } if(code==KeyEvent.VK_S){
+            gp.playSE(1);
+
             gp.getIu().setComandoNum(gp.getIu().getComandoNum()+1);
             if(gp.getIu().getComandoNum()>numMaxComando){
                 gp.getIu().setComandoNum(0);
@@ -445,9 +461,6 @@ public class EventosTeclado implements KeyListener {
     }
 
     public void estadoAssarAlimento(int code) {
-        if (code == KeyEvent.VK_L) {
-            gp.setEstadoJogo(gp.getEstadoAssarAlimento());
-        }
 
         if (code == KeyEvent.VK_ENTER) {
             setEnterPressionado(true);
@@ -456,11 +469,15 @@ public class EventosTeclado implements KeyListener {
         int numMaxComando = 1; // porque temos 2 opções: 0 ("Sim") e 1 ("Não")
 
         if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
+            gp.playSE(1);
+
             gp.getIu().setComandoNum(gp.getIu().getComandoNum()-1);
             if (gp.getIu().getComandoNum() < 0) gp.getIu().setComandoNum(numMaxComando);
         }
 
         if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
+            gp.playSE(1);
+
             gp.getIu().setComandoNum(gp.getIu().getComandoNum()+1);
             if (gp.getIu().getComandoNum() > numMaxComando) gp.getIu().setComandoNum(0);
         }
@@ -474,6 +491,7 @@ public class EventosTeclado implements KeyListener {
         int code=e.getKeyCode();
 
         if(code==KeyEvent.VK_W) {
+
             cimaPressionado=false;
         }
         if(code==KeyEvent.VK_S) {

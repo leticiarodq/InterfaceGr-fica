@@ -13,7 +13,9 @@ public class Som {
     public Som(){
 
         somURL[0]=getClass().getResource("/sons/UltimaFronteira.wav");
-        somURL[1]=getClass().getResource("/sons/chuva.wav");
+        somURL[1]=getClass().getResource("/sons/cursor.wav");
+        somURL[2]=getClass().getResource("/sons/andando.wav");
+
 
     }
 

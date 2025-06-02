@@ -221,6 +221,7 @@ public class Jogador extends Entidade {
             if (eventosTeclado.isCimaPressionado() || eventosTeclado.isBaixoPressionado() ||
                     eventosTeclado.isEsquerdaPressionado() || eventosTeclado.isDireitaPressionado()) {
 
+
                 // Atualiza a direção com base na tecla pressionada
                 if (eventosTeclado.isCimaPressionado()) {
                     setDirecao("up");
@@ -605,6 +606,7 @@ public class Jogador extends Entidade {
                 if (!isAtaque()) {
                     imagem = (getNumSprite() == 1) ? getDown1() : getDown2();
                 } else {
+
                     imagem = (getNumSprite() == 1) ? getAtaqueDown1() : getAtaqueDown2();
                 }
                 break;
@@ -613,6 +615,7 @@ public class Jogador extends Entidade {
                 if (!isAtaque()) {
                     imagem = (getNumSprite() == 1) ? getLeft1() : getLeft2();
                 } else {
+
                     imagem = (getNumSprite() == 1) ? getAtaqueLeft1() : getAtaqueLeft2();
                 }
                 break;
@@ -620,7 +623,8 @@ public class Jogador extends Entidade {
             case "right":
                 if (!isAtaque()) {
                     imagem = (getNumSprite() == 1) ? getRight1() : getRight2();
-                } else {
+                } else {gp.playSE(2);
+
                     imagem = (getNumSprite() == 1) ? getAtaqueRight1() : getAtaqueRight2();
                 }
                 break;
