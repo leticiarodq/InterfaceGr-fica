@@ -1,4 +1,4 @@
-package gui.tile_interativo;
+package gui.criaturas;
 
 import eventos.EventoCriatura;
 import gui.entidades.Entidade;
@@ -8,7 +8,7 @@ import gui.system.PainelJogo;
 import java.awt.*;
 import java.util.Random;
 
-public class BI_Peixe extends Entidade {
+public class BI_Peixe extends Entidade implements Aquatico {
 
     private PainelJogo gp;
     private EventoCriatura criaturaLogica;
@@ -24,9 +24,6 @@ public class BI_Peixe extends Entidade {
         setVidaMaxima(2);
         setVida(getVidaMaxima());
 
-        setTilesIgnorados(new int[]{50, 51,52,53,54,55,56, 57,58,59,60});
-
-
         setAreaSolida(new Rectangle(3, 18, 42, 30));
         setAreaSolidaPadraoX(getAreaSolida().x);
         setAreaSolidaPadraoY(getAreaSolida().y);
@@ -34,15 +31,37 @@ public class BI_Peixe extends Entidade {
         carregarImagemPeixe();
     }
 
+    public boolean podeAtravessar(int tileId) {
+        // Lista dos IDs dos tiles que o peixe pode atravessar
+        // Exemplo: se água = tile 5, areia = tile 3
+        int[] tilesQueOPeixePodeAtravessar = {59}; // Mude esses números pelos IDs corretos
+
+
+        for (int tile : tilesQueOPeixePodeAtravessar) {
+            if (tile == tileId) {
+                return true; // Pode atravessar
+            }
+        }
+        return false; // Não pode atravessar
+    }
+
+
+
+
+
+
     public void carregarImagemPeixe() {
-        setUp1(setup("/animais/peixe_right", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
-        setUp2(setup("/animais/peixe_right", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
-        setDown1(setup("/animais/peixe_right", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
-        setDown2(setup("/animais/peixe_right", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
-        setLeft1(setup("/animais/peixe_right", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
-        setLeft2(setup("/animais/peixe_right", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
-        setRight1(setup("/animais/peixe_right", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
-        setRight2(setup("/animais/peixe_right", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
+        setUp1(setup("/animais/peixe01_up_01", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
+        setUp2(setup("/animais/peixe01_up_02", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
+
+        setDown1(setup("/animais/peixe01_down_01", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
+        setDown2(setup("/animais/peixe01_down_02", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
+
+        setLeft1(setup("/animais/peixe01_left_01", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
+        setLeft2(setup("/animais/peixe01_left_02", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
+
+        setRight1(setup("/animais/peixe01_right_01", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
+        setRight2(setup("/animais/peixe01_right_02", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
 
     }
 

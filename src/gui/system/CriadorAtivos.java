@@ -1,16 +1,13 @@
 package gui.system;
 
 import gui.criaturas.*;
-import gui.entidades.Craft;
 import gui.entidades.Entidade;
 import gui.entidades.NPC_Explorador;
-import gui.itens.ALIMENTO_Fruta;
 import gui.itens.Armas;
 import gui.itens.Ferramentas;
 import gui.itens.Fogueira;
 import gui.tile_interativo.BI_Arvore;
-import gui.tile_interativo.BI_Minerio;
-import gui.tile_interativo.BI_Peixe;
+import gui.criaturas.BI_Peixe;
 
 public class CriadorAtivos {
 
@@ -33,6 +30,16 @@ public class CriadorAtivos {
             System.out.println("Tentativa de posicionar fora da área 40x40: (" + blocoX + ", " + blocoY + ")");
         }
     }
+
+    public void posicionarLimitada(Entidade e, int col, int lin) {
+        if (col >= 28 && col <= 30 && lin >= 27 && lin <= 29) {
+            e.setMundoX(col);
+            e.setMundoY(lin);
+        } else {
+            System.out.println("Tentativa de posicionar fora dos limites!");
+        }
+    }
+
 
 
     public void setObjeto() {
@@ -105,6 +112,18 @@ public class CriadorAtivos {
 
 
         */
+
+        CRI_Siri siri=new CRI_Siri(gp);
+        gp.getPresa()[1][2]=siri;
+        posicionarEntidadeLimitada(siri, 26, 31);
+
+        CRI_Raia raia=new CRI_Raia(gp);
+        gp.getPresa()[1][3]=raia;
+        gp.getPresa()[1][3].setMundoX(40 * gp.getTamanhoBloco());
+        gp.getPresa()[1][3].setMundoY(33 * gp.getTamanhoBloco());
+
+
+
 
 
     }

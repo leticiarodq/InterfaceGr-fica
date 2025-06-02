@@ -1,6 +1,8 @@
 package gui.system;
 
+import gui.criaturas.Aquatico;
 import gui.entidades.Entidade;
+import gui.criaturas.BI_Peixe;
 
 public class ChecadorColisoes {
 
@@ -58,8 +60,17 @@ public class ChecadorColisoes {
                     if (blocoNum1 >= 0 && blocoNum1 < gp.getBlocosG().getBlocos().length &&
                             blocoNum2 >= 0 && blocoNum2 < gp.getBlocosG().getBlocos().length) {
 
-                        if (gp.getBlocosG().getBlocos()[blocoNum1].isColisao() || gp.getBlocosG().getBlocos()[blocoNum2].isColisao()) {
-                            entidade.setColisaoOn(true);
+                        // Verifica se é peixe e se pode atravessar esses tiles
+                        boolean peixePodePassar = false;
+                        if (entidade instanceof Aquatico) {
+                            Aquatico aquatica = (Aquatico) entidade;
+                            peixePodePassar = aquatica.podeAtravessar(blocoNum1) && aquatica.podeAtravessar(blocoNum2);
+                        }
+// Se não é peixe OU peixe não pode passar, então verifica colisão normal
+                        if (!peixePodePassar) {
+                            if (gp.getBlocosG().getBlocos()[blocoNum1].isColisao() || gp.getBlocosG().getBlocos()[blocoNum2].isColisao()) {
+                                entidade.setColisaoOn(true);
+                            }
                         }
                     }
                 }
@@ -79,8 +90,16 @@ public class ChecadorColisoes {
                     if (blocoNum1 >= 0 && blocoNum1 < gp.getBlocosG().getBlocos().length &&
                             blocoNum2 >= 0 && blocoNum2 < gp.getBlocosG().getBlocos().length) {
 
-                        if (gp.getBlocosG().getBlocos()[blocoNum1].isColisao() || gp.getBlocosG().getBlocos()[blocoNum2].isColisao()) {
-                            entidade.setColisaoOn(true);
+                        boolean peixePodePassar = false;
+                        if (entidade instanceof Aquatico) {
+                            Aquatico aquatica = (Aquatico) entidade;
+                            peixePodePassar = aquatica.podeAtravessar(blocoNum1) && aquatica.podeAtravessar(blocoNum2);
+                        }
+
+                        if (!peixePodePassar) {
+                            if (gp.getBlocosG().getBlocos()[blocoNum1].isColisao() || gp.getBlocosG().getBlocos()[blocoNum2].isColisao()) {
+                                entidade.setColisaoOn(true);
+                            }
                         }
                     }
                 }
@@ -100,8 +119,16 @@ public class ChecadorColisoes {
                     if (blocoNum1 >= 0 && blocoNum1 < gp.getBlocosG().getBlocos().length &&
                             blocoNum2 >= 0 && blocoNum2 < gp.getBlocosG().getBlocos().length) {
 
-                        if (gp.getBlocosG().getBlocos()[blocoNum1].isColisao() || gp.getBlocosG().getBlocos()[blocoNum2].isColisao()) {
-                            entidade.setColisaoOn(true);
+                        boolean peixePodePassar = false;
+                        if (entidade instanceof Aquatico) {
+                            Aquatico aquatica = (Aquatico) entidade;
+                            peixePodePassar = aquatica.podeAtravessar(blocoNum1) && aquatica.podeAtravessar(blocoNum2);
+                        }
+
+                        if (!peixePodePassar) {
+                            if (gp.getBlocosG().getBlocos()[blocoNum1].isColisao() || gp.getBlocosG().getBlocos()[blocoNum2].isColisao()) {
+                                entidade.setColisaoOn(true);
+                            }
                         }
                     }
                 }
@@ -121,8 +148,16 @@ public class ChecadorColisoes {
                     if (blocoNum1 >= 0 && blocoNum1 < gp.getBlocosG().getBlocos().length &&
                             blocoNum2 >= 0 && blocoNum2 < gp.getBlocosG().getBlocos().length) {
 
-                        if (gp.getBlocosG().getBlocos()[blocoNum1].isColisao() || gp.getBlocosG().getBlocos()[blocoNum2].isColisao()) {
-                            entidade.setColisaoOn(true);
+                        boolean peixePodePassar = false;
+                        if (entidade instanceof Aquatico) {
+                            Aquatico aquatica = (Aquatico) entidade;
+                            peixePodePassar = aquatica.podeAtravessar(blocoNum1) && aquatica.podeAtravessar(blocoNum2);
+                        }
+
+                        if (!peixePodePassar) {
+                            if (gp.getBlocosG().getBlocos()[blocoNum1].isColisao() || gp.getBlocosG().getBlocos()[blocoNum2].isColisao()) {
+                                entidade.setColisaoOn(true);
+                            }
                         }
                     }
                 }

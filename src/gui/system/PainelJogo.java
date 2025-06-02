@@ -79,7 +79,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
     // Mapa do jogo
 
     private final int mapaMax = 10;
-    private int mapaAtual = 0;
+    private int mapaAtual = 1;
 
     // Entidade e objeto
 
@@ -88,8 +88,8 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
     private Som som = new Som();
     private Entidade obj[][] = new Entidade[mapaMax][100];
     private Entidade npc[][] = new Entidade[mapaMax][100];
-    private Entidade criatura[][] = new Entidade[mapaMax][10];
-    private Entidade presa[][] = new Entidade[mapaMax][10];
+    private Entidade criatura[][] = new Entidade[mapaMax][20];
+    private Entidade presa[][] = new Entidade[mapaMax][20];
     private BlocoInterativo bloco[][]=new BlocoInterativo[mapaMax][10];
     private ArrayList<Entidade> entidadeLista = new ArrayList<>();
     private Entidade alimento[][] = new Entidade[mapaMax][10];
