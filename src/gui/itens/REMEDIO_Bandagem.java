@@ -15,13 +15,17 @@ public class REMEDIO_Bandagem extends Entidade {
         this.gp=gp;
 
         remedioLogico=new Remedio("Remédio", 1, 10, "Bandagem", "Estancar sangramentos e proteger ferimentos leves", 1);
-        setTipo(getTipo_consumivel());
+        setTipo(getTipo_remedio());
 
         setNome(remedioLogico.getTipo());
-        setDown1(setup("/objetos/bandagem",gp.getTamanhoBloco(), gp.getTamanhoBloco()));
+        setDown1(setup("/objetos/pocao3",gp.getTamanhoBloco(), gp.getTamanhoBloco()));
         setColisao(true);
         setDescricao("["+ getNome() +"]\nUsada para estancar\nsangramentos e\nproteger ferimentos\nleves.");
+    }
 
-
+    public void usar(Entidade entidade){
+        gp.setEstadoJogo(gp.getEstadoDialogo());
+        gp.getIu().setDialogoAtual("Você recuperou 1 ponto de energia!");
+        entidade.setEnergia(entidade.getEnergia()+1);
     }
 }

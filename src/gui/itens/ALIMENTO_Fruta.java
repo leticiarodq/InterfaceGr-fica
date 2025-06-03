@@ -21,36 +21,42 @@ public class ALIMENTO_Fruta extends Entidade {
         switch (tipoFruta.toLowerCase()) {
             case "maca":
                 frutaLogica=new Alimento("Maçã", 10, 1, "Fruta", 1, 0);
+                setNome("Maçã");
                 setDown1(setup("/alimentos/maca", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
                 setDescricao("[Maçã]\nMata a fome e é fácil de\nencontrar.\nRica em fibras\ne vitaminas.");
                 break;
 
             case "banana":
                 frutaLogica=new Alimento("Banana", 10, 1, "Fruta", 1, 0);
+                setNome("Banana");
                 setDown1(setup("/alimentos/banana", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
                 setDescricao("[Banana]\nRica em potássio e\nenergia rápida.\nÓtima para recuperar\nforças.");
                 break;
 
             case "laranja":
                 frutaLogica=new Alimento("Laranja", 10, 1, "Fruta", 1, 0);
+                setNome("Laranja");
                 setDown1(setup("/alimentos/laranja", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
                 setDescricao("[Laranja]\nCheia de vitamina C!\nAjuda a fortalecer o\nsistema imunológico.");
                 break;
 
             case "tomate":
                 frutaLogica=new Alimento("Tomate", 10, 1, "Fruta", 1, 0);
+                setNome("Tomate");
                 setDown1(setup("/alimentos/tomate", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
                 setDescricao("[Tomate]\nFonte de antioxidantes\ne vitamina C.\nBom para a saúde\nda pele.");
                 break;
 
             case "uvaroxa":
                 frutaLogica=new Alimento("Uva Roxa", 10, 1, "Fruta", 1, 0);
+                setNome("Uva roxa");
                 setDown1(setup("/alimentos/uva_roxa", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
                 setDescricao("[Uva roxa]\nCheia de antioxidantes.\nAjuda na circulação sanguínea.");
                 break;
 
             case "uva verde":
                 frutaLogica=new Alimento("Uva verde", 10, 1, "Fruta", 1, 0);
+                setNome("Uva verde");
                 setDown1(setup("/alimentos/uva_verde", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
                 setDescricao("[Uva verde]\nRefrescante e nutritiva.\nBoa fonte de vitaminas.");
                 break;

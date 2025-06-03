@@ -2,7 +2,6 @@ package gui.system;
 
 import gui.criaturas.Aquatico;
 import gui.entidades.Entidade;
-import gui.criaturas.BI_Peixe;
 
 public class ChecadorColisoes {
 

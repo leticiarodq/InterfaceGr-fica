@@ -11,8 +11,6 @@ import java.util.ArrayList;
 
 public class Entidade {
 
-    public boolean tocou=false;
-
     // Referência ao jogo
     private final PainelJogo gp;
     private boolean isDestrutivel;
@@ -23,45 +21,45 @@ public class Entidade {
     private String direcao = "down";
     private int numSprite = 1;
 
-    // Invisibilidade
-    private boolean invisibilidade=false;
+    // Invisibilidade e estado
+    private boolean invisibilidade = false;
+    private boolean ataque = false;
+    private boolean vivo = true;
+    private boolean morto = false;
 
-    // Ataque
-    private boolean ataque=false;
-    private boolean vivo=true;
-    private boolean morto=false;
-
-    // Tipo
+    // Tipos
+    private final int tipo_jogador = 0;
+    private final int tipo_npc = 1;
+    private final int tipo_criatura = 2;
+    private final int tipo_consumivel = 3;
+    private final int tipo_espada = 4;
+    private final int tipo_machado = 5;
+    private final int tipo_picareta = 6;
+    private final int tipo_escudo = 7;
+    private final int tipo_presa = 8;
+    private final int tipo_dropavelConsumivel = 9;
+    private final int tipo_interativo = 10;
+    private final int tipo_dropavel = 11;
+    public final int tipo_fogueira = 12;
+    private final int tipo_vencido = 13;
+    private final int tipo_armadilha = 14;
+    private final int tipo_remedio = 15;
     private int tipo;
-    private final int tipo_jogador=0;
-    private final int tipo_npc=1;
-    private final int tipo_criatura=2;
-    private final int tipo_consumivel=3;
-    private final int tipo_espada=4;
-    private final int tipo_machado=5;
-    private final int tipo_picareta=6;
-    private final int tipo_escudo=7;
-    private final int tipo_presa=8;
-    private final int tipo_dropavelConsumivel=9;
-    private final int tipo_interativo=10;
-    private final int tipo_dropavel=11;
 
-    public final int tipo_fogueira=12;
-    // Dropar item
-
-
+    // Inventário
     private ArrayList<Entidade> inventario = new ArrayList<>();
     private final int tamanhoMaxInventario = 20;
 
     // Contadores
     private int contadorSprite = 0;
     private int contadorInvisibilidade;
-    private int contadorMorto=0;
+    private int contadorMorto = 0;
     private int contadorDeBloqueioDeAcao = 0;
 
     // Imagens do personagem
     private BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
     private BufferedImage ataqueUp1, ataqueUp2, ataqueDown1, ataqueDown2, ataqueLeft1, ataqueLeft2, ataqueRight1, ataqueRight2;
+
     // Atributos machado
     private BufferedImage machadoUp1, machadoUp2;
     private BufferedImage machadoDown1, machadoDown2;
@@ -74,17 +72,14 @@ public class Entidade {
     private BufferedImage picaretaLeft1, picaretaLeft2;
     private BufferedImage picaretaRight1, picaretaRight2;
 
-
-
     // Colisão
     private Rectangle areaSolida = new Rectangle(0, 0, 64, 64);
     private int areaSolidaPadraoX, areaSolidaPadraoY;
     private boolean colisaoOn = false;
-    public Rectangle areaAtaque=new Rectangle(0,0,0,0);
-
+    public Rectangle areaAtaque = new Rectangle(0, 0, 0, 0);
 
     // Diálogos
-    private String dialogos[] = new String[20];
+    private String dialogos[] = new String[50];
     private int indiceDialogo = 0;
 
     // Status do personagem
@@ -104,62 +99,158 @@ public class Entidade {
     private int energia;
 
     private int atacar;
-
     private int defender;
 
+    // Equipamentos e itens atuais
     private Entidade armaAtual;
-
     public Entidade itemAtual;
-
     private Entidade escudoAtual;
 
-    private String descricao="";
+    private String descricao = "";
 
     private int valorAtaque;
-
     private int durabilidade;
 
-    public int getDurabilidade() {
-        return durabilidade;
-    }
-    public void setDurabilidade(int durabilidade){
-        this.durabilidade=durabilidade;
-    }
 
     // Objetos
     private BufferedImage imagem, imagem2, imagem3, imagem4;
     private String nome;
     private boolean colisao = false;
 
+    private int precoPrata;
+    private int precoOuro;
+    private int precoEsmeralda;
+
+    // Animal aquático
+
+    private int[] tilesIgnorados = null;
+
+    public int[] getTilesIgnorados() {
+        return tilesIgnorados;
+    }
 
     // Métodos de acesso
 
-
-    public BufferedImage getImagem4() {
-        return imagem4;
+    // Durabilidade
+    public int getDurabilidade() {
+        return durabilidade;
+    }
+    public void setDurabilidade(int durabilidade){
+        this.durabilidade = durabilidade;
     }
 
-    public void setInventario(ArrayList<Entidade> inventario) {
-        this.inventario = inventario;
+    // Tipos
+    public int getTipo() {
+        return tipo;
+    }
+    public void setTipo(int tipo) {
+        this.tipo = tipo;
     }
 
-    public ArrayList<Entidade> getInventario() {
-        return inventario;
+    public int getTipo_jogador() {
+        return tipo_jogador;
     }
+    public int getTipo_npc() {
+        return tipo_npc;
+    }
+    public int getTipo_criatura() {
+        return tipo_criatura;
+    }
+    public int getTipo_consumivel() {
+        return tipo_consumivel;
+    }
+    public int getTipo_espada() {
+        return tipo_espada;
+    }
+    public int getTipo_machado() {
+        return tipo_machado;
+    }
+    public int getTipo_picareta() {
+        return tipo_picareta;
+    }
+    public int getTipo_escudo() {
+        return tipo_escudo;
+    }
+    public int getTipo_presa() {
+        return tipo_presa;
+    }
+    public int getTipo_dropavelConsumivel() {
+        return tipo_dropavelConsumivel;
+    }
+    public int getTipo_interativo() {
+        return tipo_interativo;
+    }
+    public int getTipo_dropavel() {
+        return tipo_dropavel;
+    }
+    public int getTipo_fogueira() {
+        return tipo_fogueira;
+    }
+    public int getTipo_vencido() {
+        return tipo_vencido;
+    }
+    public int getTipo_armadilha() {
+        return tipo_armadilha;
+    }
+    public int getTipo_remedio() {
+        return tipo_remedio;
+    }
+
+    // Posição de movimento
+    public int getMundoX() {
+        return mundoX;
+    }
+    public void setMundoX(int mundoX) {
+        this.mundoX = mundoX;
+    }
+
+    public int getMundoY() {
+        return mundoY;
+    }
+    public void setMundoY(int mundoY) {
+        this.mundoY = mundoY;
+    }
+
+    public int getVelocidade() {
+        return velocidade;
+    }
+    public void setVelocidade(int velocidade) {
+        this.velocidade = velocidade;
+    }
+
+    public String getDirecao() {
+        return direcao;
+    }
+    public void setDirecao(String direcao) {
+        this.direcao = direcao;
+    }
+
+    public int getContadorSprite() {
+        return contadorSprite;
+    }
+    public void setContadorSprite(int contadorSprite) {
+        this.contadorSprite = contadorSprite;
+    }
+
+    public int getNumSprite() {
+        return numSprite;
+    }
+    public void setNumSprite(int numSprite) {
+        this.numSprite = numSprite;
+    }
+
+    // Status
 
     // Vida
     public int getVida() {
         return vida;
     }
-
-    public int getVidaMaxima() {
-        return vidaMaxima;
-    }
-
     public void setVida(int vida) {
         this.vida = vida;
     }
-
+    public int getVidaMaxima() {
+        return vidaMaxima;
+    }
     public void setVidaMaxima(int vidaMaxima) {
         this.vidaMaxima = vidaMaxima;
     }
@@ -168,33 +259,26 @@ public class Entidade {
     public int getSede() {
         return sede;
     }
-
-    public int getSedeMaxima() {
-        return sedeMaxima;
-    }
-
     public void setSede(int sede) {
         this.sede = sede;
     }
-
+    public int getSedeMaxima() {
+        return sedeMaxima;
+    }
     public void setSedeMaxima(int sedeMaxima) {
         this.sedeMaxima = sedeMaxima;
     }
-
 
     // Fome
     public int getFome() {
         return fome;
     }
-
-    public int getFomeMaxima() {
-        return fomeMaxima;
-    }
-
     public void setFome(int fome) {
         this.fome = fome;
     }
-
+    public int getFomeMaxima() {
+        return fomeMaxima;
+    }
     public void setFomeMaxima(int fomeMaxima) {
         this.fomeMaxima = fomeMaxima;
     }
@@ -203,15 +287,12 @@ public class Entidade {
     public int getSanidade() {
         return sanidade;
     }
-
-    public int getSanidadeMaxima() {
-        return sanidadeMaxima;
-    }
-
     public void setSanidade(int sanidade) {
         this.sanidade = sanidade;
     }
-
+    public int getSanidadeMaxima() {
+        return sanidadeMaxima;
+    }
     public void setSanidadeMaxima(int sanidadeMaxima) {
         this.sanidadeMaxima = sanidadeMaxima;
     }
@@ -220,117 +301,57 @@ public class Entidade {
     public int getEnergia() {
         return energia;
     }
-
-    public int getEnergiaMaxima() {
-        return energiaMaxima;
-    }
-
     public void setEnergia(int energia) {
         this.energia = energia;
     }
-
+    public int getEnergiaMaxima() {
+        return energiaMaxima;
+    }
     public void setEnergiaMaxima(int energiaMaxima) {
         this.energiaMaxima = energiaMaxima;
     }
 
-    // Ataque e defesa
-
+    // Ataque
     public int getAtacar() {
         return atacar;
     }
-
-    public int getDefender() {
-        return defender;
-    }
-
     public void setAtacar(int atacar) {
         this.atacar = atacar;
     }
 
+    public Entidade getArmaAtual() {
+        return armaAtual;
+    }
     public void setArmaAtual(Entidade armaAtual) {
         this.armaAtual = armaAtual;
-    }
-
-    public void setDefender(int defender) {
-        this.defender = defender;
-    }
-
-    public Entidade getArmaAtual(){
-        return armaAtual;
     }
 
     public int getValorAtaque() {
         return valorAtaque;
     }
-
     public void setValorAtaque(int valorAtaque) {
         this.valorAtaque = valorAtaque;
     }
 
     // Inventário
+    public ArrayList<Entidade> getInventario() {
+        return inventario;
+    }
+    public void setInventario(ArrayList<Entidade> inventario) {
+        this.inventario = inventario;
+    }
 
     public String getDescricao() {
         return descricao;
     }
-
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
 
-    // Posição e movimento
-    public int getMundoX() {
-        return mundoX;
-    }
-
-    public void setMundoX(int mundoX) {
-        this.mundoX = mundoX;
-    }
-
-    public int getMundoY() {
-        return mundoY;
-    }
-
-    public void setMundoY(int mundoY) {
-        this.mundoY = mundoY;
-    }
-
-    public int getVelocidade() {
-        return velocidade;
-    }
-
-    public void setVelocidade(int velocidade) {
-        this.velocidade = velocidade;
-    }
-
-    public String getDirecao() {
-        return direcao;
-    }
-
-    public void setDirecao(String direcao) {
-        this.direcao = direcao;
-    }
-
-    public int getContadorSprite() {
-        return contadorSprite;
-    }
-
-    public void setContadorSprite(int contadorSprite) {
-        this.contadorSprite = contadorSprite;
-    }
-
-    public int getNumSprite() {
-        return numSprite;
-    }
-
-    public void setNumSprite(int numSprite) {
-        this.numSprite = numSprite;
-    }
-
-    // Colisao
+    // Colisão
     public boolean isColisaoOn() {
         return colisaoOn;
     }
-
     public void setColisaoOn(boolean colisaoOn) {
         this.colisaoOn = colisaoOn;
     }
@@ -338,7 +359,6 @@ public class Entidade {
     public Rectangle getAreaSolida() {
         return areaSolida;
     }
-
     public void setAreaSolida(Rectangle areaSolida) {
         this.areaSolida = areaSolida;
     }
@@ -346,7 +366,6 @@ public class Entidade {
     public int getAreaSolidaPadraoX() {
         return areaSolidaPadraoX;
     }
-
     public void setAreaSolidaPadraoX(int areaSolidaPadraoX) {
         this.areaSolidaPadraoX = areaSolidaPadraoX;
     }
@@ -354,7 +373,6 @@ public class Entidade {
     public int getAreaSolidaPadraoY() {
         return areaSolidaPadraoY;
     }
-
     public void setAreaSolidaPadraoY(int areaSolidaPadraoY) {
         this.areaSolidaPadraoY = areaSolidaPadraoY;
     }
@@ -363,120 +381,48 @@ public class Entidade {
     public int getContadorDeBloqueioDeAcao() {
         return contadorDeBloqueioDeAcao;
     }
-
     public void setContadorDeBloqueioDeAcao(int contadorDeBloqueioDeAcao) {
         this.contadorDeBloqueioDeAcao = contadorDeBloqueioDeAcao;
     }
 
     // Invisibilidade
-
     public boolean isInvisibilidade() {
         return invisibilidade;
     }
-
     public void setInvisibilidade(boolean invisibilidade) {
         this.invisibilidade = invisibilidade;
-    }
-
-    public void setContadorInvisibilidade(int contadorInvisibilidade) {
-        this.contadorInvisibilidade = contadorInvisibilidade;
     }
 
     public int getContadorInvisibilidade() {
         return contadorInvisibilidade;
     }
-
-
-    // Tipos
-    public int getTipo() {
-        return tipo;
+    public void setContadorInvisibilidade(int contadorInvisibilidade) {
+        this.contadorInvisibilidade = contadorInvisibilidade;
     }
 
-    public int getTipo_criatura() {
-        return tipo_criatura;
-    }
-
-    public int getTipo_consumivel() {
-        return tipo_consumivel;
-    }
-
-    public int getTipo_escudo() {
-        return tipo_escudo;
-    }
-
-    public int getTipo_espada() {
-        return tipo_espada;
-    }
-
-    public int getTipo_jogador() {
-        return tipo_jogador;
-    }
-
-    public int getTipo_machado() {
-        return tipo_machado;
-    }
-
-    public int getTipo_picareta() {
-        return tipo_picareta;
-    }
-
-    public int getTipo_npc() {
-        return tipo_npc;
-    }
-
-    public void setTipo(int tipo) {
-        this.tipo = tipo;
-    }
-
-    public int getTipo_presa() {
-        return tipo_presa;
-    }
-
-    public int getTipo_dropavel() {
-        return tipo_dropavel;
-    }
-
-    public int getTipo_dropavelConsumivel() {
-        return tipo_dropavelConsumivel;
-    }
-
-
-    public int getTipo_interativo() {
-        return tipo_interativo;
-    }
-
-    public void setDestrutivel(boolean destrutivel) {
-        isDestrutivel = destrutivel;
-    }
-
-    // Ataque
+    // Estado (Ataque, vivo ou morto)
     public boolean isAtaque() {
         return ataque;
     }
-
-    public boolean isMorto() {
-        return morto;
+    public void setAtaque(boolean ataque) {
+        this.ataque = ataque;
     }
 
     public boolean isVivo() {
         return vivo;
     }
 
-
+    public boolean isMorto() {
+        return morto;
+    }
     public void setMorto(boolean morto) {
         this.morto = morto;
-    }
-
-
-    public void setAtaque(boolean ataque) {
-        this.ataque = ataque;
     }
 
     // Diálogos
     public String[] getDialogos() {
         return dialogos;
     }
-
     public void setDialogos(String[] dialogos) {
         this.dialogos = dialogos;
     }
@@ -484,12 +430,39 @@ public class Entidade {
     public int getIndiceDialogo() {
         return indiceDialogo;
     }
-
     public void setIndiceDialogo(int indiceDialogo) {
         this.indiceDialogo = indiceDialogo;
     }
 
+    // Preços
+    public int getPrecoPrata() {
+        return precoPrata;
+    }
+    public void setPrecoPrata(int precoPrata) {
+        this.precoPrata = precoPrata;
+    }
+
+    public int getPrecoOuro() {
+        return precoOuro;
+    }
+    public void setPrecoOuro(int precoOuro) {
+        this.precoOuro = precoOuro;
+    }
+
+    public int getPrecoEsmeralda() {
+        return precoEsmeralda;
+    }
+    public void setPrecoEsmeralda(int precoEsmeralda) {
+        this.precoEsmeralda = precoEsmeralda;
+    }
+
+
+    public void setDestrutivel(boolean destrutivel) {
+        isDestrutivel = destrutivel;
+    }
+
     // Imagens getters
+
     public BufferedImage getUp1() {
         return up1;
     }
@@ -619,6 +592,7 @@ public class Entidade {
 
 
     // Imagens setters
+
     public void setUp1(BufferedImage up1) {
         this.up1 = up1;
     }
@@ -746,7 +720,6 @@ public class Entidade {
         this.picaretaRight2 = picaretaRight2;
     }
 
-
     // Objetos getters
 
     public BufferedImage getImagem() {
@@ -768,7 +741,6 @@ public class Entidade {
     public boolean isColisao() {
         return colisao;
     }
-
 
     // Objetos setters
 
@@ -792,7 +764,6 @@ public class Entidade {
         this.imagem3 = imagem3;
     }
 
-
     public Entidade(PainelJogo gp) {
         this.gp = gp;
     }
@@ -803,27 +774,12 @@ public class Entidade {
     public void falar() {
     }
 
-    // Na classe Entidade, adicione:
-    private int[] tilesIgnorados = null;
-
-    public int[] getTilesIgnorados() {
-        return tilesIgnorados;
-    }
 
     public void setTilesIgnorados(int[] tilesIgnorados) {
         this.tilesIgnorados = tilesIgnorados;
     }
 
-    public boolean podeIgnorarTile(int tileId) {
-        if (tilesIgnorados == null) return false;
-        for (int tile : tilesIgnorados) {
-            if (tile == tileId) return true;
-        }
-        return false;
-    }
-
     public void update() {
-
         setAcao();
 
         setColisaoOn(false);
@@ -841,7 +797,6 @@ public class Entidade {
             }
         }
 
-        // Movimento
         if (!isColisaoOn()) {
             switch (getDirecao()) {
                 case "up":
@@ -865,15 +820,14 @@ public class Entidade {
                     }
                     break;
             }
-
-            setContadorSprite(getContadorSprite() + 1);
-            if (getContadorSprite() > 20) {
-                setNumSprite(getNumSprite() == 1 ? 2 : 1);
-                setContadorSprite(0);
-            }
         }
 
-        // Invisibilidade deve ser contada SEMPRE
+        setContadorSprite(getContadorSprite() + 1);
+        if (getContadorSprite() > 24) {
+            setNumSprite(getNumSprite() == 1 ? 2 : 1);
+            setContadorSprite(0);
+        }
+
         if (invisibilidade) {
             contadorInvisibilidade++;
             if (contadorInvisibilidade > 60) {
@@ -909,8 +863,6 @@ public class Entidade {
                     imagem = (getNumSprite() == 1) ? getRight1() : getRight2();
                     break;
             }
-
-            // barra
 
             if (tipo == tipo_criatura || tipo == tipo_presa) {
 
@@ -948,17 +900,20 @@ public class Entidade {
                 g2.drawImage(imagem, telaX, telaY, imagem.getWidth(), imagem.getHeight(), null);
             }
 
-
-            //g2.drawImage(imagem, telaX, telaY, gp.getTamanhoBloco(), gp.getTamanhoBloco(), null);
-
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
         }
 
 
     }
+
     public void usar(Entidade entidade){}
 
+    public void consumirAlimentoVencido(Entidade entidade){
+
+    }
+
     public void coletar(Entidade entidade){}
+
     public void mortoAnimacao(Graphics2D g2){
 
         contadorMorto++;
@@ -1017,7 +972,6 @@ public class Entidade {
         }
     }
 
-
     public void checarDrop(){
 
     }
@@ -1033,11 +987,8 @@ public class Entidade {
                 break;
 
             }
-
         }
 
-
     }
-
 
 }

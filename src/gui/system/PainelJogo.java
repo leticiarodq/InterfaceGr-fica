@@ -18,13 +18,20 @@ import sistema.Main;
 import javax.swing.*;
 import javax.swing.Timer;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.*;
 
 
 public class PainelJogo extends JPanel implements Runnable { //GamePanel herda de JPanel, que é a área onde o jogo vai ser desenhado
     //implements Runnable indica que essa classe será executada em uma Thread separada, permitindo que o jogo rode continuamente sem travar a interface
+    private int tremorDuracao = 0; // conta frames de tremor
+    private int offsetX = 0;
+    private int offsetY = 0;
 
+    public void iniciarTremor(int duracaoFrames) {
+        tremorDuracao = duracaoFrames;
+    }
 
     // Atributos privados
 
@@ -80,7 +87,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
     // Mapa do jogo
 
     private final int mapaMax = 10;
-    private int mapaAtual = 1;
+    private int mapaAtual = 5;
 
     // Entidade e objeto
 
@@ -91,7 +98,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
     private Entidade npc[][] = new Entidade[mapaMax][100];
     private Entidade criatura[][] = new Entidade[mapaMax][20];
     private Entidade presa[][] = new Entidade[mapaMax][20];
-    private BlocoInterativo bloco[][]=new BlocoInterativo[mapaMax][10];
+    private BlocoInterativo bloco[][]=new BlocoInterativo[mapaMax][30];
     private ArrayList<Entidade> entidadeLista = new ArrayList<>();
     private Entidade alimento[][] = new Entidade[mapaMax][10];
     public Entidade fogueira[][]=new Entidade[mapaMax][10];
@@ -115,14 +122,29 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
     private int estadoOpcoes = 8;
     private int estadoAssarAlimento=9;
     private int estadoTransicao=10;
+    private int estadoSistemaDeTroca=11;
+    private int estadoJogoVencido=12;
 
 
     // Métodos de acesso getters
 
 
+    public int getEstadoJogoVencido() {
+        return estadoJogoVencido;
+    }
+
+    public void setEstadoJogoVencido(int estadoJogoVencido) {
+        this.estadoJogoVencido = estadoJogoVencido;
+    }
+
     public Entidade[][] getCraft() {
         return craft;
     }
+
+    public int getEstadoSistemaDeTroca() {
+        return estadoSistemaDeTroca;
+    }
+
 
     public int getEstadoPersonagem() {
         return estadoPersonagem;
@@ -373,6 +395,8 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         cAtivos.definirCriatura();
         cAtivos.definirPresa();
         cAtivos.definirBlocoInterativo();
+
+
         if (iu != null) {
             iu.setPersonagemSelecionado(null);
             iu.setTelaMenu(0); //
@@ -404,7 +428,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
             if (delta >= 1) { // Só atualiza o jogo quando delta ≥ 1
                 update();    // Atualiza a lógica do jogo
                 //repaint();      // Requisição para redesenhar a tela
-                desenharTempoTela();
+                desenharTelaTemp();
                 desenharTela();
                 delta--;        // Evita múltiplas atualizações por quadro
                 contadorQuadros++;
@@ -550,6 +574,8 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         cAtivos.definirBlocoInterativo();
         cAtivos.definirAquatico();
 
+
+
         // Configura a iluminação inicial (centro da tela)
         int tamanhoCirculo = 200; // ou outro valor adequado
         int centroX = getTelaLargura() / 2;
@@ -585,10 +611,20 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
     private ArrayList<FlocoDeNeve> flocos = new ArrayList<>();
     private boolean mostrarNevasca = false;
     private boolean mostrarEfeitoConfusao = false;
+    private boolean mostraEfeitoDesmoronamento=false;
     private float angulo = 0;
     private Random random = new Random();
 
     // Métodos de acesso
+
+
+    public void setMostraEfeitoDesmoronamento(boolean mostraEfeitoDesmoronamento) {
+        this.mostraEfeitoDesmoronamento = mostraEfeitoDesmoronamento;
+    }
+
+    public boolean isMostraEfeitoDesmoronamento() {
+        return mostraEfeitoDesmoronamento;
+    }
 
     public boolean isMostrarChuva(){
         return mostrarChuva;
@@ -698,23 +734,70 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
         int largura = getWidth();
         int altura = getHeight();
 
+        // Simula tremor da tela
+        int tremorX = (int)(Math.random() * 10 - 5); // de -5 a 5
+        int tremorY = (int)(Math.random() * 10 - 5); // de -5 a 5
+
+        AffineTransform saveAT = g2.getTransform();
+        g2.translate(tremorX, tremorY);
+
+        // Efeito vermelho translúcido sobre a tela
         g2.setColor(new Color(255, 0, 0, 100));
         g2.fillRect(0, 0, largura, altura);
 
-        angulo += 0.05f;
-        if (angulo > 2 * Math.PI) angulo = 0;
-
-        double tremor = Math.sin(System.currentTimeMillis() * 0.01) * 50;
-
-        g2.setColor(new Color(255, 100, 100, 80));
-        g2.rotate(-angulo * 1.5, largura / 2, altura / 2);
-        g2.fillOval(largura / 2 - 100, altura / 2 - 100, 200, 200);
-        g2.rotate(angulo * 1.5, largura / 2, altura / 2);
+        g2.setTransform(saveAT); // restaura a posição normal para não afetar o resto do jogo
     }
 
-    public void desenharTempoTela(){
+    private int contadorDesmoronamento = 0;
+
+    public void desenharEfeitoDesmoronamento(Graphics2D g2) {
+        int largura = getWidth();
+        int altura = getHeight();
+
+        contadorDesmoronamento++;
+
+        // Camada de tremor: desenha 5 vezes com deslocamento e sobreposição translúcida
+        for (int i = 0; i < 5; i++) {
+            int tremorX = (int) (Math.random() * 16 - 8);  // de -8 a +8
+            int tremorY = (int) (Math.random() * 16 - 8);  // de -8 a +8
+
+            // Simula deslocamento visual com sobreposição translúcida
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.05f)); // bem suave
+            g2.setColor(Color.BLACK);
+            g2.fillRect(tremorX, tremorY, largura, altura);
+        }
+
+        // Camada de escurecimento geral (mais forte, mas ainda translúcida)
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
+        g2.setColor(Color.BLACK);
+        g2.fillRect(0, 0, largura, altura);
+
+        // Flash vermelho intermitente e translúcido
+        if (contadorDesmoronamento % 12 < 6) {
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f));
+            g2.setColor(Color.RED);
+            g2.fillRect(0, 0, largura, altura);
+        }
+
+        // Reset da transparência para não afetar outros desenhos
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+        iniciarTremor(30);
+    }
+
+    public void desenharTelaTemp(){
 
         long desenhoComeco = 0;
+
+        if (tremorDuracao > 0) {
+            offsetX = (int)(Math.random() * 10 - 5); // desloca de -5 a 5 px
+            offsetY = (int)(Math.random() * 10 - 5);
+            tremorDuracao--;
+        } else {
+            offsetX = 0;
+            offsetY = 0;
+        }
+        AffineTransform original = g2.getTransform();
+        g2.translate(offsetX, offsetY);
         if(eventosTeclado.isChecarDesenhoTempo()==true){
             desenhoComeco=System.nanoTime();
         }
@@ -774,6 +857,8 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
                 }
             }
 
+            g2.setTransform(original);
+
 
 
 
@@ -803,6 +888,10 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
             }
             if (mostrarNevasca) {
                 desenharNevasca(g2);
+            }
+
+            if(mostraEfeitoDesmoronamento){
+                desenharEfeitoDesmoronamento(g2);
             }
             // IU (Interface do Usuário)
             gerenciadorAmbientacao.desenhar(g2);

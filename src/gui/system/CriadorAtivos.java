@@ -3,11 +3,13 @@ package gui.system;
 import gui.criaturas.*;
 import gui.entidades.Entidade;
 import gui.entidades.NPC_Explorador;
+import gui.entidades.NPC_Feiticeira;
+import gui.itens.ALIMENTO_Enlatado;
 import gui.itens.Armas;
 import gui.itens.Ferramentas;
 import gui.itens.Fogueira;
-import gui.tile_interativo.BI_Arvore;
-import gui.criaturas.BI_Peixe;
+import gui.tile_interativo.*;
+import gui.criaturas.CRI_Peixe;
 
 public class CriadorAtivos {
 
@@ -69,6 +71,17 @@ public class CriadorAtivos {
         gp.getObj()[numMapa][2].setMundoX(25 * gp.getTamanhoBloco());
         gp.getObj()[numMapa][2].setMundoY(24 * gp.getTamanhoBloco());
 
+        gp.getObj()[2][3]=new ALIMENTO_Enlatado(gp, "ervilhavenciada");
+        gp.getObj()[2][3].setMundoX(25 * gp.getTamanhoBloco());
+        gp.getObj()[2][3].setMundoY(24 * gp.getTamanhoBloco());
+
+        gp.getObj()[2][4]=new ALIMENTO_Enlatado(gp, "lataervilha");
+        gp.getObj()[2][4].setMundoX(21 * gp.getTamanhoBloco());
+        gp.getObj()[2][4].setMundoY(22 * gp.getTamanhoBloco());
+
+        gp.getObj()[4][5]=new Ferramentas(gp, "picareta");
+        gp.getObj()[4][5].setMundoX(26 * gp.getTamanhoBloco());
+        gp.getObj()[4][5].setMundoY(22 * gp.getTamanhoBloco());
     }
 
     public void craft(){
@@ -86,7 +99,7 @@ public class CriadorAtivos {
 
     public void definirAquatico(){
 
-        BI_Peixe peixe = new BI_Peixe(gp);
+        CRI_Peixe peixe = new CRI_Peixe(gp);
         gp.getPresa()[1][0] = peixe;
         posicionarEntidadeLimitada(peixe, 29, 28);
 
@@ -140,10 +153,14 @@ public class CriadorAtivos {
         i=1;
         NPC_Coelho coelho = new NPC_Coelho(gp);
         gp.getNpc()[numMapa][i] = coelho;
-
         posicionarEntidadeLimitada(coelho, 21, 26);
 
-    }
+        NPC_Feiticeira feiticeira=new NPC_Feiticeira(gp);
+        gp.getNpc()[5][2]=feiticeira;
+        posicionarEntidadeLimitada(feiticeira, 26, 22);
+
+
+        }
 
 
     public void definirCriatura() {
@@ -187,9 +204,27 @@ public class CriadorAtivos {
 
 
 
+        gp.getBloco()[2][5]=new BI_Armadilha(gp, 31,26);
+
+
+        gp.getBloco()[4][6]=new MINERIO_Esmeralda(gp, 29,26);
+        gp.getBloco()[4][7]=new MINERIO_Esmeralda(gp, 28,32);
+        gp.getBloco()[4][8]=new MINERIO_Esmeralda(gp, 24,12);
+        gp.getBloco()[4][9]=new MINERIO_Esmeralda(gp, 23,24);
+        gp.getBloco()[4][10]=new MINERIO_Prata(gp, 22,36);
+        gp.getBloco()[4][11]=new MINERIO_Prata(gp, 22,21);
+        gp.getBloco()[4][13]=new MINERIO_Prata(gp, 23,32);
+        gp.getBloco()[4][14]=new MINERIO_Prata(gp, 24,36);
+        gp.getBloco()[4][15]=new MINERIO_Prata(gp, 25,21);
+        gp.getBloco()[4][16]=new Carvao(gp, 12,12);
+        gp.getBloco()[4][17]=new Carvao(gp, 13,12);
+        gp.getBloco()[4][18]=new Carvao(gp, 14,12);
+        gp.getBloco()[4][19]=new Carvao(gp, 15,12);
+
 
 
     }
+
 
 
 

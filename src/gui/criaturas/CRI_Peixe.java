@@ -2,19 +2,18 @@ package gui.criaturas;
 
 import eventos.EventoCriatura;
 import gui.entidades.Entidade;
-import gui.itens.ALIMENTO_Carne;
 import gui.system.PainelJogo;
 
 import java.awt.*;
 import java.util.Random;
 
-public class BI_Peixe extends Entidade implements Aquatico {
+public class CRI_Peixe extends Entidade implements Aquatico {
 
     private PainelJogo gp;
     private EventoCriatura criaturaLogica;
     private Random aleatorio = new Random();
 
-    public BI_Peixe(PainelJogo gp){
+    public CRI_Peixe(PainelJogo gp) {
         super(gp);
         this.gp = gp;
 
@@ -32,10 +31,8 @@ public class BI_Peixe extends Entidade implements Aquatico {
     }
 
     public boolean podeAtravessar(int tileId) {
-        // Lista dos IDs dos tiles que o peixe pode atravessar
-        // Exemplo: se água = tile 5, areia = tile 3
-        int[] tilesQueOPeixePodeAtravessar = {59}; // Mude esses números pelos IDs corretos
 
+        int[] tilesQueOPeixePodeAtravessar = {59}; // Mude esses números pelos IDs corretos
 
         for (int tile : tilesQueOPeixePodeAtravessar) {
             if (tile == tileId) {
@@ -44,10 +41,6 @@ public class BI_Peixe extends Entidade implements Aquatico {
         }
         return false; // Não pode atravessar
     }
-
-
-
-
 
 
     public void carregarImagemPeixe() {
@@ -65,10 +58,10 @@ public class BI_Peixe extends Entidade implements Aquatico {
 
     }
 
-    public void setAcao(){
+    public void setAcao() {
         setContadorDeBloqueioDeAcao(getContadorDeBloqueioDeAcao() + 1);
 
-        if(getContadorDeBloqueioDeAcao() == 120) {
+        if (getContadorDeBloqueioDeAcao() == 120) {
             int i = aleatorio.nextInt(100) + 1;
 
             if (i <= 25) {
@@ -85,7 +78,4 @@ public class BI_Peixe extends Entidade implements Aquatico {
         }
     }
 
-    public void checarDrop() {
-        droparItem(new ALIMENTO_Carne(gp, "carnegalinha"));
-    }
 }

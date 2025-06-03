@@ -103,6 +103,11 @@ public class EventosTeclado implements KeyListener {
             estadoOpcoes(code);
         } else if(gp.getEstadoJogo()==gp.getEstadoAssarAlimento()){
             estadoAssarAlimento(code);
+        } else if(gp.getEstadoJogo()==gp.getEstadoSistemaDeTroca()){
+            estadoSistemaDeTroca(code);
+        } else if(gp.getEstadoJogo()==gp.getEstadoJogoVencido()){
+            estadoJogoVencido(code);
+
         }
     }
 
@@ -116,6 +121,38 @@ public class EventosTeclado implements KeyListener {
 
     }
 
+    public void estadoJogoVencido(int code) {
+
+        if(code == KeyEvent.VK_W) {
+            // gp.playSE(1);
+            gp.getIu().setComandoNum(gp.getIu().getComandoNum() - 1);
+            if(gp.getIu().getComandoNum() < 0) {
+                gp.getIu().setComandoNum(1);
+            }
+        }
+
+        if(code == KeyEvent.VK_S) {
+            // gp.playSE(1);
+            gp.getIu().setComandoNum(gp.getIu().getComandoNum() + 1);
+            if(gp.getIu().getComandoNum() > 1) {
+                gp.getIu().setComandoNum(0);
+            }
+        }
+
+        if(code == KeyEvent.VK_ENTER) {
+            if(gp.getIu().getComandoNum() == 0) {
+                // Reinicia o jogo no estado de jogo (play)
+                gp.setEstadoJogo(gp.getEstadoPlay());
+                gp.retry(); // Você pode usar outro método se quiser comportamento diferente ao vencer
+            } else if(gp.getIu().getComandoNum() == 1) {
+                // Volta para a tela inicial
+                gp.setEstadoJogo(gp.getEstadoTitulo());
+                gp.getIu().setTelaMenu(0);
+                gp.getIu().setComandoNum(0);
+                gp.restart(); // Reset geral, se necessário
+            }
+        }
+    }
 
 
     public void estadoTitulo(int code) {
@@ -328,11 +365,42 @@ public class EventosTeclado implements KeyListener {
 
 
     }
+    public void estadoSistemaDeTroca(int code) {
+
+        if (code == KeyEvent.VK_ENTER) {
+            setEnterPressionado(true);
+        }
+
+        if (gp.getIu().subEstado == 0) {
+            if (code == KeyEvent.VK_W) {
+                gp.getIu().setComandoNum(gp.getIu().getComandoNum() - 1);
+                if (gp.getIu().getComandoNum() < 0) {
+                    gp.getIu().setComandoNum(2);
+                }
+            }
+
+            if (code == KeyEvent.VK_S) {
+                gp.getIu().setComandoNum(gp.getIu().getComandoNum() + 1);
+                if (gp.getIu().getComandoNum() > 2) {
+                    gp.getIu().setComandoNum(0);
+                }
+            }
+        }
+
+        // Mover este bloco para fora do if acima
+        if (gp.getIu().subEstado == 1) {
+            inventarioNpc(code);
+
+            if (code == KeyEvent.VK_ESCAPE) {
+                gp.getIu().subEstado = 0;
+            }
+        }
+    }
 
     public void estadoJogoFinalizado(int code){
 
         if(code==KeyEvent.VK_W){
-            gp.playSE(1);
+            //gp.playSE(1);
             gp.getIu().setComandoNum(gp.getIu().getComandoNum()-1);
             if(gp.getIu().getComandoNum()<0){
                 gp.getIu().setComandoNum(1);
@@ -340,7 +408,7 @@ public class EventosTeclado implements KeyListener {
         }
 
         if(code==KeyEvent.VK_S){
-            gp.playSE(1);
+            //gp.playSE(1);
             gp.getIu().setComandoNum(gp.getIu().getComandoNum()+1);
             if(gp.getIu().getComandoNum()>1){
                 gp.getIu().setComandoNum(0);
@@ -391,42 +459,83 @@ public class EventosTeclado implements KeyListener {
             gp.setEstadoJogo(gp.getEstadoPlay());
         }
 
-        if (code == KeyEvent.VK_W) {
-            gp.playSE(1);
+        if(code==KeyEvent.VK_ENTER){
+            gp.jogador.selecaoItem();
+        }
 
-            if (gp.getIu().getSlotLinha() != 0) {
-                gp.getIu().setSlotLinha(gp.getIu().getSlotLinha() - 1); // Cima
+        inventarioJogador(code);
+    }
+
+    public void inventarioJogador(int code) {
+        if (code == KeyEvent.VK_W) {
+            //gp.playSE(1);
+
+            if (gp.getIu().getJogadorSlotLinha() != 0) {
+                gp.getIu().setJogadorSlotLinha(gp.getIu().getJogadorSlotLinha() - 1); // Cima
             }
         }
 
         if (code == KeyEvent.VK_S) {
-            gp.playSE(1);
+            //gp.playSE(1);
 
-            if (gp.getIu().getSlotLinha() != 3) {
-                gp.getIu().setSlotLinha(gp.getIu().getSlotLinha() + 1); // Baixo
+            if (gp.getIu().getJogadorSlotLinha() != 3) {
+                gp.getIu().setJogadorSlotLinha(gp.getIu().getJogadorSlotLinha() + 1); // Baixo
             }
         }
 
         if (code == KeyEvent.VK_A) {
-            gp.playSE(1);
+            //gp.playSE(1);
 
-            if (gp.getIu().getSlotCol() != 0) {
-                gp.getIu().setSlotCol(gp.getIu().getSlotCol() - 1); // Esquerda
+            if (gp.getIu().getJogadorSlotCol() != 0) {
+                gp.getIu().setJogadorSlotCol(gp.getIu().getJogadorSlotCol() - 1); // Esquerda
             }
         }
 
         if (code == KeyEvent.VK_D) {
-            gp.playSE(1);
+            //gp.playSE(1);
 
-            if (gp.getIu().getSlotCol() != 4) {
-                gp.getIu().setSlotCol(gp.getIu().getSlotCol() + 1); // Direita
+            if (gp.getIu().getJogadorSlotCol() != 4) {
+                gp.getIu().setJogadorSlotCol(gp.getIu().getJogadorSlotCol() + 1); // Direita
+            }
+        }
+    }
+
+
+    public void inventarioNpc(int code) {
+        if (code == KeyEvent.VK_W) {
+            //gp.playSE(1);
+
+            if (gp.getIu().getNpcSlotLinha() != 0) {
+                gp.getIu().setNpcSlotLinha(gp.getIu().getNpcSlotLinha() - 1); // Cima
             }
         }
 
-        if(code==KeyEvent.VK_ENTER){
-            gp.jogador.selecaoItem();
+        if (code == KeyEvent.VK_S) {
+            //gp.playSE(1);
+
+            if (gp.getIu().getNpcSlotLinha() != 3) {
+                gp.getIu().setNpcSlotLinha(gp.getIu().getNpcSlotLinha() + 1); // Baixo
+            }
+        }
+
+        if (code == KeyEvent.VK_A) {
+            //gp.playSE(1);
+
+            if (gp.getIu().getNpcSlotCol() != 0) {
+                gp.getIu().setNpcSlotCol(gp.getIu().getNpcSlotCol() - 1); // Esquerda
+            }
+        }
+
+        if (code == KeyEvent.VK_D) {
+            //gp.playSE(1);
+
+            if (gp.getIu().getNpcSlotCol() != 4) {
+                gp.getIu().setNpcSlotCol(gp.getIu().getNpcSlotCol() + 1); // Direita
+            }
         }
     }
+
+
 
     public void estadoOpcoes(int code){
         if(code==KeyEvent.VK_ESCAPE){

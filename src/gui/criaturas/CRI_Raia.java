@@ -30,17 +30,16 @@ public class CRI_Raia extends Entidade implements Aquatico {
     }
 
     public boolean podeAtravessar(int tileId) {
-        // Lista dos IDs dos tiles que o peixe pode atravessar
-        // Exemplo: se água = tile 5, areia = tile 3
-        int[] tilesQueOPeixePodeAtravessar = {59}; // Mude esses números pelos IDs corretos
+
+        int[] tilesQueOPeixePodeAtravessar = {59};
 
 
         for (int tile : tilesQueOPeixePodeAtravessar) {
             if (tile == tileId) {
-                return true; // Pode atravessar
+                return true;
             }
         }
-        return false; // Não pode atravessar
+        return false;
     }
 
     public void carregarImagemRaia() {

@@ -56,6 +56,15 @@ public class Mechanic extends Jogador {
             setAtaqueLeft2(setup("/mechanic/mecanica_left_02_machado", gp.getTamanhoBloco() * 2, gp.getTamanhoBloco()));
             setAtaqueRight1(setup("/mechanic/mecanica_right_01_machado", gp.getTamanhoBloco() * 2, gp.getTamanhoBloco()));
             setAtaqueRight2(setup("/mechanic/mecanica_right_02_machado", gp.getTamanhoBloco() * 2, gp.getTamanhoBloco()));
+        } else if(getArmaAtual().getTipo()==getTipo_picareta()){
+            setAtaqueUp1(setup("/mechanic/mecanica_up_01_picareta", gp.getTamanhoBloco(), gp.getTamanhoBloco() * 2));
+            setAtaqueUp2(setup("/mechanic/mecanica_up_02_picareta", gp.getTamanhoBloco(), gp.getTamanhoBloco() * 2));
+            setAtaqueDown1(setup("/mechanic/mecanica_down_01_picareta", gp.getTamanhoBloco(), gp.getTamanhoBloco() * 2));
+            setAtaqueDown2(setup("/mechanic/mecanica_down_02_picareta", gp.getTamanhoBloco(), gp.getTamanhoBloco() * 2));
+            setAtaqueLeft1(setup("/mechanic/mecanica_left_01_picareta", gp.getTamanhoBloco() * 2, gp.getTamanhoBloco()));
+            setAtaqueLeft2(setup("/mechanic/mecanica_left_02_picareta", gp.getTamanhoBloco() * 2, gp.getTamanhoBloco()));
+            setAtaqueRight1(setup("/mechanic/mecanica_right_01_picareta", gp.getTamanhoBloco() * 2, gp.getTamanhoBloco()));
+            setAtaqueRight2(setup("/mechanic/mecanica_right_02_picareta", gp.getTamanhoBloco() * 2, gp.getTamanhoBloco()));
         }
     }
 }

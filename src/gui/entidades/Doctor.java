@@ -4,6 +4,7 @@ import gui.system.EventosTeclado;
 import gui.system.PainelJogo;
 import personagens.Medico;
 import personagens.Personagem;
+import personagens.Rastreador;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;
@@ -21,7 +22,8 @@ public class Doctor extends Jogador {
         super(gp, eventosTeclado);
         this.gp=gp;
 
-        this.medico = new Medico("Dr. Eduardo",100, 100, 100, 100, 100, null, gp.getBlocosG().getAmbienteAtual().getNomeAmbiente(), 36.5);
+        this.medico = new Medico("Curandeiro", getVida(), getFome(), getSede(), getEnergia(), getSanidade(), null, gp.getBlocosG().getAmbienteAtual().getNomeAmbiente(), 36.5);
+
         definirImagemJogador();
 
     }
@@ -58,8 +60,18 @@ public class Doctor extends Jogador {
             setAtaqueLeft2(setup("/doctor/curandeiro_left_02_machado", gp.getTamanhoBloco() * 2, gp.getTamanhoBloco()));
             setAtaqueRight1(setup("/doctor/curandeiro_right_01_machado", gp.getTamanhoBloco() * 2, gp.getTamanhoBloco()));
             setAtaqueRight2(setup("/doctor/curandeiro_right_02_machado", gp.getTamanhoBloco() * 2, gp.getTamanhoBloco()));
-        }
+        } else if (getArmaAtual().getTipo() == getTipo_picareta()) {
+        setAtaqueUp1(setup("/doctor/curandeiro_up_01_picareta", gp.getTamanhoBloco(), gp.getTamanhoBloco() * 2));
+        setAtaqueUp2(setup("/doctor/curandeiro_up_02_picareta", gp.getTamanhoBloco(), gp.getTamanhoBloco() * 2));
+        setAtaqueDown1(setup("/doctor/curandeiro_down_01_picareta", gp.getTamanhoBloco(), gp.getTamanhoBloco() * 2));
+        setAtaqueDown2(setup("/doctor/curandeiro_down_02_picareta", gp.getTamanhoBloco(), gp.getTamanhoBloco() * 2));
+        setAtaqueLeft1(setup("/doctor/curandeiro_left_01_picareta", gp.getTamanhoBloco() * 2, gp.getTamanhoBloco()));
+        setAtaqueLeft2(setup("/doctor/curandeiro_left_02_picareta", gp.getTamanhoBloco() * 2, gp.getTamanhoBloco()));
+        setAtaqueRight1(setup("/doctor/curandeiro_right_01_picareta", gp.getTamanhoBloco() * 2, gp.getTamanhoBloco()));
+        setAtaqueRight2(setup("/doctor/curandeiro_right_02_picareta", gp.getTamanhoBloco() * 2, gp.getTamanhoBloco()));
     }
+
+}
 
 
 }

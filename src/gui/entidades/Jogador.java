@@ -1,7 +1,6 @@
 package gui.entidades;
 
-import gui.itens.Armas;
-import gui.itens.Ferramentas;
+import gui.itens.*;
 import gui.system.CriadorAtivos;
 import gui.system.EventosTeclado;
 import gui.system.PainelJogo;
@@ -33,6 +32,8 @@ public class Jogador extends Entidade {
     private final int tamanhoMaxInventario = 20;
 
     private Personagem personagemLogico;
+
+    private boolean ataqueCancelado;
 
     // Contador
     private int counter2 = 0;
@@ -73,6 +74,13 @@ public class Jogador extends Entidade {
         return telaY;
     }
 
+    public boolean isAtaqueCancelado() {
+        return ataqueCancelado;
+    }
+
+    public void setAtaqueCancelado(boolean ataqueCancelado) {
+        this.ataqueCancelado = ataqueCancelado;
+    }
 
     public Jogador(PainelJogo gp, EventosTeclado eventosTeclado) { //Construtor da classe que recebe o painel de jogo e manipulador de teclas
 
@@ -115,10 +123,14 @@ public class Jogador extends Entidade {
     public void setValoresPadrao() {
         // Define valores iniciais para a posição do jogador, velocidade e direção
 
-        setMundoX(gp.getTamanhoBloco() * 21);
-        setMundoY(gp.getTamanhoBloco() * 10);
+       // setMundoX(gp.getTamanhoBloco() * 21);
+       //setMundoY(gp.getTamanhoBloco() * 10);
+        setMundoX(gp.getTamanhoBloco() * 28);
+        setMundoY(gp.getTamanhoBloco() * 19);
+
         setVelocidade(4);
         setDirecao("down");
+        setAtaqueCancelado(false);
 
         // Status do jogador
 
@@ -151,6 +163,20 @@ public class Jogador extends Entidade {
         setSanidadeMaxima(6);
         setEnergiaMaxima(6);
 
+        String personagem=gp.getPersonagemSelecionado();
+
+        if(gp.jogador!=null){
+            gp.jogador.inventario.add(new REMEDIO_Antibiotico(gp));
+            gp.jogador.inventario.add(new REMEDIO_Analgesico(gp));
+            gp.jogador.inventario.add(new REMEDIO_Bandagem(gp));
+
+
+        }
+
+
+
+
+
         setArmaAtual(null);
         //setAtacar(definirAtaque());
 
@@ -166,8 +192,8 @@ public class Jogador extends Entidade {
 
      */
     public void posicoesPadrao(){
-        setMundoX(gp.getTamanhoBloco() * 21);
-        setMundoY(gp.getTamanhoBloco() * 10);
+        setMundoX(gp.getTamanhoBloco() * 28);
+        setMundoY(gp.getTamanhoBloco() * 19);
         setDirecao("down");
 
     }
@@ -181,6 +207,7 @@ public class Jogador extends Entidade {
     public void definirItens() {
 
         //inventario.clear();
+        //gp.jogador.inventario.add(new Material(gp, "ouro"));
     }
 
     public void definirImagemJogador() {
@@ -189,11 +216,6 @@ public class Jogador extends Entidade {
     public void definirImagemAtaque() {
     }
 
-    public void definirImagemMachado(){
-    }
-
-    public void definirImagemPicareta(){
-    }
 
     public void update() {
 
@@ -203,15 +225,18 @@ public class Jogador extends Entidade {
             if (npcIndice != 999) {
                 interagirNPC(npcIndice);
                 eventosTeclado.setEnterPressionado(false);
-            } else if (!isAtaque() && getArmaAtual() != null) { // Só ataca se tem arma equipada
-                setAtaque(true);
-                setContadorSprite(0);
-                eventosTeclado.setEnterPressionado(false);
-            } else if (getArmaAtual() == null) {
-                // Mostra mensagem informando que precisa de uma arma
-                gp.getIu().mostrarMensagem("Você precisa equipar uma arma para atacar!");
+            } else if (!isAtaque()) {
+                if (getArmaAtual() != null) {
+                    setAtaque(true);
+                    setContadorSprite(0);
+                    setAtaqueCancelado(false);
+                } else {
+                    setAtaqueCancelado(true);
+                    gp.getIu().mostrarMensagem("Você precisa equipar uma arma para atacar!");
+                }
                 eventosTeclado.setEnterPressionado(false);
             }
+
         }
 
         if (isAtaque()) {
@@ -308,6 +333,7 @@ public class Jogador extends Entidade {
         if (getVida() <= 0 || getSanidade() <= 0) {
             gp.setEstadoJogo(gp.getEstadoJogoFinalizado());
         }
+
     }
 
     public void craftar(int i){
@@ -493,21 +519,21 @@ public class Jogador extends Entidade {
         this.inventario = inventario;
     }
 
-    public void selecaoItem(){
-        int itemIndice = gp.getIu().pegarItemSlot();
+    public void selecaoItem() {
+        int itemIndice = gp.getIu().pegarItemSlot(gp.getIu().getJogadorSlotCol(), gp.getIu().getJogadorSlotLinha());
 
-        if(itemIndice < inventario.size()){
+        if (itemIndice < inventario.size()) {
             Entidade itemSelecionado = inventario.get(itemIndice);
 
-            if(itemSelecionado.getTipo() == getTipo_espada() || itemSelecionado.getTipo() == getTipo_machado()){
+            if (itemSelecionado.getTipo() == getTipo_espada() || itemSelecionado.getTipo() == getTipo_machado() || itemSelecionado.getTipo() == getTipo_picareta()) {
                 setArmaAtual(itemSelecionado);
 
                 definirImagemAtaque();
             }
 
 
-            if(itemSelecionado.getTipo() == getTipo_consumivel()){
-               if(gp.jogador.getFome() < gp.jogador.getFomeMaxima()){
+            if (itemSelecionado.getTipo() == getTipo_consumivel()) {
+                if (gp.jogador.getFome() < gp.jogador.getFomeMaxima()) {
                     itemSelecionado.usar(this);
                     inventario.remove(itemIndice);
                 } else {
@@ -516,16 +542,39 @@ public class Jogador extends Entidade {
                 }
             }
 
-            if(itemSelecionado.getTipo() == getTipo_dropavelConsumivel()){
+            if (itemSelecionado.getTipo() == getTipo_dropavelConsumivel()) {
 
                 gp.setEstadoJogo(gp.getEstadoAssarAlimento());
 
             }
 
+            if (itemSelecionado.getTipo() == getTipo_vencido()) {
+                if (gp.jogador.getFome() < gp.jogador.getFomeMaxima()) {
+                    itemSelecionado.consumirAlimentoVencido(this);
+                    inventario.remove(itemIndice);
+                } else {
+                    gp.setEstadoJogo(gp.getEstadoDialogo());
+                    gp.getIu().setDialogoAtual("Você já está satisfeito.\nNão pode comer mais agora.");
+                }
 
+            }
+
+            if (itemSelecionado.getTipo() == getTipo_remedio()) {
+                if (gp.jogador.getVida() < gp.jogador.getVidaMaxima() || gp.jogador.getSanidade() < gp.jogador.getSanidadeMaxima() || gp.jogador.getEnergia() < gp.jogador.getEnergiaMaxima()) {
+                    itemSelecionado.usar(this);
+                    inventario.remove(itemIndice);
+
+                }
+                else {
+                    gp.setEstadoJogo(gp.getEstadoDialogo());
+                    gp.getIu().setDialogoAtual("Você já está satisfeito.\nNão pode comer mais agora.");
+                }
+
+
+            }
         }
-    }
 
+    }
     public void interativo(int i) {
         if (i != 999 &&
                 gp.getBloco()[gp.getMapaAtual()][i].isDestrutivel() &&
@@ -539,14 +588,11 @@ public class Jogador extends Entidade {
             bloco.setInvisibilidade(true);
 
 
-            // Debug para verificar
-            System.out.println("Árvore atacada! Vida restante: " + bloco.getVida());
-
             if (bloco.getVida() <= 0) {
                 // Checa se há drop antes de remover
                 bloco.checarDrop();
                 gp.getBloco()[gp.getMapaAtual()][i] = null;
-                System.out.println("Árvore destruída!");
+
             }
         } else {
             // Debug para entender por que não está funcionando
@@ -558,6 +604,7 @@ public class Jogador extends Entidade {
                 System.out.println("- Invisível: " + bloco.isInvisibilidade());
             }
         }
+
     }
 
 
@@ -583,6 +630,8 @@ public class Jogador extends Entidade {
             }
         }
     }
+
+
 
     public void removerArmaQuebrada() {
         if (getArmaAtual() != null) {

@@ -1,5 +1,6 @@
 package gui.eventos;
 
+import gui.entidades.Entidade;
 import gui.system.PainelJogo;
 
 import java.awt.*;
@@ -130,8 +131,15 @@ public class ManipuladorDeEventos {
                 teleporte(1, 49,3);
 
             }
+            else if(acertar(0, 19, 33, "up")){
+                teleporte(5, 28,20);
 
-            else if(acertar(2, 49, 21, "right")){
+            }
+            else if(acertar(5, 28,19, "up")){
+                teleporte(0, 19, 33);
+
+            }
+            else if(acertar(2, 49, 21, "up")){
                 teleporte(3, 0,1);
 
             }
@@ -148,7 +156,11 @@ public class ManipuladorDeEventos {
             else if(acertar(4, 25, 8, "up")){
                 teleporte(3, 30,45);
 
+            } else if(acertar(5, 26, 24, "down")){
+                falar(gp.getNpc()[5][0]);
             }
+
+
 
             if (!eventoMapaAtivo && gp.getEstadoJogo() != gp.getEstadoDialogo()) {
 
@@ -174,6 +186,9 @@ public class ManipuladorDeEventos {
                         eventoClima.eventoNevasca(2);
                         eventoClima.eventoNevasca(3);
                         break;
+                    case 3:
+                        eventoDoencaFerimento.eventoDesmoronamento(3);
+
 
                 }
 
@@ -229,6 +244,15 @@ public class ManipuladorDeEventos {
 
         return acertar;
     }
+
+    public void falar(Entidade entidade){
+        if (gp.getEventosTeclado().isEnterPressionado()) {
+            gp.setEstadoJogo(gp.getEstadoDialogo());
+            gp.jogador.setAtaqueCancelado(true); // Impede ataque durante diálogo
+            entidade.falar(); // Apenas uma chamada é suficiente
+        }
+    }
+
 
 
     public void teleporte(int mapa, int coluna, int linha){

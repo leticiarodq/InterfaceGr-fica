@@ -14,7 +14,7 @@ public class CRI_Siri extends Entidade {
     private EventoCriatura criaturaLogica;
     private Random aleatorio = new Random();
 
-    public CRI_Siri(PainelJogo gp){
+    public CRI_Siri(PainelJogo gp) {
         super(gp);
         this.gp = gp;
 
@@ -43,10 +43,10 @@ public class CRI_Siri extends Entidade {
 
     }
 
-    public void setAcao(){
+    public void setAcao() {
         setContadorDeBloqueioDeAcao(getContadorDeBloqueioDeAcao() + 1);
 
-        if(getContadorDeBloqueioDeAcao() == 120) {
+        if (getContadorDeBloqueioDeAcao() == 120) {
             int i = aleatorio.nextInt(100) + 1;
 
             if (i <= 25) {
@@ -63,9 +63,5 @@ public class CRI_Siri extends Entidade {
         }
     }
 
-    public void checarDrop() {
-        droparItem(new ALIMENTO_Carne(gp, "carnegalinha"));
-    }
 }
-
 

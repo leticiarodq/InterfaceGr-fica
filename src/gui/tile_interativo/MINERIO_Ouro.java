@@ -1,23 +1,22 @@
 package gui.tile_interativo;
 
 import gui.entidades.Entidade;
-import gui.itens.ALIMENTO_Fruta;
 import gui.itens.Material;
 import gui.system.PainelJogo;
 
 import java.awt.*;
 
-public class BI_Minerio extends BlocoInterativo{
+public class MINERIO_Ouro extends BlocoInterativo{
 
     PainelJogo gp;
 
-    public BI_Minerio(PainelJogo gp, int coluna, int linha) {
+    public MINERIO_Ouro(PainelJogo gp, int coluna, int linha) {
 
         super(gp, coluna, linha);
         this.gp = gp;
-        setVida(8);
+        setVida(15);
 
-        setDown1(setup("/tiles_interativos/minerio_diamante", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
+        setDown1(setup("/tiles_interativos/minerio_ouro", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
         setDestrutivel(true);
 
         this.setMundoX(gp.getTamanhoBloco()*coluna);
@@ -32,10 +31,10 @@ public class BI_Minerio extends BlocoInterativo{
         boolean itemCorreto = false;
 
         if (entidade.getArmaAtual() != null) {
-            if (entidade.getArmaAtual().getTipo()==getTipo_machado()) {
+            if (entidade.getArmaAtual().getTipo()==getTipo_picareta()) {
                 itemCorreto = true;
             } else {
-                System.out.println("A arma atual não é um machado.");
+                System.out.println("A arma atual não é uma picareta.");
             }
         } else {
             System.out.println("Você não está segurando nenhuma arma.");
@@ -46,9 +45,8 @@ public class BI_Minerio extends BlocoInterativo{
 
     public void checarDrop() {
 
-        //droparItem(new Material(gp, "madeira"));
-        //droparItem(new ALIMENTO_Fruta(gp, "maca"));
-        //coletar(gp.jogador);
+        droparItem(new Material(gp, "ouro"));
+        coletar(gp.jogador);
 
     }
 
@@ -56,11 +54,11 @@ public class BI_Minerio extends BlocoInterativo{
         System.out.println("Tentando coletar item...");
         System.out.println("Tamanho atual do inventário: " + gp.jogador.getInventario().size());
 
-        Material madeira = new Material(gp, "madeira");
-        gp.jogador.getInventario().add(madeira);
+        Material ouro = new Material(gp, "ouro");
+        gp.jogador.getInventario().add(ouro);
 
         System.out.println("Item adicionado! Novo tamanho: " + gp.jogador.getInventario().size());
-        gp.getIu().mostrarMensagem("Coletou " + madeira.getNome() + "!");
+        gp.getIu().mostrarMensagem("Coletou " + ouro.getNome() + "!");
     }
 
 

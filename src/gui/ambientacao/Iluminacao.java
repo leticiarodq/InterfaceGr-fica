@@ -25,7 +25,6 @@ public class Iluminacao {
     private int estadoDia=dia;
 
 
-    // Agora o construtor recebe centroX e centroY
     public Iluminacao(PainelJogo gp, int tamanhoCirculo, int centroX, int centroY) {
 
         this.gp = gp;
@@ -89,7 +88,7 @@ public class Iluminacao {
     public void update() {
         if(estadoDia == dia) {
             contadorDias++;
-            if(contadorDias > 600) {
+            if(contadorDias > 12600) {
                 estadoDia = anoitecendo;
                 contadorDias = 0;
             }
@@ -103,7 +102,7 @@ public class Iluminacao {
         }
         else if(estadoDia == noite) {
             contadorDias++;
-            if(contadorDias > 600) {
+            if(contadorDias > 12600) {
                 estadoDia = amanhecendo;
                 contadorDias = 0;
             }
@@ -113,26 +112,24 @@ public class Iluminacao {
             if(filterAlpha < 0f) {
                 filterAlpha = 0;
                 estadoDia = dia;
-                ciclosCompletos++; // Incrementa quando completa um ciclo
+                ciclosCompletos++;
 
                 String personagem=gp.getPersonagemSelecionado();
 
                 if("médico".equals(personagem)){
                     gp.jogador.setVida(gp.jogador.getVida()+1);
-                    gp.jogador.setFome(gp.jogador.getFome()-3);
-                    gp.jogador.setSede(gp.jogador.getSede()-3);
+                    gp.jogador.setFome(gp.jogador.getFome()-1);
+                    gp.jogador.setSede(gp.jogador.getSede()-1);
                     gp.jogador.setSanidade(gp.jogador.getSanidade()-2);
 
                 } else{
                     gp.jogador.setFome(gp.jogador.getFome()-2);
-                    gp.jogador.setSede(gp.jogador.getSede()-3);
-                    gp.jogador.setSanidade(gp.jogador.getSanidade()-3);
+                    gp.jogador.setSede(gp.jogador.getSede()-2);
+                    gp.jogador.setSanidade(gp.jogador.getSanidade()-1);
                 }
 
-
-                // Verifica se atingiu o limite de dias
                 if(ciclosCompletos >= MAX_DIAS_SOBREVIVENCIA) {
-                    //gp.setEstadoJogo(gp.getEstadoJogoFinalizado());
+                    gp.setEstadoJogo(gp.getEstadoJogoVencido());
                 }
             }
         }
@@ -151,8 +148,8 @@ public class Iluminacao {
             case amanhecendo: situacao="Amanhecendo";break;
         }
 
-        g2.setColor(Color.WHITE);
-        g2.setFont(g2.getFont().deriveFont(50f));
-        g2.drawString(situacao, 800, 500);
+        //g2.setColor(Color.WHITE);
+        //g2.setFont(g2.getFont().deriveFont(50f));
+        //g2.drawString(situacao, 800, 500);
     }
 }

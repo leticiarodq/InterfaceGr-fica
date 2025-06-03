@@ -28,6 +28,7 @@ public class Ferramentas extends Entidade {
                 setDown1(setup("/armasFerramentas/picareta", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
                 setDescricao("[Picareta]\nIdeal para minerar\ne quebrar rochas.");
                 setTipo(getTipo_picareta());
+                setDurabilidade(150);
                 break;
 
 

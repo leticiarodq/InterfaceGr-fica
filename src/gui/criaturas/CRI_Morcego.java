@@ -23,7 +23,7 @@ public class CRI_Morcego extends Entidade {
         setTipo(getTipo_criatura());
         setNome("Morcego");
         setVelocidade(2);
-        setVidaMaxima(6);
+        setVidaMaxima(4);
         setVida(getVidaMaxima());
 
         setAreaSolida(new Rectangle(3, 18, 42, 30));

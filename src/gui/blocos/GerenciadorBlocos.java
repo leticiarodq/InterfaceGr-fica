@@ -24,7 +24,6 @@ public class GerenciadorBlocos {
 
     private Ambiente ambienteAtual;
 
-
     public GerenciadorBlocos(PainelJogo gp) {
         this.gp = gp;
 
@@ -39,6 +38,7 @@ public class GerenciadorBlocos {
         ambientesMapeados.put(2, new AmbienteMontanha());
         ambientesMapeados.put(3, new AmbienteRuinas());
         ambientesMapeados.put(4, new AmbienteCaverna());
+        ambientesMapeados.put(5, new AmbienteInterior());
 
 
         carregarMapa("/maps/floresta.txt", 0);
@@ -46,6 +46,7 @@ public class GerenciadorBlocos {
         carregarMapa("/maps/ruinas.txt", 2);
         carregarMapa("/maps/montanha.txt", 3);
         carregarMapa("/maps/caverna.txt", 4);
+        carregarMapa("/maps/interior_feiticeira.txt",5);
     }
 
 
@@ -63,7 +64,6 @@ public class GerenciadorBlocos {
     }
 
     public void pegarImagemBloco(){ // Construtor que chama o método setup várias vezes passando o índice no vetor 'blocos', o nome da imagem e se o bloco tem colisão ou não
-
 
         setup(0, "000", false);
         setup(1, "001", true);
@@ -382,9 +382,69 @@ public class GerenciadorBlocos {
         setup(309, "309", true);
         setup(310, "310", true);
         setup(311, "311", true);
-
-
-
+        setup(312, "312", false);
+        setup(313, "313", false);
+        setup(314, "314", false);
+        setup(315, "315", false);
+        setup(316, "316", false);
+        setup(317, "317", false);
+        setup(318, "318", false);
+        setup(319, "319", false);
+        setup(320, "320", false);
+        setup(321, "321", false);
+        setup(322, "322", false);
+        setup(323, "323", false);
+        setup(324, "324", false);
+        setup(325, "325", false);
+        setup(326, "326", false);
+        setup(327, "327", false);
+        setup(328, "328", false);
+        setup(329, "329", true);
+        setup(330, "330", true);
+        setup(331, "331", true);
+        setup(332, "332", true);
+        setup(333, "333", true);
+        setup(334, "334", true);
+        setup(335, "335", true);
+        setup(336, "336", true);
+        setup(337, "337", true);
+        setup(338, "338", false);
+        setup(339, "339", true);
+        setup(340, "340", true);
+        setup(341, "341", true);
+        setup(342, "342", true);
+        setup(343, "343", true);
+        setup(344, "344", true);
+        setup(345, "345", true);
+        setup(346, "346", true);
+        setup(347, "347", true);
+        setup(348, "348", true);
+        setup(349, "349", true);
+        setup(350, "350", true);
+        setup(351, "351", true);
+        setup(352, "352", true);
+        setup(353, "353", true);
+        setup(354, "354", true);
+        setup(355, "355", true);
+        setup(356, "356", true);
+        setup(357, "357", true);
+        setup(358, "358", true);
+        setup(359, "359", true);
+        setup(360, "360", true);
+        setup(361, "361", true);
+        setup(362, "362", true);
+        setup(363, "363", true);
+        setup(364, "364", false);
+        setup(365, "365", true);
+        setup(366, "366", true);
+        setup(367, "367", true);
+        setup(368, "368", true);
+        setup(369, "369", true);
+        setup(370, "370", true);
+        setup(371, "371", true);
+        setup(372, "372", true);
+        setup(373, "373", true);
+        setup(374, "374", true);
 
     }
 
@@ -398,8 +458,6 @@ public class GerenciadorBlocos {
             BufferedImage imagem = ImageIO.read(getClass().getResourceAsStream("/tiles/" + nomeImagem + ".png"));
             imagem = ferramentasUteis.escalar(imagem, gp.getTamanhoBloco(), gp.getTamanhoBloco());
 
-
-
             blocos[indice].setImagem(imagem);
             blocos[indice].setColisao(colisao);
 
@@ -407,7 +465,6 @@ public class GerenciadorBlocos {
             e.printStackTrace();
         }
     }
-
 
     public boolean carregarMapa(String caminhoArquivo, int mapa) {
         try {
@@ -439,7 +496,6 @@ public class GerenciadorBlocos {
 
             br.close();
 
-            // Associa o ambiente atual ao mapa carregado
             ambienteAtual = ambientesMapeados.get(mapa);
 
         } catch (Exception e) {

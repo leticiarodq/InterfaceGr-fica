@@ -23,8 +23,10 @@ public class InterfaceUsuario {
     private int comandoNum = 0;
     private int telaMenu = 0;
     //private int telaDesc = 0;
-    private int slotCol = 0;
-    private int slotLinha = 0;
+    private int jogadorSlotCol = 0;
+    private int jogadorSlotLinha = 0;
+    private int npcSlotCol=0;
+    private int npcSlotLinha=0;
 
     private String personagemSelecionado;
 
@@ -46,26 +48,55 @@ public class InterfaceUsuario {
     private boolean mostrandoMensagem = false;
     private String textoMapaAtual = "";
     private int ultimoMapa = -1;
+    private Entidade prata;
+    private Entidade ouro;
+    private Entidade esmeralda;
 
-
+    private Entidade npc;
 
     // Métodos de acesso
 
-    public int getSlotCol() {
-        return slotCol;
+
+    public Entidade getNpc() {
+        return npc;
     }
 
-    public int getSlotLinha() {
-        return slotLinha;
+    public void setNpc(Entidade npc) {
+        this.npc = npc;
     }
 
-    public void setSlotLinha(int slotLinha) {
-        this.slotLinha = slotLinha;
+    public int getJogadorSlotCol() {
+        return jogadorSlotCol;
     }
 
-    public void setSlotCol(int slotCol) {
-        this.slotCol = slotCol;
+    public int getJogadorSlotLinha() {
+        return jogadorSlotLinha;
     }
+
+    public void setJogadorSlotLinha(int jogadorSlotLinha) {
+        this.jogadorSlotLinha= jogadorSlotLinha;
+    }
+
+    public void setJogadorSlotCol(int jogadorSlotCol) {
+        this.jogadorSlotCol = jogadorSlotCol;
+    }
+
+    public int getNpcSlotCol() {
+        return npcSlotCol;
+    }
+
+    public int getNpcSlotLinha() {
+        return npcSlotLinha;
+    }
+
+    public void setNpcSlotLinha(int npcSlotLinha) {
+        this.npcSlotLinha = npcSlotLinha;
+    }
+
+    public void setNpcSlotCol(int npcSlotCol) {
+        this.npcSlotCol = npcSlotCol;
+    }
+
 
     public int getComandoNum() {
         return comandoNum;
@@ -131,7 +162,15 @@ public class InterfaceUsuario {
         vida_vazia = vida.getImagem3();
 
 
+        //Entidade prata=new Material(gp, "prata");
+        //Entidade ouro=new Material(gp, "ouro");
+        //Entidade esmeralda=new Material(gp, "esmeralda");
 
+        this.prata = new Material(gp, "prata");
+
+        this.ouro=new Material(gp, "ouro");
+
+        this.esmeralda=new Material(gp, "esmeralda");
 
     }
 
@@ -154,7 +193,7 @@ public class InterfaceUsuario {
 
         } else if (gp.getEstadoJogo() == gp.getEstadoPersonagem()) {
             desenharStatusPersonagem();
-            desenharInventario();
+            desenharInventario(gp.jogador, true);
 
         } else if (gp.getEstadoJogo() == gp.getEstadoJogoFinalizado()) {
             desenharTelaJogoFinalizado();
@@ -167,6 +206,11 @@ public class InterfaceUsuario {
             desenharTelaAssar();
         } else if(gp.getEstadoJogo()==gp.getEstadoTransicao()){
             desenharTransicao();
+        } else if(gp.getEstadoJogo()==gp.getEstadoSistemaDeTroca()){
+            desenharTelaSistemaDeTrocas();
+
+        }else if(gp.getEstadoJogo()==gp.getEstadoJogoVencido()){
+            desenharTelaJogoVencido();
         }
 
         desenharNomeMapa(g2);
@@ -215,6 +259,178 @@ public class InterfaceUsuario {
 
     }
 
+    public void desenharTelaSistemaDeTrocas(){
+        switch(subEstado){
+            case 0: sistemaDeTrocas_selecionar(); break;
+            case 1: sistemaDeTrocas_comprar(); break;
+            case 2: sistemaDeTrocas_vender(); break;
+        }
+
+        gp.getEventosTeclado().setEnterPressionado(false);
+
+
+    }
+
+    public void sistemaDeTrocas_selecionar(){
+
+        desenharTelaDialogo();
+
+        int x=gp.getTamanhoBloco()*15;
+        int y=gp.getTamanhoBloco()*4;
+        int largura=(int)(gp.getTamanhoBloco()*3.5);
+        int altura=(int)(gp.getTamanhoBloco()*3.5);
+        desenharJanela(x,y,altura,largura);
+
+        x+=gp.getTamanhoBloco();
+        y+=gp.getTamanhoBloco();
+        g2.drawString("Comprar", x, y);
+        if(comandoNum==0){
+            g2.drawString(">", x-24, y);
+            if(gp.getEventosTeclado().isEnterPressionado()){
+                subEstado=1;
+            }
+        }
+        y+=gp.getTamanhoBloco();
+        g2.drawString("Vender", x, y);
+        if(comandoNum==1){
+            g2.drawString(">", x-24, y);
+            if(gp.getEventosTeclado().isEnterPressionado()){
+                subEstado=2;
+            }
+        }
+        y+=gp.getTamanhoBloco();
+        g2.drawString("Sair",x,y);
+        if(comandoNum==2){
+            g2.drawString(">", x-24, y);
+            if(gp.getEventosTeclado().isEnterPressionado()){
+                comandoNum=0;
+                gp.setEstadoJogo(gp.getEstadoDialogo());
+                dialogoAtual="Você de novo?";
+            }
+
+        }
+
+    }
+
+    public void sistemaDeTrocas_comprar() {
+
+        desenharInventario(gp.jogador, false);
+        desenharInventario(npc, true);
+
+        int itemIndiceNPC = pegarItemSlot(npcSlotCol, npcSlotLinha);  // Item do NPC
+
+        int x = gp.getTamanhoBloco() * 12;
+        int y = gp.getTamanhoBloco() * 9;
+        g2.drawString("[ENTER] Comprar (com ouro)  |  [ESC] Voltar", x, y + 40);
+
+        if (gp.getEventosTeclado().isEnterPressionado()) {
+            if (itemIndiceNPC < npc.getInventario().size()) {
+                Entidade itemDesejado = npc.getInventario().get(itemIndiceNPC);
+
+                // Verifica se o jogador tem o item de troca necessário (ex: "ouro")
+                Entidade itemDeTroca = null;
+                for (Entidade item : gp.jogador.getInventario()) {
+                    if (item instanceof Material && item.getNome().equalsIgnoreCase("ouro")) {
+                        itemDeTroca = item;
+                        break;
+                    }
+                }
+
+                if (itemDeTroca != null) {
+                    // Realiza a troca
+                    gp.jogador.getInventario().remove(itemDeTroca);
+                    gp.jogador.getInventario().add(itemDesejado);
+                    npc.getInventario().remove(itemDesejado);
+
+                    mensagem = "Você comprou " + itemDesejado.getNome() + " com ouro!";
+                } else {
+                    mensagem = "Você precisa de ouro para comprar esse item.";
+                }
+
+                mensagemOn = true;
+                contadorMensagem = 0;
+            }
+
+            gp.getEventosTeclado().setEnterPressionado(false);
+        }
+    }
+
+
+
+    public void desenharTelaJogoVencido(){
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8f));
+
+            g2.setColor(Color.BLACK);
+            g2.fillRect(0, 0, gp.getTelaLargura(), gp.getTelaAltura());
+
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+
+            g2.setFont(Font05.deriveFont(65f));
+
+            // Texto "VOCÊ VENCEU!" com sombra
+            String texto = "VOCÊ VENCEU!";
+            int x = obterXCentralizarTexto(texto);
+            int y = 200;
+
+            g2.setColor(Color.BLACK);
+            g2.drawString(texto, x + 4, y + 4);
+            g2.setColor(new Color(0, 255, 127)); // Verde vibrante
+            g2.drawString(texto, x, y);
+
+            // Texto "Jogar novamente"
+            g2.setFont(Font03.deriveFont(45f));
+            texto = "Jogar novamente";
+            x = obterXCentralizarTexto(texto);
+            y += gp.getTamanhoBloco() * 4;
+            desenharTextoSombra(texto, x, y);
+
+            g2.setColor(Color.WHITE);
+            g2.drawString(texto, x, y);
+            if (comandoNum == 0) g2.drawString(">", x - 40, y);
+
+            // Texto "Sair"
+            texto = "Sair";
+            x = obterXCentralizarTexto(texto);
+            y += gp.getTamanhoBloco() * 1;
+
+            desenharTextoSombra(texto, x, y);
+
+            g2.setColor(Color.WHITE);
+            g2.drawString(texto, x, y);
+            if (comandoNum == 1) g2.drawString(">", x - 40, y);
+
+
+    }
+
+
+    public void sistemaDeTrocas_vender(){
+
+        desenharInventario(gp.jogador, true);
+
+        int x;
+        int y;
+        int largura;
+        int altura;
+
+        int itemIndice=pegarItemSlot(jogadorSlotCol, jogadorSlotLinha);
+        if(itemIndice<gp.jogador.getInventario().size()){
+            /*x=(int)(gp.getTamanhoBloco()*5.5);
+            y=(int)(gp.getTamanhoBloco()*5.5);
+            largura=(int)(gp.getTamanhoBloco()*2.5);
+            altura=gp.getTamanhoBloco();
+            desenharJanela(x,y,altura,largura);
+
+             */
+            if(gp.getEventosTeclado().isEnterPressionado()){
+
+
+            }
+        }
+
+        //desenharInventario(npc, true);
+
+    }
+
 
     public void desenharTelaAssar() {
         g2.setColor(Color.white);
@@ -248,7 +464,7 @@ public class InterfaceUsuario {
         String texto = "Assar a carne";
         textoX = obterXCentralizarTexto(texto);
 
-        int itemIndice = gp.getIu().pegarItemSlot();
+        int itemIndice = gp.getIu().pegarItemSlot(jogadorSlotCol, jogadorSlotLinha);
 
         g2.drawString(texto, textoX, textoY);
         if (comandoNum == 0) {
@@ -338,7 +554,8 @@ public class InterfaceUsuario {
             g2.drawString(">", textoX - 25, textoY);
             if (gp.getEventosTeclado().isEnterPressionado()) {
 
-                itemIndice = gp.getIu().pegarItemSlot();
+
+                itemIndice = gp.getIu().pegarItemSlot(jogadorSlotCol, jogadorSlotLinha);
 
                 if (itemIndice >= 0 && itemIndice < gp.jogador.getInventario().size()) {
                     Entidade itemSelecionado = gp.jogador.getInventario().get(itemIndice);
@@ -802,13 +1019,36 @@ public class InterfaceUsuario {
 
     }
 
-    public void desenharInventario() {
+    public void desenharInventario(Entidade entidade, boolean cursor) {
+
+        int frameX = 0;
+        int frameY = 0;
+        int frameLargura = 0;
+        int frameAltura = 0;
+        int slotColuna=0;
+        int slotLinha=0;
+
+        if(entidade==gp.jogador){
+             frameX = gp.getTamanhoBloco() * 12;
+             frameY = gp.getTamanhoBloco();
+             frameLargura = gp.getTamanhoBloco() * 6;
+             frameAltura = gp.getTamanhoBloco() * 5;
+             slotColuna=jogadorSlotCol;
+             slotLinha=jogadorSlotLinha;
+
+        }
+
+        else {
+            frameX = gp.getTamanhoBloco() * 2;
+            frameY = gp.getTamanhoBloco();
+            frameLargura = gp.getTamanhoBloco() * 6;
+            frameAltura = gp.getTamanhoBloco() * 5;
+            slotColuna = npcSlotCol;
+            slotLinha = npcSlotLinha;
+        }
 
         // Frame
-        int frameX = gp.getTamanhoBloco() * 12;
-        int frameY = gp.getTamanhoBloco();
-        int frameLargura = gp.getTamanhoBloco() * 6;
-        int frameAltura = gp.getTamanhoBloco() * 5;
+
 
         desenharJanela(frameX, frameY, frameAltura, frameLargura);
 
@@ -820,15 +1060,15 @@ public class InterfaceUsuario {
 
         // Itens
 
-        for (int i = 0; i < gp.jogador.getInventario().size(); i++) {
+        for (int i = 0; i < entidade.getInventario().size(); i++) {
 
-            if(gp.jogador.getInventario().get(i)==gp.jogador.getArmaAtual()){
+            if(entidade.getInventario().get(i)==entidade.getArmaAtual()){
 
                 g2.setColor(new Color(240,190,90));
                 g2.fillRoundRect(slotX, slotY, gp.getTamanhoBloco(), gp.getTamanhoBloco(), 10, 10);
             }
 
-            g2.drawImage(gp.jogador.getInventario().get(i).getDown1(), slotX, slotY, null);
+            g2.drawImage(entidade.getInventario().get(i).getDown1(), slotX, slotY, null);
 
             slotX += gp.getTamanhoBloco();
 
@@ -839,48 +1079,52 @@ public class InterfaceUsuario {
 
         }
 
-        // Cursor
+        if(cursor==true){
 
-        int cursorX = slotXstart + (gp.getTamanhoBloco() * slotCol);
-        int cursorY = slotYstart + (gp.getTamanhoBloco() * slotLinha);
-        int cursorAltura = gp.getTamanhoBloco();
-        int cursorLargura = gp.getTamanhoBloco();
+            int cursorX = slotXstart + (gp.getTamanhoBloco() * slotColuna);
+            int cursorY = slotYstart + (gp.getTamanhoBloco() * slotLinha);
+            int cursorAltura = gp.getTamanhoBloco();
+            int cursorLargura = gp.getTamanhoBloco();
 
-        g2.setColor(Color.WHITE);
-        g2.setStroke(new BasicStroke(3));
-        g2.drawRoundRect(cursorX, cursorY, cursorLargura, cursorAltura, 10, 10);
+            g2.setColor(Color.WHITE);
+            g2.setStroke(new BasicStroke(3));
+            g2.drawRoundRect(cursorX, cursorY, cursorLargura, cursorAltura, 10, 10);
 
-        // Tela descricao
+            // Tela descricao
 
-        int dFrameX=frameX;
-        int dFrameY=frameY + frameAltura;
-        int dFrameLargura=frameLargura;
-        int dFrameAltura=gp.getTamanhoBloco()*4;
+            int dFrameX=frameX;
+            int dFrameY=frameY + frameAltura;
+            int dFrameLargura=frameLargura;
+            int dFrameAltura=gp.getTamanhoBloco()*4;
 
 
-        int textoX= dFrameX+20;
-        int textoY=frameY+gp.getTamanhoBloco()+230;
-        g2.setFont(Font03.deriveFont(25f));
+            int textoX= dFrameX+20;
+            int textoY=frameY+gp.getTamanhoBloco()+230;
+            g2.setFont(Font03.deriveFont(25f));
 
-        int itemIndice=pegarItemSlot();
+            int itemIndice=pegarItemSlot(slotColuna, slotLinha);
 
-        if (itemIndice < gp.jogador.getInventario().size()) {
+            if (itemIndice < entidade.getInventario().size()) {
 
-            desenharJanela(dFrameX, dFrameY, dFrameAltura, dFrameLargura);
+                desenharJanela(dFrameX, dFrameY, dFrameAltura, dFrameLargura);
 
-            for(String linha:gp.jogador.getInventario().get(itemIndice).getDescricao().split("\n")){
-                g2.drawString(linha, textoX, textoY);
-                textoY+=26;
+                for(String linha:entidade.getInventario().get(itemIndice).getDescricao().split("\n")){
+                    g2.drawString(linha, textoX, textoY);
+                    textoY+=26;
+
+                }
 
             }
 
         }
 
+
+
     }
 
-    public int pegarItemSlot(){
+    public int pegarItemSlot(int slotColuna, int slotLinha){
 
-        int itemIndice= slotCol+(slotLinha*5);
+        int itemIndice= slotColuna+(slotLinha*5);
         return itemIndice;
     }
 
@@ -920,12 +1164,13 @@ public class InterfaceUsuario {
 
 
     public void desenharTelaDialogo() {
-        int x = gp.getTamanhoBloco() / 2;
+        int x = gp.getTamanhoBloco() * 4;
         int y = gp.getTamanhoBloco() / 2;
-        int altura = gp.getTamanhoBloco() * 8;
-        int largura = gp.getTamanhoBloco() * 4;
+        int largura =gp.getTelaAltura() - (gp.getTamanhoBloco()/6);
+        int altura = gp.getTamanhoBloco() * 4;
 
-        desenharJanela(x, y, largura, altura);
+        // Corrigido: largura antes de altura
+        desenharJanela(x, y, altura, largura);
 
         g2.setFont(Font03.deriveFont(25f));
         x += gp.getTamanhoBloco() / 2;
@@ -935,11 +1180,10 @@ public class InterfaceUsuario {
         if (dialogo != null) {
             for (String linha : dialogo.split("\n")) {
                 g2.drawString(linha, x, y);
-                y += 30; // Ajuste a distância entre as linhas
+                y += 30;
             }
         }
     }
-
 
     public void desenharJanela(int x, int y, int altura, int largura) {
         {
@@ -1382,5 +1626,6 @@ public class InterfaceUsuario {
         g2.setColor(Color.WHITE);
         g2.drawString(texto, x, y);
     }
+
 
 }
