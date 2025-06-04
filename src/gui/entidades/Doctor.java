@@ -3,11 +3,6 @@ package gui.entidades;
 import gui.system.EventosTeclado;
 import gui.system.PainelJogo;
 import personagens.Medico;
-import personagens.Personagem;
-import personagens.Rastreador;
-
-import javax.imageio.ImageIO;
-import java.io.IOException;
 
 public class Doctor extends Jogador {
 
@@ -22,7 +17,7 @@ public class Doctor extends Jogador {
         super(gp, eventosTeclado);
         this.gp=gp;
 
-        this.medico = new Medico("Curandeiro", getVida(), getFome(), getSede(), getEnergia(), getSanidade(), null, gp.getBlocosG().getAmbienteAtual().getNomeAmbiente(), 36.5);
+        //this.medico = new Medico("Curandeiro", getVida(), getFome(), getSede(), getEnergia(), getSanidade(), null, gp.getBlocosG().getAmbienteAtual().getNomeAmbiente(), 36.5);
 
         definirImagemJogador();
 

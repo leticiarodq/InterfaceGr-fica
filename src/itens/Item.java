@@ -1,10 +1,11 @@
-package itens; // Define que esta classe pertence ao pacote 'itens'
+//Pacote
+package itens;
 
-import interfaces.AcaoUsar;
+//Import
 import personagens.Personagem;
 
-// Declaração da classe pública 'Item'
-public abstract class Item implements AcaoUsar {
+//Classe Abstrata Item
+public abstract class Item {
     private String nome;
     private int peso;
     private int durabilidade;
@@ -42,5 +43,6 @@ public abstract class Item implements AcaoUsar {
         this.durabilidade = durabilidade;
     }
 
+    //Método abstrato usar para forçar as subclasses a usarem e facilitar no uso do inventario
     public abstract void usar(Personagem personagem);
 }

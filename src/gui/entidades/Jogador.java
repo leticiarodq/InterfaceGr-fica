@@ -5,8 +5,7 @@ import gui.system.CriadorAtivos;
 import gui.system.EventosTeclado;
 import gui.system.PainelJogo;
 import gui.tile_interativo.BlocoInterativo;
-import itens.Arma;
-import personagens.*;
+import personagens.Personagem;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -90,7 +89,7 @@ public class Jogador extends Entidade {
         setTipo(getTipo_jogador());
         this.eventosTeclado = eventosTeclado;
 
-        this.personagemLogico = new Personagem(
+        /*this.personagemLogico = new Personagem(
                 "Jogador",
                 6,
                 8,
@@ -101,6 +100,9 @@ public class Jogador extends Entidade {
                 gp.getBlocosG().getAmbienteAtual().getNomeAmbiente(),
                 36.5
         );
+
+
+         */
 
         telaX = gp.getTelaLargura() / 2 - (gp.getTamanhoBloco() / 2);
         telaY = gp.getTelaAltura() / 2 - (gp.getTamanhoBloco() / 2);
@@ -123,10 +125,10 @@ public class Jogador extends Entidade {
     public void setValoresPadrao() {
         // Define valores iniciais para a posição do jogador, velocidade e direção
 
-       // setMundoX(gp.getTamanhoBloco() * 21);
-       //setMundoY(gp.getTamanhoBloco() * 10);
-        setMundoX(gp.getTamanhoBloco() * 28);
-        setMundoY(gp.getTamanhoBloco() * 19);
+        setMundoX(gp.getTamanhoBloco() * 21);
+        setMundoY(gp.getTamanhoBloco() * 10);
+        //setMundoX(gp.getTamanhoBloco() * 28);
+        //setMundoY(gp.getTamanhoBloco() * 19);
 
         setVelocidade(4);
         setDirecao("down");
@@ -134,7 +136,7 @@ public class Jogador extends Entidade {
 
         // Status do jogador
 
-        /*setVidaMaxima(6);
+        setVidaMaxima(6);
         setVida(getVidaMaxima());
 
         setSedeMaxima(8);
@@ -149,9 +151,9 @@ public class Jogador extends Entidade {
         setEnergiaMaxima(6);
         setEnergia(getEnergiaMaxima());
 
-         */
 
-        setVida(personagemLogico.getVida());
+
+        /*setVida(personagemLogico.getVida());
         setSede(personagemLogico.getSede());
         setFome(personagemLogico.getFome());
         setSanidade(personagemLogico.getSanidade());
@@ -163,18 +165,16 @@ public class Jogador extends Entidade {
         setSanidadeMaxima(6);
         setEnergiaMaxima(6);
 
+         */
         String personagem=gp.getPersonagemSelecionado();
 
         if(gp.jogador!=null){
-            gp.jogador.inventario.add(new REMEDIO_Antibiotico(gp));
-            gp.jogador.inventario.add(new REMEDIO_Analgesico(gp));
-            gp.jogador.inventario.add(new REMEDIO_Bandagem(gp));
+            gp.jogador.inventario.add(new REMEDIO_PocaoSanidade(gp));
+            gp.jogador.inventario.add(new REMEDIO_PocaoVida(gp));
+            gp.jogador.inventario.add(new REMEDIO_PocaoEnergia(gp));
 
 
         }
-
-
-
 
 
         setArmaAtual(null);
@@ -192,8 +192,8 @@ public class Jogador extends Entidade {
 
      */
     public void posicoesPadrao(){
-        setMundoX(gp.getTamanhoBloco() * 28);
-        setMundoY(gp.getTamanhoBloco() * 19);
+        setMundoX(gp.getTamanhoBloco() * 21);
+        setMundoY(gp.getTamanhoBloco() * 10);
         setDirecao("down");
 
     }
@@ -637,7 +637,6 @@ public class Jogador extends Entidade {
         if (getArmaAtual() != null) {
             Entidade armaQuebrada = getArmaAtual();
 
-            // Remove todas as ocorrências da arma quebrada (caso haja duplicatas)
             inventario.removeIf(item ->
                     item == armaQuebrada ||
                             (item.getNome().equals(armaQuebrada.getNome()) &&

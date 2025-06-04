@@ -3,9 +3,6 @@ package gui.tile_interativo;
 import gui.entidades.Entidade;
 import gui.system.PainelJogo;
 
-import java.awt.*;
-import java.util.Random;
-
 public class BI_Armadilha extends BlocoInterativo {
     private int contadorAnimacao = 0;
     private int intervaloAnimacao = 20; // número de frames para trocar de imagem

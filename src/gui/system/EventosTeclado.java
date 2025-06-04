@@ -1,8 +1,5 @@
 package gui.system;
 
-import gui.entidades.*;
-import personagens.Rastreador;
-
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 

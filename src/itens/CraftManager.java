@@ -1,11 +1,15 @@
+//Pacote
 package itens;
 
-import itens.Material;
-import itens.FerramentaCombinada;
+//Imports
+import exceptions.ReceitaInvalidaException;
+
 import java.util.List;
 
+//Classe de gerenciamento de craft
 public class CraftManager {
 
+    // Cria uma nova FerramentaCombinada a partir de uma lista de materiais.
     public FerramentaCombinada craft(List<Material> materiais) {
         int pedras = 0;
         int gravetos = 0;
@@ -31,7 +35,6 @@ public class CraftManager {
         }
 
         // Se não bate com nenhuma receita
-        System.out.println("Receita inválida para combinação!");
-        return null;
+        throw new ReceitaInvalidaException("Receita inválida!");
     }
 }

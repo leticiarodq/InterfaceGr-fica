@@ -1,6 +1,5 @@
 package gui.entidades;
 
-import gui.system.FerramentasUteis;
 import gui.system.PainelJogo;
 
 import javax.imageio.ImageIO;

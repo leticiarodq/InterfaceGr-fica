@@ -1,11 +1,14 @@
+//Pacote
 package ambientes;
 
+//AmbienteFloresta é uma subclasse de Ambiente
 public class AmbienteFloresta extends Ambiente {
 
     private boolean vegetacaoDensa;
     private boolean faunaAbundante;
     private boolean climaUmido;
 
+    //Construtor
     public AmbienteFloresta() {
         super(
                 "Floresta",
@@ -13,7 +16,8 @@ public class AmbienteFloresta extends Ambiente {
                 3,
                 new String[]{"Frutas", "Raízes", "Cogumelos", "Madeira", "Pequenos animais para caça"},
                 0.6,
-                "Úmido"
+                "Úmido",
+                "/maps/floresta.txt" // Caminho para o layout do mapa
         );
 
         this.vegetacaoDensa = true;
@@ -33,11 +37,4 @@ public class AmbienteFloresta extends Ambiente {
         return climaUmido;
     }
 
-    public void gerarEvento(){
-
-    }
-
-    public void modificarClima(){
-
-    }
 }

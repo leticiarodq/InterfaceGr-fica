@@ -8,7 +8,7 @@ import java.util.Random;
 
 public class ALIMENTO_Enlatado extends Entidade {
 
-    private Alimento alimentoLogica;
+    private Alimento alimentoLogico;
     private PainelJogo gp;
 
     public ALIMENTO_Enlatado(PainelJogo gp, String tipoEnlatado) {
@@ -19,26 +19,34 @@ public class ALIMENTO_Enlatado extends Entidade {
         setNome(tipoEnlatado);
 
         switch (tipoEnlatado.toLowerCase()) {
-            case "Lata de feijão":
-                setDown1(setup("/alimentos/enalatado01", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
+            case "latafeijao":
+                setDown1(setup("/alimentos/enlatado01", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
+                alimentoLogico=new Alimento("Lata de feijão", 1, 5, "Enlatado", 2, 0);
+                alimentoLogico.setValorNutricional(1);
                 setTipo(getTipo_consumivel());
                 setDescricao("[Lata de Feijão]\nAlimento nutritivo e durável.\nRecupera bastante fome.\nIdeal para longas jornadas.");
                 break;
 
-            case "Lata de feijão vencida":
+            case "latafeijaovencida":
                 setDown1(setup("/alimentos/enlatado02", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
+                alimentoLogico=new Alimento("Lata de feijão vencida", 1, 5, "Enlatado vencido", 1, 0);
+                alimentoLogico.setValorNutricional(2);
                 setTipo(getTipo_vencido());
                 setDescricao("[Feijão Vencido]\nAinda com valor nutritivo,\nmas pode causar efeitos\ncolaterais leves.");
                 break;
 
             case "lataervilha":
                 setDown1(setup("/alimentos/enlatado03", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
+                alimentoLogico=new Alimento("Lata de ervilha", 1, 5, "Enlatado vencido", 2, 0);
+                alimentoLogico.setValorNutricional(2);
                 setTipo(getTipo_consumivel());
                 setDescricao("[Lata de Ervilha]\nLeve e saudável.\nRecupera um pouco de fome\nsem pesar no estômago.");
                 break;
 
             case "ervilhavencida":
                 setDown1(setup("/alimentos/enlatado04", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
+                alimentoLogico=new Alimento("Lata de ervilha vencida", 1, 5, "Enlatado vencido", 1, 0);
+                alimentoLogico.setValorNutricional(1);
                 setNome("Lata de ervilha vencida");
                 setTipo(getTipo_vencido());
                 setDescricao("[Lata de Ervilha Vencida]\nComestível, mas com gosto\nestranho. Use só em emergências.");
@@ -50,7 +58,7 @@ public class ALIMENTO_Enlatado extends Entidade {
     public void usar(Entidade entidade){
         gp.setEstadoJogo(gp.getEstadoDialogo());
         gp.getIu().setDialogoAtual("Você comeu "+ getNome());
-        entidade.setFome(entidade.getFome() + 1);
+        entidade.setFome(entidade.getFome() + alimentoLogico.getValorNutricional());
 
     }
 
@@ -63,11 +71,11 @@ public class ALIMENTO_Enlatado extends Entidade {
         String personagem = gp.getPersonagemSelecionado().toLowerCase();
 
         if (personagem.equals("médico")) {
-            if (chance < 40) { // 40% de chance de ser infectado
+            if (chance < 40) {
                 gp.jogador.setInfectado(true);
             }
         } else {
-            if (chance < 60) { // 60% de chance de ser infectado
+            if (chance < 60) {
                 gp.jogador.setInfectado(true);            }
         }
 
@@ -78,7 +86,7 @@ public class ALIMENTO_Enlatado extends Entidade {
             gp.getIu().setDialogoAtual("Você ingeriu alimento\nvencido, mas não\nfoi infectado.");
         }
 
-        entidade.setFome(entidade.getFome() + 1);
+        entidade.setFome(entidade.getFome() + alimentoLogico.getValorNutricional());
 
     }
 }

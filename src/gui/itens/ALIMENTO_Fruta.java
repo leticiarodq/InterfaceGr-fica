@@ -21,6 +21,7 @@ public class ALIMENTO_Fruta extends Entidade {
         switch (tipoFruta.toLowerCase()) {
             case "maca":
                 frutaLogica=new Alimento("Maçã", 10, 1, "Fruta", 1, 0);
+                frutaLogica.setValorNutricional(1);
                 setNome("Maçã");
                 setDown1(setup("/alimentos/maca", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
                 setDescricao("[Maçã]\nMata a fome e é fácil de\nencontrar.\nRica em fibras\ne vitaminas.");
@@ -28,6 +29,7 @@ public class ALIMENTO_Fruta extends Entidade {
 
             case "banana":
                 frutaLogica=new Alimento("Banana", 10, 1, "Fruta", 1, 0);
+                frutaLogica.setValorNutricional(1);
                 setNome("Banana");
                 setDown1(setup("/alimentos/banana", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
                 setDescricao("[Banana]\nRica em potássio e\nenergia rápida.\nÓtima para recuperar\nforças.");
@@ -35,6 +37,7 @@ public class ALIMENTO_Fruta extends Entidade {
 
             case "laranja":
                 frutaLogica=new Alimento("Laranja", 10, 1, "Fruta", 1, 0);
+                frutaLogica.setValorNutricional(1);
                 setNome("Laranja");
                 setDown1(setup("/alimentos/laranja", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
                 setDescricao("[Laranja]\nCheia de vitamina C!\nAjuda a fortalecer o\nsistema imunológico.");
@@ -42,6 +45,7 @@ public class ALIMENTO_Fruta extends Entidade {
 
             case "tomate":
                 frutaLogica=new Alimento("Tomate", 10, 1, "Fruta", 1, 0);
+                frutaLogica.setValorNutricional(1);
                 setNome("Tomate");
                 setDown1(setup("/alimentos/tomate", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
                 setDescricao("[Tomate]\nFonte de antioxidantes\ne vitamina C.\nBom para a saúde\nda pele.");
@@ -49,6 +53,7 @@ public class ALIMENTO_Fruta extends Entidade {
 
             case "uvaroxa":
                 frutaLogica=new Alimento("Uva Roxa", 10, 1, "Fruta", 1, 0);
+                frutaLogica.setValorNutricional(1);
                 setNome("Uva roxa");
                 setDown1(setup("/alimentos/uva_roxa", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
                 setDescricao("[Uva roxa]\nCheia de antioxidantes.\nAjuda na circulação sanguínea.");
@@ -56,6 +61,7 @@ public class ALIMENTO_Fruta extends Entidade {
 
             case "uva verde":
                 frutaLogica=new Alimento("Uva verde", 10, 1, "Fruta", 1, 0);
+                frutaLogica.setValorNutricional(1);
                 setNome("Uva verde");
                 setDown1(setup("/alimentos/uva_verde", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
                 setDescricao("[Uva verde]\nRefrescante e nutritiva.\nBoa fonte de vitaminas.");
@@ -75,14 +81,14 @@ public class ALIMENTO_Fruta extends Entidade {
     public void usar(Entidade entidade){
         gp.setEstadoJogo(gp.getEstadoDialogo());
         gp.getIu().setDialogoAtual("Você comeu "+ getNome());
-        entidade.setFome(getFome()+1);
+        entidade.setFome(getFome()+ frutaLogica.getValorNutricional());
     }
 
     public void coletar(Entidade entidade){
 
         int i=0;
         gp.jogador.getInventario().add(gp.getObj()[gp.getMapaAtual()][i]);
-        gp.getIu().mostrarMensagem("Carne crua");
+        gp.getIu().mostrarMensagem("Coletou "+ frutaLogica.getNome()+"!");
 
     }
 

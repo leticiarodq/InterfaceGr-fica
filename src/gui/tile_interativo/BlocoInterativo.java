@@ -1,16 +1,7 @@
 package gui.tile_interativo;
 
-import eventos.EventoCriatura;
 import gui.entidades.Entidade;
-import gui.itens.ALIMENTO_Carne;
-import gui.itens.Material;
 import gui.system.PainelJogo;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.Random;
 
 public class BlocoInterativo extends Entidade {
 

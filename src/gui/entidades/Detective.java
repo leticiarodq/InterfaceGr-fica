@@ -4,9 +4,6 @@ import gui.system.EventosTeclado;
 import gui.system.PainelJogo;
 import personagens.Rastreador;
 
-import javax.imageio.ImageIO;
-import java.io.IOException;
-
 public class Detective extends Jogador { //
 
 
@@ -17,7 +14,7 @@ public class Detective extends Jogador { //
         super(gp, eventosTeclado);
         this.gp=gp;
 
-        this.rastreador = new Rastreador("Rastreador", getVida(), getFome(), getSede(), getEnergia(), getSanidade(), null, gp.getBlocosG().getAmbienteAtual().getNomeAmbiente(), 36.5);
+        //this.rastreador = new Rastreador("Rastreador", getVida(), getFome(), getSede(), getEnergia(), getSanidade(), null, gp.getBlocosG().getAmbienteAtual().getNomeAmbiente(), 36.5);
         definirImagemJogador();
 
     }

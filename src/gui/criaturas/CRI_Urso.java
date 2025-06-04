@@ -3,13 +3,9 @@ package gui.criaturas;
 import eventos.EventoCriatura;
 import gui.entidades.Entidade;
 import gui.itens.ALIMENTO_Carne;
-import gui.itens.ALIMENTO_Fruta;
-import gui.itens.REMEDIO_Analgesico;
 import gui.system.PainelJogo;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.io.IOException;
 import java.util.Random;
 
 public class CRI_Urso extends Entidade {

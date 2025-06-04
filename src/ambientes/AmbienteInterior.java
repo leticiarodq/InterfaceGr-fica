@@ -9,7 +9,7 @@ public class AmbienteInterior extends Ambiente {
                 3,
                 new String[]{"Rochas", "Minérios raros", "Pequenos lagos subterrâneos", "Ossos", "Vestígios de exploradores antigos"},
                 0.6,
-                "Frias"
+                "Frias", "/maps/interior_feiticeira.txt"
         );
     }
 

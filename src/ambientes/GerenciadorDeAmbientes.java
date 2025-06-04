@@ -1,66 +1,52 @@
 package ambientes;
 
 import personagens.Personagem;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class GerenciadorDeAmbientes {
 
     private List<Ambiente> ambientesDisponiveis;
-    private List<String> climaGlobal;
-    private List<String> historicoMovimentacao;
     private Ambiente ambienteAtual;
+    private int indiceAmbienteAtual;
 
-    public GerenciadorDeAmbientes(List<Ambiente> ambientesDisponiveis, String[] climaGlobal, String[] historicoMovimentacao){
-        this.ambientesDisponiveis = ambientesDisponiveis;
-        this.climaGlobal= Arrays.asList(climaGlobal);
-        this.historicoMovimentacao = new ArrayList<>(Arrays.asList(historicoMovimentacao));
-        this.ambienteAtual = ambientesDisponiveis.get(0);
+    public GerenciadorDeAmbientes() {
+        this.ambientesDisponiveis = new ArrayList<>();
+
+        // Popula a lista com todas as implementações de Ambiente
+        ambientesDisponiveis.add(new AmbienteFloresta());   // Índice 0
+        ambientesDisponiveis.add(new AmbienteLagoRio());    // Índice 1
+        ambientesDisponiveis.add(new AmbienteRuinas());     // Índice 2
+        ambientesDisponiveis.add(new AmbienteMontanha());   // Índice 3
+        ambientesDisponiveis.add(new AmbienteCaverna());    // Índice 4
+
+        // Define o ambiente inicial do jogo
+        this.indiceAmbienteAtual = 0;
+        this.ambienteAtual = ambientesDisponiveis.get(this.indiceAmbienteAtual);
     }
 
-    public List<Ambiente> getAmbientesDisponiveis(){
-        return ambientesDisponiveis;
-    }
-
-    public List<String> getClimaGlobal(){
-        return climaGlobal;
-    }
-
-    public List<String> getHistoricoMovimentacao(){
-        return historicoMovimentacao;
-    }
-
-    public Ambiente getAmbienteAtual(){
+    public Ambiente getAmbienteAtual() {
         return ambienteAtual;
     }
 
-    public void mudarAmbiente(Ambiente novoAmbiente, Personagem personagem) {
-        if (ambienteAtual.equals(novoAmbiente)) {
-            System.out.println();
-            System.out.println("Você já está no ambiente " + ambienteAtual.getNomeAmbiente() + "!");
-            return;
+    public int getIndiceAmbienteAtual() {
+        return indiceAmbienteAtual;
+    }
+
+    public List<Ambiente> getAmbientesDisponiveis() {
+        return ambientesDisponiveis;
+    }
+
+    public void mudarAmbiente(int novoIndice, Personagem personagem) {
+        if (novoIndice >= 0 && novoIndice < ambientesDisponiveis.size()) {
+            Ambiente novoAmbiente = ambientesDisponiveis.get(novoIndice);
+
+            this.indiceAmbienteAtual = novoIndice;
+            this.ambienteAtual = novoAmbiente;
+
+            if (personagem != null) {
+                personagem.setLocalizacao(ambienteAtual.getNomeAmbiente());
+            }
         }
-        System.out.println();
-        System.out.println("[VOCÊ ESTÁ DEIXANDO] " + ambienteAtual.getNomeAmbiente());
-        System.out.println();
-        System.out.println("[INDO PARA] " + novoAmbiente.getNomeAmbiente());
-        System.out.println(novoAmbiente.getDescricaoAmbiente());
-
-        historicoMovimentacao.add("Saiu de " + ambienteAtual.getNomeAmbiente() + " para " + novoAmbiente.getNomeAmbiente());
-        ambienteAtual = novoAmbiente;
-
-        personagem.setLocalizacao(ambienteAtual.getNomeAmbiente());
-
     }
-
-    public void gerarEvento(){
-
-    }
-
-    public void modificarRecursos(){
-
-    }
-
 }

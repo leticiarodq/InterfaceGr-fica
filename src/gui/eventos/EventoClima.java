@@ -1,6 +1,5 @@
 package gui.eventos;
 
-import eventos.EventoClimatico;
 import gui.system.PainelJogo;
 
 import java.util.Random;
@@ -26,7 +25,6 @@ public class EventoClima {
 
     public EventoClima(PainelJogo gp) {
         this.gp = gp;
-
 
     }
 

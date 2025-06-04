@@ -1,14 +1,17 @@
+//Pacote
 package itens;
 
+//Imports
 import exceptions.VidaCheiaException;
-import interfaces.AcaoCurar;
 import personagens.Personagem;
 
-public class Remedio extends Item implements AcaoCurar {
+//Remedio é uma subclasse de Item
+public class Remedio extends Item {
     private String tipo;
     private String efeito;
     private int cura;
 
+    //Construtor
     public Remedio(String nome, int peso, int durabilidade, String tipo, String efeito, int cura) {
         super(nome, peso, durabilidade);
         this.tipo = tipo;
@@ -16,6 +19,7 @@ public class Remedio extends Item implements AcaoCurar {
         this.cura = cura;
     }
 
+    //Getters
     public String getTipo() {
         return tipo;
     }
@@ -28,6 +32,7 @@ public class Remedio extends Item implements AcaoCurar {
         return cura;
     }
 
+    //Setters
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
@@ -49,12 +54,13 @@ public class Remedio extends Item implements AcaoCurar {
         return personagem.getNome() + " foi curado em " + cura + " pontos de vida.";
     }
 
-    // Método usar sem throws, usa curar
+    // //Método override de Item
     @Override
     public void usar(Personagem personagem) {
         curar(personagem);
     }
 
+    // Sobrescreve o método toString() para que o objeto seja representado pelo seu nome por garantia de segurança
     @Override
     public String toString() {
         return getNome();

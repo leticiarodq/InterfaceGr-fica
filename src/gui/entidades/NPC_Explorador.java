@@ -2,8 +2,6 @@ package gui.entidades;
 
 import gui.system.PainelJogo;
 
-import javax.imageio.ImageIO;
-import java.io.IOException;
 import java.util.Random;
 
 public class NPC_Explorador extends Entidade{

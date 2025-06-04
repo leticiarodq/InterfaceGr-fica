@@ -2,11 +2,7 @@ package gui.entidades;
 
 import gui.system.EventosTeclado;
 import gui.system.PainelJogo;
-import personagens.Personagem;
 import personagens.SobreviventeNato;
-
-import javax.imageio.ImageIO;
-import java.io.IOException;
 
 public class Survivor extends Jogador {
 
@@ -16,7 +12,7 @@ public class Survivor extends Jogador {
     public Survivor(PainelJogo gp, EventosTeclado eventosTeclado) {
         super(gp, eventosTeclado);
         this.gp = gp;
-        this.sobreviventeNato = new SobreviventeNato("Elfa", 100, 100, 100, 100, 100, null, "Floresta", 36.5);
+        //this.sobreviventeNato = new SobreviventeNato("Elfa", 100, 100, 100, 100, 100, null, "Floresta", 36.5);
         definirImagemJogador();
 
 

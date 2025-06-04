@@ -1,7 +1,11 @@
+//Pacote
 package personagens;
 
+//Imports
 import exceptions.*;
+import itens.Arma;
 
+//Classe
 public class Personagem {
 
     private String nome;
@@ -13,19 +17,32 @@ public class Personagem {
     private Inventario inventario;
     private String localizacao;
     private double temperaturaCorporal = 36.5;
+    private int sedeMaxima;
+    private int velocidade;
+    private boolean desidratado;
+    private boolean infectado;
+    private boolean delirio;
+    private Arma armaEquipada;
 
-
-
-    public Personagem(String nome, int vida, int fome, int sede, int energia, int sanidade, Inventario inventario, String localizacao, double temperaturaCorporal) {
+    //Construtor
+    public Personagem(String nome, int vida, int fome, int sede, int energia, int sanidade, Inventario inventario, String localizacao, double temperaturaCorporal, int sedeMaxima, int velocidade, boolean desidratado, boolean infectado, boolean delirio, Arma armaEquipada) {
         this.nome = nome;
         this.vida = vida;
         this.fome = fome;
         this.sede = sede;
         this.energia = energia;
         this.sanidade = sanidade;
-        this.inventario = new Inventario(40);
+        this.inventario = inventario;
+        if (this.inventario == null) {
+            this.inventario = new Inventario(40);}
         this.localizacao = localizacao;
         this.temperaturaCorporal = temperaturaCorporal;
+        this.sedeMaxima = sedeMaxima;
+        this.velocidade = velocidade;
+        this.infectado = infectado;
+        this.desidratado = desidratado;
+        this.delirio = delirio;
+        this.armaEquipada = armaEquipada;
     }
 
     // Getters
@@ -61,8 +78,20 @@ public class Personagem {
         return localizacao;
     }
 
+    public int getSedeMaxima(){
+        return sedeMaxima;
+    }
+
     public double getTemperaturaCorporal() {
         return temperaturaCorporal;
+    }
+
+    public int getVelocidade(){
+        return velocidade;
+    }
+
+    public Arma getArmaEquip() {
+        return armaEquipada;
     }
 
     // Setters
@@ -102,89 +131,142 @@ public class Personagem {
         this.localizacao = localizacao;
     }
 
-    // Métodos para gastar energia - lança exceção se energia insuficiente
-    public void reduzirEnergia(int quantidade) throws EnergiaInsuficienteException {
+    public void setVelocidade(int velocidade){
+        this.velocidade = velocidade;
+    }
+
+    public void setArmaEquip(Arma arma) {
+        this.armaEquipada = arma;
+    }
+
+    //Metodos de reduções de atributos + exceções para casos de erros
+    public void reduzirEnergia(int quantidade) {
         if (energia < quantidade) {
             throw new EnergiaInsuficienteException();
         }
         energia -= quantidade;
     }
 
-    // Reduz vida - lança exceção se vida chegar a zero
-    public void reduzirVida(int quantidade) throws PersonagemMortoException {
-        vida = (vida - quantidade);
-        if (vida == 0) {
+    public void reduzirVida(int quantidade) {
+        vida -= quantidade;
+        if (vida <= 0) {
             throw new PersonagemMortoException();
         }
     }
 
-    // Reduz fome e, se chegar a zero, reduz vida (com exceção se morrer)
-    public void reduzirFome(int quantidade) throws PersonagemMortoException {
-        fome = (fome - quantidade);
-        if (fome == 0) {
-            reduzirVida(10);  // Perde vida por fome
+    public void reduzirFome(int quantidade) {
+        fome -= quantidade;
+        if (fome <= 0) {
+            reduzirSanidade(10);// Perde vida por fome
         }
     }
 
-    // Reduz sede e, se chegar a zero, reduz vida (com exceção se morrer)
-    public void reduzirSede(int quantidade) throws PersonagemMortoException {
-        sede = (sede - quantidade);
-        if (sede == 0) {
-            reduzirVida(15);  // Perde vida por sede
+    public void reduzirSede(int quantidade) {
+        sede -= quantidade;
+        if (sede <= 0) {
+            reduzirSanidade(15);  // Perde vida por sede
         }
     }
 
-    public void reduzirSanidade(int quantidade) throws PersonagemMortoException {
-        sanidade = (sanidade - quantidade);
-        if (sanidade == 0) {
-            reduzirVida(15); //Perde vida por falta de sanidade
+    public void reduzirSanidade(int quantidade) {
+        sanidade -= quantidade;
+        if (sanidade <= 0) {
+            reduzirVida(15);  // Perde vida por falta de sanidade
         }
     }
 
-    public void reduzirTemperaturaCorporal(double quantidade) throws PersonagemMortoException {
+    public void reduzirTemperaturaCorporal(double quantidade) {
         temperaturaCorporal -= quantidade;
         if (temperaturaCorporal < 35.0) {
-            reduzirVida(15); //Perde vida por baixa da temperatura
+            reduzirVida(15);  // Perde vida por baixa da temperatura
+        }
+
+    }
+
+
+    //Metodos de recuperações de atributos + exceções para casos de erros
+    public void recuperarVida(int quantidade) {
+        vida += quantidade;
+        if (vida > 100) {
+            throw new VidaCheiaException("A vida já está cheia!");
         }
     }
 
-    // Recuperação
-    public void recuperarVida(int quantidade) throws VidaCheiaException {
-        vida =  (vida + quantidade);
+    public void recuperarFome(int quantidade) {
+        fome += quantidade;
+        if (fome > 100) {
+            throw new FomeCheiaException("A fome já está cheia!");
+        }
     }
 
-    public void recuperarFome(int quantidade) throws FomeCheiaException {
-        fome =  (fome + quantidade);
+    public void recuperarSede(int quantidade) {
+        sede += quantidade;
+        if (sede > 100) {
+            throw new SedeCheiaException("A sede já está cheia!");
+        }
     }
 
-    public void recuperarSede(int quantidade) throws SedeCheiaException {
-        sede = (sede + quantidade);
+    public void recuperarEnergia(int quantidade) {
+        energia += quantidade;
+        if (energia > 100) {
+            throw new EnergiaCheiaException("A energia já está cheia!");
+        }
     }
 
-    public void recuperarEnergia(int quantidade) throws EnergiaCheiaException {
-        energia = (energia + quantidade);
+    public void recuperarSanidade(int quantidade) {
+        sanidade += quantidade;
+        if (sanidade > 100) {
+            throw new SanidadeCheiaException("A sanidade já está cheia!");
+        }
     }
 
-    public void recuperarSanidade(int quantidade) throws EnergiaCheiaException {
-        sanidade = (sanidade + quantidade);
-    }
-
-    public void recuperarTemperaturaCorporal(double quantidade) throws PersonagemMortoException {
+    public void recuperarTemperaturaCorporal(double quantidade) {
         temperaturaCorporal += quantidade;
         if (temperaturaCorporal > 42.0) {
-          reduzirVida(15); //Perde vida por aumento da temperatura corporal
+            reduzirVida(15); // Perde vida por aumento da temperatura corporal
         }
     }
 
-    public void exibirStatus() {
-        System.out.println("Personagem: " + getNome());
-        System.out.println("Vida: " + getVida());
-        System.out.println("Fome: " + getFome());
-        System.out.println("Sede: " + getSede());
-        System.out.println("Energia: " + getEnergia());
-        System.out.println("Sanidade: " + getSanidade());
-        System.out.println("Localização: " + getLocalizacao());
+    //Método para exibir status na aplicação da GUI
+    public String obterStatus() {
+        StringBuilder status = new StringBuilder();
+        status.append("Personagem: ").append(getNome()).append("\n");
+        status.append("Vida: ").append(getVida()).append("\n");
+        status.append("Fome: ").append(getFome()).append("\n");
+        status.append("Sede: ").append(getSede()).append("\n");
+        status.append("Energia: ").append(getEnergia()).append("\n");
+        status.append("Sanidade: ").append(getSanidade()).append("\n");
+        status.append("Localização: ").append(getLocalizacao()).append("\n");
+        status.append("Temperatura Corporal: ").append(getTemperaturaCorporal()).append(("n"));
+        status.append("Velocidade: ").append(getVelocidade()).append(("n"));
+        return status.toString();
+    }
 
+    //Métodos boolean para identificação do EventoDoencaFerimento no personagem
+    public boolean isDesidratado() { return desidratado; }
+
+    public boolean isDelirando() {
+        return delirio;
+    }
+
+    public boolean isInfectado() { return infectado; }
+
+    public void setDesidratado(boolean desidratado) { this.desidratado = desidratado; }
+
+    public void setInfectado(boolean infectado) { this.infectado = infectado; }
+
+    public void setDelirando(boolean delirio) {
+        this.delirio = delirio;
+    }
+
+    //Método de ataque a criaturas baseado atacar com arma ou sem a arma
+    public void atacar(Criatura inimigo) {
+        if (armaEquipada != null) {
+            armaEquipada.atacar(inimigo);
+        } else {
+            double danoMao = 10; // dano padrão sem arma
+            inimigo.receberDano(danoMao);
+        }
     }
 
 

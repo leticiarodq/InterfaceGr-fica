@@ -1,16 +1,20 @@
+//Pacote
 package itens;
 
+//Imports
 import eventos.EventoCriatura;
 import exceptions.ArmaQuebradaException;
-import interfaces.Atacavel;
+import personagens.Criatura;
 import personagens.Personagem;
 
-public class Arma extends Item implements Atacavel {
+//Arma é uma subclasse de Item
+public class Arma extends Item {
     private String tipo;
     private double dano;
     private double distancia;
     private EventoCriatura inimigo; // Inimigo a ser atacado
 
+    //Construtor
     public Arma(String nome, int peso, int durabilidade, String tipo, double dano, double distancia) {
         super(nome, peso, durabilidade);
         this.tipo = tipo;
@@ -18,7 +22,7 @@ public class Arma extends Item implements Atacavel {
         this.distancia = distancia;
     }
 
-    // Getters e Setters
+    // Getters
     public String getTipo() {
         return tipo;
     }
@@ -31,6 +35,7 @@ public class Arma extends Item implements Atacavel {
         return distancia;
     }
 
+    //Setters
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
@@ -52,7 +57,7 @@ public class Arma extends Item implements Atacavel {
     }
 
     // Lógica do ataque
-    public void atacar(EventoCriatura inimigo) {
+    public void atacar(Criatura inimigo) {
         if (getDurabilidade() <= 0) {
             throw new ArmaQuebradaException("A arma está quebrada e não pode ser usada.");
         }
@@ -60,15 +65,17 @@ public class Arma extends Item implements Atacavel {
         setDurabilidade(getDurabilidade() - 1);
     }
 
-    // Método usar sobrescrito
+
+    //Método override de Item
     @Override
     public void usar(Personagem personagem) {
         if (inimigo == null) {
             throw new IllegalStateException("Nenhum inimigo definido para ataque.");
         }
-        atacar(inimigo); // Lógica do back-end
+        atacar(inimigo.getCriaturaAtual());
     }
 
+    // Sobrescreve o método toString() para que o objeto seja representado pelo seu nome por garantia de segurança
     @Override
     public String toString() {
         return getNome();

@@ -2,7 +2,6 @@ package gui.criaturas;
 
 import eventos.EventoCriatura;
 import gui.entidades.Entidade;
-import gui.itens.ALIMENTO_Carne;
 import gui.system.PainelJogo;
 
 import java.awt.*;

@@ -18,9 +18,9 @@ public class Armas extends Entidade {
 
             case "espada":
                 armaLogica=new Arma("Espada", 10, 100, "Ataque", 2, 10);
+                armaLogica.setDano(2);
                 setDown1(setup("/armasFerramentas/espada", gp.getTamanhoBloco(), gp.getTamanhoBloco()));
                 setDescricao("[Espada]\nLeve e afiada,\nfeita para o\ncombate direto.");
-                setValorAtaque(2);
                 setDurabilidade(100);
                 break;
 

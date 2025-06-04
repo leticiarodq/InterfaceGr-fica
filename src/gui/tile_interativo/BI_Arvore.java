@@ -5,10 +5,7 @@ import gui.itens.ALIMENTO_Fruta;
 import gui.itens.Material;
 import gui.system.PainelJogo;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 public class BI_Arvore extends BlocoInterativo {
 

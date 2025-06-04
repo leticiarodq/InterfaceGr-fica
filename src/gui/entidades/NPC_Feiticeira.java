@@ -1,8 +1,8 @@
 package gui.entidades;
 
-import gui.itens.REMEDIO_Analgesico;
-import gui.itens.REMEDIO_Antibiotico;
-import gui.itens.REMEDIO_Bandagem;
+import gui.itens.REMEDIO_PocaoVida;
+import gui.itens.REMEDIO_PocaoSanidade;
+import gui.itens.REMEDIO_PocaoEnergia;
 import gui.system.PainelJogo;
 
 import java.util.Random;
@@ -46,9 +46,9 @@ public class NPC_Feiticeira extends Entidade {
 
     public void definirItens() {
 
-        getInventario().add(new REMEDIO_Analgesico(gp));
-        getInventario().add(new REMEDIO_Antibiotico(gp));
-        getInventario().add(new REMEDIO_Bandagem(gp));
+        getInventario().add(new REMEDIO_PocaoVida(gp));
+        getInventario().add(new REMEDIO_PocaoSanidade(gp));
+        getInventario().add(new REMEDIO_PocaoEnergia(gp));
 
     }
 

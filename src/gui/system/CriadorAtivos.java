@@ -9,11 +9,10 @@ import gui.itens.Armas;
 import gui.itens.Ferramentas;
 import gui.itens.Fogueira;
 import gui.tile_interativo.*;
-import gui.criaturas.CRI_Peixe;
 
 public class CriadorAtivos {
 
-    private PainelJogo gp;
+   /* private PainelJogo gp;
     //private Random random;
 
     public CriadorAtivos(PainelJogo gp) {
@@ -48,15 +47,7 @@ public class CriadorAtivos {
 
           int i=0;
           int numMapa=0;
-/*
-           gp.getObj()[numMapa][i] = new ALIMENTO_Fruta(gp, "banana");
-           gp.getObj()[numMapa][i].setMundoX(21 * gp.getTamanhoBloco());
-           gp.getObj()[numMapa][i].setMundoY(34 * gp.getTamanhoBloco());
 
-           i++;
-
-
-           */
         gp.getObj()[numMapa][i] = new Armas(gp, "espada");
         gp.getObj()[numMapa][i].setMundoX(21 * gp.getTamanhoBloco());
         gp.getObj()[numMapa][i].setMundoY(33 * gp.getTamanhoBloco());
@@ -84,27 +75,17 @@ public class CriadorAtivos {
         gp.getObj()[4][5].setMundoY(22 * gp.getTamanhoBloco());
     }
 
-    public void craft(){
 
-        /*int numMapa = 0;
-        int i=0;
-        gp.getCraft()[numMapa][i]=new Craft(gp);
-        gp.getCraft()[numMapa][i].setMundoX(22 * gp.getTamanhoBloco());
-        gp.getCraft()[numMapa][i].setMundoY(24 * gp.getTamanhoBloco());
-
-        i++;
-
-         */
-    }
-
-    public void definirAquatico(){
+   /* public void definirAquatico(){
 
         CRI_Peixe peixe = new CRI_Peixe(gp);
         gp.getPresa()[1][0] = peixe;
         posicionarEntidadeLimitada(peixe, 29, 28);
 
     }
-    public void definirPresa() {
+
+    */
+    /*public void definirPresa() {
         int i = 0;
         int numMapa = 0;
 
@@ -118,13 +99,6 @@ public class CriadorAtivos {
         gp.getPresa()[numMapa][i] = galinha;
         posicionarEntidadeLimitada(galinha, 23, 25);
 
-       /* i=2;
-        BI_Peixe peixe = new BI_Peixe(gp);
-        gp.getPresa()[1][i] = peixe;
-        posicionarEntidadeLimitada(peixe, 29, 28);
-
-
-        */
 
         CRI_Siri siri=new CRI_Siri(gp);
         gp.getPresa()[1][2]=siri;
@@ -135,13 +109,11 @@ public class CriadorAtivos {
         gp.getPresa()[1][3].setMundoX(40 * gp.getTamanhoBloco());
         gp.getPresa()[1][3].setMundoY(33 * gp.getTamanhoBloco());
 
-
-
-
-
     }
 
-        public void definirNPC() {
+
+     */
+       /* public void definirNPC() {
 
         int i=0;
         int numMapa=0;
@@ -163,7 +135,9 @@ public class CriadorAtivos {
         }
 
 
-    public void definirCriatura() {
+        */
+
+    /*public void definirCriatura() {
         int i = 0;
         int numMapa = 0;
 
@@ -191,7 +165,9 @@ public class CriadorAtivos {
 
     }
 
-    public void definirBlocoInterativo(){
+
+     */
+   /* public void definirBlocoInterativo(){
 
         int i=0;
         int numMapa=0;
@@ -228,6 +204,7 @@ public class CriadorAtivos {
 
 
 
+    */
 
 
 }

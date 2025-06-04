@@ -1,11 +1,10 @@
 package gui.criaturas;
 
-import java.awt.*;
-import java.util.Random;
-
-import eventos.EventoCriatura;
 import gui.entidades.Entidade;
 import gui.system.PainelJogo;
+
+import java.awt.*;
+import java.util.Random;
 
 public class CRI_Raia extends Entidade implements Aquatico {
 

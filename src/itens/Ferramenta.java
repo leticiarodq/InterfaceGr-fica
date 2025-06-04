@@ -1,11 +1,12 @@
-package itens;// Define que esta classe pertence ao pacote 'itens'
+//Pacote
+package itens;
 
+//Imports
 import exceptions.FerramentaQuebradaException;
-import interfaces.AcaoUsar;
 import personagens.Personagem;
 
 // A classe Ferramenta é uma subclasse da classe Item
-public class Ferramenta extends Item implements AcaoUsar {
+public class Ferramenta extends Item {
     private String tipo;
     private int eficiencia;
 

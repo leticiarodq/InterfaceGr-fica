@@ -1,6 +1,7 @@
 package gui.ambientacao;
 
 import gui.system.PainelJogo;
+
 import java.awt.*;
 
 public class GerenciadorAmbientacao {

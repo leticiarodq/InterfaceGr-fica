@@ -5,22 +5,23 @@ package gui.system;
 //java.swing
 
 import gui.ambientacao.GerenciadorAmbientacao;
-import gui.ambientacao.Iluminacao;
 import gui.blocos.GerenciadorBlocos;
 import gui.entidades.*;
+import gui.eventos.EventoClima;
+import gui.eventos.EventoCriatura;
+import gui.eventos.EventoDescoberta;
 import gui.eventos.ManipuladorDeEventos;
 import gui.tile_interativo.BlocoInterativo;
-import itens.Alimento;
-import personagens.Mecanico;
-import personagens.Medico;
 import sistema.Main;
 
 import javax.swing.*;
-import javax.swing.Timer;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Random;
 
 
 public class PainelJogo extends JPanel implements Runnable { //GamePanel herda de JPanel, que é a área onde o jogo vai ser desenhado
@@ -62,8 +63,6 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
     private boolean telaCheiaOn=false;
     private int FPS = 90;
 
-
-
     // Sistema
 
     private GerenciadorBlocos blocosG = new GerenciadorBlocos(this);//
@@ -72,9 +71,9 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
 
     private ChecadorColisoes cColisoes = new ChecadorColisoes(this);
 
-    private CriadorAtivos cAtivos = new CriadorAtivos(this);
+    private EventoCriatura eventoCriatura=new EventoCriatura(this);
 
-    //private FerramentasUteis ferramentasUteis=new FerramentasUteis();
+    private EventoDescoberta eventoDescoberta=new EventoDescoberta(this);
 
     private InterfaceUsuario iu = new InterfaceUsuario(this);
 
@@ -82,12 +81,13 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
 
     private GerenciadorAmbientacao gerenciadorAmbientacao= new GerenciadorAmbientacao(this);
 
+
     Thread threadJogo; //Essa Thread permitirá que o jogo rode continuamente.
 
     // Mapa do jogo
 
     private final int mapaMax = 10;
-    private int mapaAtual = 5;
+    private int mapaAtual = 0;
 
     // Entidade e objeto
 
@@ -371,15 +371,13 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
 
     }
 
-    // Tentar novamente
     public void retry(){
         jogador.posicoesPadrao();
         jogador.restaurarVida();
-        cAtivos.setObjeto();
-        cAtivos.definirNPC();
-        cAtivos.definirCriatura();
-        cAtivos.definirPresa();
-
+        eventoDescoberta.definirObjeto();
+        eventoDescoberta.definirNPC();
+        eventoCriatura.definirCriatura();
+        eventoCriatura.definirPresa();
 
     }
 
@@ -390,11 +388,11 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
 
         setPersonagemSelecionado(null); //
 
-        cAtivos.setObjeto();
-        cAtivos.definirNPC();
-        cAtivos.definirCriatura();
-        cAtivos.definirPresa();
-        cAtivos.definirBlocoInterativo();
+        eventoDescoberta.definirObjeto();
+        eventoDescoberta.definirNPC();
+        eventoCriatura.definirCriatura();
+        eventoCriatura.definirPresa();
+        eventoDescoberta.definirBlocoInterativo();
 
 
         if (iu != null) {
@@ -567,13 +565,12 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
     }
 
     public void setupJogo() {
-        cAtivos.setObjeto();
-        cAtivos.definirNPC();
-        cAtivos.definirCriatura();
-        cAtivos.definirPresa();
-        cAtivos.definirBlocoInterativo();
-        cAtivos.definirAquatico();
-
+        eventoDescoberta.definirObjeto();
+        eventoDescoberta.definirNPC();
+        eventoCriatura.definirCriatura();
+        eventoCriatura.definirPresa();
+        eventoDescoberta.definirBlocoInterativo();
+        //eventoCriatura.definirAquatico();
 
 
         // Configura a iluminação inicial (centro da tela)

@@ -1,7 +1,9 @@
 package gui.system;
 
-import gui.entidades.*;
-import gui.itens.*;
+import gui.entidades.Entidade;
+import gui.itens.ALIMENTO_CarneAssada;
+import gui.itens.Material;
+import gui.itens.OBJ_Vida;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
