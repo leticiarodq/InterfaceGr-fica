@@ -1,8 +1,10 @@
 package gui.criaturas;
 
+import enums.TipoAcaoCriatura;
 import eventos.EventoCriatura;
 import gui.entidades.Entidade;
 import gui.system.PainelJogo;
+import personagens.Criatura;
 
 import java.awt.*;
 import java.util.Random;
@@ -10,18 +12,20 @@ import java.util.Random;
 public class CRI_Peixe extends Entidade implements Aquatico {
 
     private PainelJogo gp;
-    private EventoCriatura criaturaLogica;
+    private Criatura criaturaLogica;
     private Random aleatorio = new Random();
 
     public CRI_Peixe(PainelJogo gp) {
         super(gp);
         this.gp = gp;
+        this.criaturaLogica=new Criatura("Peixe", 0, 2, TipoAcaoCriatura.NADA);
 
         setTipo(getTipo_presa());
-        setNome("Peixe");
+
+        setNome(criaturaLogica.getNome());
         setVelocidade(1);
-        setVidaMaxima(2);
-        setVida(getVidaMaxima());
+        setVidaMaxima(criaturaLogica.getVida());
+        setVida(criaturaLogica.getVida());
 
         setAreaSolida(new Rectangle(3, 18, 42, 30));
         setAreaSolidaPadraoX(getAreaSolida().x);

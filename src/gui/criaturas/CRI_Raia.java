@@ -5,7 +5,7 @@ import gui.system.PainelJogo;
 
 import java.awt.*;
 import java.util.Random;
-
+/*
 public class CRI_Raia extends Entidade implements Aquatico {
 
     private PainelJogo gp;
@@ -75,5 +75,9 @@ public class CRI_Raia extends Entidade implements Aquatico {
         }
     }
 
+
  
 }
+
+
+ */

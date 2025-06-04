@@ -81,8 +81,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
 
     private GerenciadorAmbientacao gerenciadorAmbientacao= new GerenciadorAmbientacao(this);
 
-
-    Thread threadJogo; //Essa Thread permitirá que o jogo rode continuamente.
+    Thread threadJogo;
 
     // Mapa do jogo
 
@@ -91,7 +90,7 @@ public class PainelJogo extends JPanel implements Runnable { //GamePanel herda d
 
     // Entidade e objeto
 
-   // public Jogador jogador = new Jogador(this, eventosTeclado);
+    //public Jogador jogador = new Jogador(this, eventosTeclado);
 
     private Som som = new Som();
     private Entidade obj[][] = new Entidade[mapaMax][100];

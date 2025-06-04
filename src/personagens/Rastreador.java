@@ -9,9 +9,9 @@ public class Rastreador extends Personagem {
 
     // Construtor
     public Rastreador(String nome, int vida, int fome, int sede, int energia, int sanidade,
-                      Inventario inventario, String localizacao, double temperaturaCorporal,
+                      Inventario inventario, String localizacao,
                       int sedeMaxima, int velocidade, boolean desidratado, boolean infectado, boolean delirio, Arma armaEquipada) {
-        super(nome, vida, fome, sede, energia, sanidade, inventario, localizacao, temperaturaCorporal, sedeMaxima, velocidade, desidratado, infectado, delirio, armaEquipada);
+        super(nome, vida, fome, sede, energia, sanidade, inventario, localizacao, sedeMaxima, velocidade, desidratado, infectado, delirio, armaEquipada);
 
     }
 

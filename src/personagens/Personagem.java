@@ -25,7 +25,7 @@ public class Personagem {
     private Arma armaEquipada;
 
     //Construtor
-    public Personagem(String nome, int vida, int fome, int sede, int energia, int sanidade, Inventario inventario, String localizacao, double temperaturaCorporal, int sedeMaxima, int velocidade, boolean desidratado, boolean infectado, boolean delirio, Arma armaEquipada) {
+    public Personagem(String nome, int vida, int fome, int sede, int energia, int sanidade, Inventario inventario, String localizacao, int sedeMaxima, int velocidade, boolean desidratado, boolean infectado, boolean delirio, Arma armaEquipada) {
         this.nome = nome;
         this.vida = vida;
         this.fome = fome;
@@ -36,7 +36,6 @@ public class Personagem {
         if (this.inventario == null) {
             this.inventario = new Inventario(40);}
         this.localizacao = localizacao;
-        this.temperaturaCorporal = temperaturaCorporal;
         this.sedeMaxima = sedeMaxima;
         this.velocidade = velocidade;
         this.infectado = infectado;
@@ -264,7 +263,7 @@ public class Personagem {
         if (armaEquipada != null) {
             armaEquipada.atacar(inimigo);
         } else {
-            double danoMao = 10; // dano padrão sem arma
+            int danoMao = 10; // dano padrão sem arma
             inimigo.receberDano(danoMao);
         }
     }

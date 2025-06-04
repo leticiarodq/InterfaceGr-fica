@@ -40,7 +40,6 @@ public class CatalogoDeEventos {
                 100,
                 new String[]{
                         "reduz energia pelo peso da roupa molhada",
-                        "reduz a temperatura corporal"
                 }
         ));
 

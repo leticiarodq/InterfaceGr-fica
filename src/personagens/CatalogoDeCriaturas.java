@@ -19,14 +19,14 @@ public class CatalogoDeCriaturas {
 
     //Método para inicializar(instanciar) todas as criaturas do jogo
     private void inicializarCriaturas() {
-        criaturas.add(new Criatura("Lobo", 2, 30, TipoAcaoCriatura.MORDIDA));
-        criaturas.add(new Criatura("Urso", 4, 50, TipoAcaoCriatura.GARRAS ));
-        criaturas.add(new Criatura("Aranha", 1, 20, TipoAcaoCriatura.PICA_VENENO ));
-        criaturas.add(new Criatura("Morcego", 0, 30, TipoAcaoCriatura.VOA ));
-        criaturas.add(new Criatura("Lhama", 0, 30, TipoAcaoCriatura.CAMINHA ));
-        criaturas.add(new Criatura("Besouro", 0, 15, TipoAcaoCriatura.CAMINHA ));
-        criaturas.add(new Criatura("Peixe", 0, 30, TipoAcaoCriatura.NADA ));
-        criaturas.add(new Criatura("Coelho", 0, 10, TipoAcaoCriatura.PULA ));
+        criaturas.add(new Criatura("Lobo", 2, 6, TipoAcaoCriatura.MORDIDA));
+        criaturas.add(new Criatura("Urso", 4, 10, TipoAcaoCriatura.GARRAS ));
+        criaturas.add(new Criatura("Aranha", 2, 8, TipoAcaoCriatura.PICA_VENENO ));
+        criaturas.add(new Criatura("Morcego", 1, 2, TipoAcaoCriatura.VOA ));
+        criaturas.add(new Criatura("Porco", 0, 4, TipoAcaoCriatura.CAMINHA ));
+        criaturas.add(new Criatura("Galinha", 0, 2, TipoAcaoCriatura.CAMINHA ));
+        criaturas.add(new Criatura("Peixe", 0, 2, TipoAcaoCriatura.NADA ));
+        criaturas.add(new Criatura("Coelho", 0, 2, TipoAcaoCriatura.PULA ));
     }
 
     //Retorna a lista de criaturas(para exibir na GUI)

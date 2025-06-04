@@ -1,8 +1,11 @@
 package gui.criaturas;
 
+import enums.TipoAcaoCriatura;
 import eventos.EventoCriatura;
 import gui.entidades.Entidade;
 import gui.system.PainelJogo;
+import personagens.CatalogoDeCriaturas;
+import personagens.Criatura;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -12,19 +15,18 @@ import java.util.Random;
 public class CRI_Morcego extends Entidade {
 
     private PainelJogo gp;
-
-    private EventoCriatura criaturaLogica;
     private Random aleatorio = new Random();
+    private Criatura criaturaLogica;
 
     public CRI_Morcego(PainelJogo gp){
 
         super(gp);
+        this.criaturaLogica=new Criatura("Morcego", 1, 4, TipoAcaoCriatura.VOA);
 
-        setTipo(getTipo_criatura());
-        setNome("Morcego");
+        setNome(criaturaLogica.getNome());
         setVelocidade(2);
-        setVidaMaxima(4);
-        setVida(getVidaMaxima());
+        setVidaMaxima(criaturaLogica.getVida());
+        setVida(criaturaLogica.getVida());
 
         setAreaSolida(new Rectangle(3, 18, 42, 30));
         setAreaSolidaPadraoX(getAreaSolida().x);

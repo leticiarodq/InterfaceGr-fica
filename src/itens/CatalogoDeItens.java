@@ -40,8 +40,8 @@ public class CatalogoDeItens {
         aguas.add(new Agua("Agua contaminada", 2, 80, PurezaAgua.CONTAMINADA, 500)); //
 
         // Armas
-        armas.add(new Arma("Faca", 2, 30, "Corpo-a-corpo", 15.0, 1.0)); //
-        armas.add(new Arma("Espada", 3, 50, "Corpo-a-corpo", 25.0, 1.5)); //
+        armas.add(new Arma("Faca", 2, 30, "Corpo-a-corpo", 15, 1.0)); //
+        armas.add(new Arma("Espada", 3, 50, "Corpo-a-corpo", 25, 1.5)); //
 
         // Ferramentas
         ferramentas.add(new Ferramenta("Machado", 5, 100, "Corte", 80)); //

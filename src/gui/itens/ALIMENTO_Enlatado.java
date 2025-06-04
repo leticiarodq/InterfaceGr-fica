@@ -32,7 +32,7 @@ public class ALIMENTO_Enlatado extends Entidade {
                 alimentoLogico=new Alimento("Lata de feijão vencida", 1, 5, "Enlatado vencido", 1, 0);
                 alimentoLogico.setValorNutricional(2);
                 setTipo(getTipo_vencido());
-                setDescricao("[Feijão Vencido]\nAinda com valor nutritivo,\nmas pode causar efeitos\ncolaterais leves.");
+                setDescricao("[Lata de Feijão Vencido]\nAinda com valor nutritivo,\nmas pode causar efeitos\ncolaterais leves.");
                 break;
 
             case "lataervilha":
@@ -64,7 +64,7 @@ public class ALIMENTO_Enlatado extends Entidade {
 
     public void consumirAlimentoVencido(Entidade entidade) {
         gp.setEstadoJogo(gp.getEstadoDialogo());
-        gp.getIu().setDialogoAtual("Você comeu " + getNome() + "...");
+        gp.getIu().setDialogoAtual("Você comeu "+ getNome() + "...");
         Random random = new Random();
 
         int chance = random.nextInt(100); // 0 a 99

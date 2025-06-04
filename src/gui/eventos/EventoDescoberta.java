@@ -15,7 +15,6 @@ public class EventoDescoberta {
 
     private PainelJogo gp;
 
-
     public EventoDescoberta(PainelJogo gp) {
         this.gp = gp;
     }

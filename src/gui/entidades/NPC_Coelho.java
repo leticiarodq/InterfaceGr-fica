@@ -58,8 +58,6 @@ public class NPC_Coelho extends Entidade{
 
     }
 
-
-
     public void setAcao(){
 
         setContadorDeBloqueioDeAcao(getContadorDeBloqueioDeAcao() + 1);

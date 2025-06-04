@@ -57,7 +57,7 @@ public class EventoCriatura {
         posicionarEntidadeLimitada(galinha, 23, 25);
 
 
-        CRI_Siri siri=new CRI_Siri(gp);
+        /*CRI_Siri siri=new CRI_Siri(gp);
         gp.getPresa()[1][2]=siri;
         posicionarEntidadeLimitada(siri, 26, 31);
 
@@ -66,6 +66,7 @@ public class EventoCriatura {
         gp.getPresa()[1][3].setMundoX(40 * gp.getTamanhoBloco());
         gp.getPresa()[1][3].setMundoY(33 * gp.getTamanhoBloco());
 
+         */
 
     }
 

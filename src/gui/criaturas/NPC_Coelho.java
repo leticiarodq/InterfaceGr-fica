@@ -1,7 +1,9 @@
 package gui.criaturas;
 
+import enums.TipoAcaoCriatura;
 import gui.entidades.Entidade;
 import gui.system.PainelJogo;
+import personagens.Criatura;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;
@@ -11,6 +13,7 @@ public class NPC_Coelho extends Entidade {
 
     PainelJogo gp;
     private Random aleatorio = new Random();
+    private Criatura criaturaLogica;
 
     private int limiteEsquerda;
     private int limiteDireita;
@@ -21,6 +24,7 @@ public class NPC_Coelho extends Entidade {
     public NPC_Coelho(PainelJogo gp){
         super(gp);
         this.gp = gp;
+        this.criaturaLogica=new Criatura("Urso", 4, 10, TipoAcaoCriatura.GARRAS );
 
         int inicioColuna = 10;
         int inicioLinha = 10;

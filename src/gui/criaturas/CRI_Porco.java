@@ -1,9 +1,11 @@
 package gui.criaturas;
 
+import enums.TipoAcaoCriatura;
 import eventos.EventoCriatura;
 import gui.entidades.Entidade;
 import gui.itens.ALIMENTO_Carne;
 import gui.system.PainelJogo;
+import personagens.Criatura;
 
 import java.awt.*;
 import java.util.Random;
@@ -12,19 +14,21 @@ public class CRI_Porco extends Entidade {
 
     private PainelJogo gp;
 
-    private EventoCriatura criaturaLogica;
+    private Criatura criaturaLogica;
     private Random aleatorio = new Random();
 
     public CRI_Porco(PainelJogo gp){
 
         super(gp);
         this.gp=gp;
+        this.criaturaLogica=new Criatura("Porco", 0, 4, TipoAcaoCriatura.CAMINHA);
 
         setTipo(getTipo_presa());
-        setNome("Porco");
+
+        setNome(criaturaLogica.getNome());
         setVelocidade(1);
-        setVidaMaxima(4);
-        setVida(getVidaMaxima());
+        setVidaMaxima(criaturaLogica.getVida());
+        setVida(criaturaLogica.getVida());
 
         setAreaSolida(new Rectangle(3, 18, 42, 30));
         setAreaSolidaPadraoX(getAreaSolida().x);

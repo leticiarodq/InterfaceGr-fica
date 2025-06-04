@@ -10,12 +10,12 @@ import personagens.Personagem;
 //Arma é uma subclasse de Item
 public class Arma extends Item {
     private String tipo;
-    private double dano;
+    private int dano;
     private double distancia;
     private EventoCriatura inimigo; // Inimigo a ser atacado
 
     //Construtor
-    public Arma(String nome, int peso, int durabilidade, String tipo, double dano, double distancia) {
+    public Arma(String nome, int peso, int durabilidade, String tipo, int dano, double distancia) {
         super(nome, peso, durabilidade);
         this.tipo = tipo;
         this.dano = dano;
@@ -27,7 +27,7 @@ public class Arma extends Item {
         return tipo;
     }
 
-    public double getDano() {
+    public int getDano() {
         return dano;
     }
 
@@ -40,7 +40,7 @@ public class Arma extends Item {
         this.tipo = tipo;
     }
 
-    public void setDano(double dano) {
+    public void setDano(int dano) {
         this.dano = dano;
     }
 

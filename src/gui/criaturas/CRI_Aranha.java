@@ -1,8 +1,10 @@
 package gui.criaturas;
 
+import enums.TipoAcaoCriatura;
 import eventos.EventoCriatura;
 import gui.entidades.Entidade;
 import gui.system.PainelJogo;
+import personagens.Criatura;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -13,19 +15,19 @@ public class CRI_Aranha extends Entidade {
 
     private PainelJogo gp;
 
-    private EventoCriatura criaturaLogica;
+    private Criatura criaturaLogica;
     private Random aleatorio = new Random();
 
     public CRI_Aranha(PainelJogo gp) {
 
         super(gp);
-
         setTipo(getTipo_criatura());
+        this.criaturaLogica=new Criatura("Aranha", 2, 8, TipoAcaoCriatura.PICA_VENENO );
 
-        setNome("Aranha");
+        setNome(criaturaLogica.getNome());
         setVelocidade(1);
-        setVidaMaxima(8);
-        setVida(getVidaMaxima());
+        setVidaMaxima(criaturaLogica.getVida());
+        setVida(criaturaLogica.getVida());
 
         setAreaSolida(new Rectangle(3, 18, 42, 30));
         setAreaSolidaPadraoX(getAreaSolida().x);

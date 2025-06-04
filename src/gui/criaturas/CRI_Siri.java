@@ -7,7 +7,7 @@ import gui.system.PainelJogo;
 import java.awt.*;
 import java.util.Random;
 
-public class CRI_Siri extends Entidade {
+/*public class CRI_Siri extends Entidade {
 
     private PainelJogo gp;
     private EventoCriatura criaturaLogica;
@@ -64,3 +64,5 @@ public class CRI_Siri extends Entidade {
 
 }
 
+
+ */

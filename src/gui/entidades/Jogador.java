@@ -5,11 +5,14 @@ import gui.system.CriadorAtivos;
 import gui.system.EventosTeclado;
 import gui.system.PainelJogo;
 import gui.tile_interativo.BlocoInterativo;
+import personagens.Inventario;
 import personagens.Personagem;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+
+
 
 public class Jogador extends Entidade {
 
@@ -17,7 +20,6 @@ public class Jogador extends Entidade {
     private EventosTeclado eventosTeclado; //keyH é uma referência para o manipulador de teclas, que controla as teclas pressionadas para movimentação.
 
     // Tela
-
     private final int telaX;
     private final int telaY;
 
@@ -89,21 +91,6 @@ public class Jogador extends Entidade {
         setTipo(getTipo_jogador());
         this.eventosTeclado = eventosTeclado;
 
-        /*this.personagemLogico = new Personagem(
-                "Jogador",
-                6,
-                8,
-                8,
-                6,
-                6,
-                new Inventario(40),
-                gp.getBlocosG().getAmbienteAtual().getNomeAmbiente(),
-                36.5
-        );
-
-
-         */
-
         telaX = gp.getTelaLargura() / 2 - (gp.getTamanhoBloco() / 2);
         telaY = gp.getTelaAltura() / 2 - (gp.getTamanhoBloco() / 2);
 
@@ -115,10 +102,7 @@ public class Jogador extends Entidade {
         areaAtaque.height=48;
 
         setValoresPadrao();
-        //definirImagemJogador();
 
-
-        //definirImagemAtaque();
         definirItens();
     }
 
@@ -127,8 +111,6 @@ public class Jogador extends Entidade {
 
         setMundoX(gp.getTamanhoBloco() * 21);
         setMundoY(gp.getTamanhoBloco() * 10);
-        //setMundoX(gp.getTamanhoBloco() * 28);
-        //setMundoY(gp.getTamanhoBloco() * 19);
 
         setVelocidade(4);
         setDirecao("down");
@@ -166,31 +148,16 @@ public class Jogador extends Entidade {
         setEnergiaMaxima(6);
 
          */
-        String personagem=gp.getPersonagemSelecionado();
 
         if(gp.jogador!=null){
-            gp.jogador.inventario.add(new REMEDIO_PocaoSanidade(gp));
-            gp.jogador.inventario.add(new REMEDIO_PocaoVida(gp));
-            gp.jogador.inventario.add(new REMEDIO_PocaoEnergia(gp));
-
 
         }
 
-
         setArmaAtual(null);
-        //setAtacar(definirAtaque());
-
 
     }
-    /*public int definirAtaque() {
 
-        areaAtaque = getArmaAtual().areaAtaque;
-        setAtacar(getArmaAtual().getValorAtaque());
 
-        return getAtacar();
-    }
-
-     */
     public void posicoesPadrao(){
         setMundoX(gp.getTamanhoBloco() * 21);
         setMundoY(gp.getTamanhoBloco() * 10);

@@ -8,11 +8,11 @@ import enums.TipoAcaoCriatura;
 public class Criatura {
     private String nome;
     private int nivelPerigo;
-    private double vida;
+    private int vida;
     private TipoAcaoCriatura tipoAcao;
 
     //Construtor
-    public Criatura(String nome, int nivelPerigo, double vida, TipoAcaoCriatura acao) {
+    public Criatura(String nome, int nivelPerigo, int vida, TipoAcaoCriatura acao) {
         this.nome = nome;
         this.nivelPerigo = nivelPerigo;
         this.vida = vida;
@@ -36,17 +36,17 @@ public class Criatura {
         return nivelPerigo;
     }
 
-    public double getVida() {
+    public int getVida() {
         return vida;
     }
 
     //Setter
-    public void setVida(double vida) {
+    public void setVida(int vida) {
         this.vida = Math.max(0, vida);
     }
 
     //Método de receber dano do ataque de qualquer personagem(mecanico, rastreador, sobreviventenato, medico)
-    public void receberDano(double dano) {
+    public void receberDano(int dano) {
         this.vida = Math.max(0, this.vida - dano);
     }
 }

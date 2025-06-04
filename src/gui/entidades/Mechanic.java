@@ -4,6 +4,7 @@ package gui.entidades;
 
 import gui.system.EventosTeclado;
 import gui.system.PainelJogo;
+import itens.Arma;
 import personagens.Mecanico;
 
 public class Mechanic extends Jogador {
@@ -15,7 +16,7 @@ public class Mechanic extends Jogador {
     public Mechanic(PainelJogo gp, EventosTeclado eventosTeclado) {
         super(gp, eventosTeclado);
         this.gp = gp;
-        //this.mecanico = new Mecanico("Mecânica", 100, 100, 100, 100, 100, null, gp.getBlocosG().getAmbienteAtual().getNomeAmbiente(), 36.5);
+        //this.mecanico = new Mecanico("Mecânico", getVida(), getFome(), getSede(), getEnergia(), getSanidade(), null, gp.getBlocosG().getAmbienteAtual().getNomeAmbiente(), 8, 2, gp.jogador.isDesidratado(), gp.jogador.isInfectado(), false,);
         definirImagemJogador();
   ;
     }
